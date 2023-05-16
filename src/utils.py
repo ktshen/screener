@@ -50,3 +50,5 @@ def check_timezone_to_ny(dt):
     elif dt.tzinfo != timezone('America/New_York'):
         dt = dt.astimezone(timezone('America/New_York'))
     return dt
+
+

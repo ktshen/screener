@@ -23,6 +23,7 @@ SMA = [20, 30, 45, 50, 60, 150, 200]
 TIINGO_URL = "https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={start_date_str}&endDate={end_date_str}&format=json"
 DB_STRFTIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 CURRENT_TIMEZONE = "America/Los_Angeles"
+INCLUDE_SYMBOLS = ["SPY", "QQQ", "DIA"]
 ###########################################################################
 
 
@@ -121,7 +122,7 @@ class StockDownloader(BaseDownloader):
             return list(data.iloc[:, 0])
 
     def update_database(self, start_date=(datetime.now() - timedelta(days=400)), end_date=datetime.now(),
-                        exclude_symbols=[]):
+                        exclude_symbols=[], include_symbols=INCLUDE_SYMBOLS):
 
         def get_ticker_loop(ticker, start_d, end_d):
             return self.get_ticker(ticker, start_d, end_d)
@@ -132,7 +133,7 @@ class StockDownloader(BaseDownloader):
         nearest_market_close_end_date = get_closest_market_datetime(end_date)
         # Get all the symbols and submit jobs to executor pool
         all_symbols = self.get_all_symbols()
-        filtered_symbols = sorted(list(set(all_symbols) - set(exclude_symbols)))
+        filtered_symbols = sorted(list((set(all_symbols) - set(exclude_symbols)) | set(include_symbols)))
         executor = ThreadPoolExecutor(max_workers=os.cpu_count()*2)
         futures = []
         for symbol in filtered_symbols:
