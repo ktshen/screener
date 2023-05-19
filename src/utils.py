@@ -1,5 +1,6 @@
 import json
 import csv
+import sqlite3
 from pytz import timezone
 from datetime import datetime, timedelta
 import pandas_market_calendars as mcal
@@ -52,3 +53,10 @@ def check_timezone_to_ny(dt):
     return dt
 
 
+def connect_db(db_path):
+    try:
+        conn = sqlite3.connect(str(db_path), timeout=300)
+        cursor = conn.cursor()
+    except Exception as e:
+        raise Exception(f"Failed to connect to the database: {e}")
+    return conn, cursor

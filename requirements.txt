@@ -1,0 +1,6 @@
+pytz
+pandas
+yfinance
+requests
+stocksymbol
+binance-connector
