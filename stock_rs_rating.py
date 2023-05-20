@@ -65,7 +65,8 @@ if __name__ == "__main__":
     sd.check_stock_table()
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", help="Symbol", type=str, default="")
-    parser.add_argument("-t", help="Text file including all the symbols", type=str, default="")
+    parser.add_argument("-t", help="Text file including all the symbols",
+                        type=str, default="{date}_strong_targets.txt".format(date=datetime.now().strftime("%Y-%m-%d")))
     args = parser.parse_args()
     reference_symbol = "SPY"
     start_date = datetime.now() - timedelta(days=365)
