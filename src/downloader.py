@@ -375,18 +375,20 @@ class CryptoDownloader(BaseDownloader):
         try:
             response = None
             binance_df = self.request_binance(crypto)
+            binance_df.set_index('Datetime', inplace=True)
+            binance_df = binance_df[~binance_df.index.duplicated(keep='first')]
             cursor.execute("SELECT * FROM crypto WHERE Datetime LIKE ? AND Crypto = ?", (start_date_str, crypto))
             start_date_result = cursor.fetchall()
             if not start_date_result:
                 tiingo_df = self.request_tiingo(crypto, start_date)
                 if tiingo_df is not None and not tiingo_df.empty and len(binance_df) < len(tiingo_df):
                     tiingo_df.set_index('Datetime', inplace=True)
-                    binance_df.set_index('Datetime', inplace=True)
+                    tiingo_df = tiingo_df[~tiingo_df.index.duplicated(keep='first')]
                     tiingo_df.update(binance_df)
-                    tiingo_df.reset_index(inplace=True)
                     response = tiingo_df
             if response is None:
                 response = binance_df
+            response.reset_index(inplace=True)
             if response.empty:
                 raise ValueError(f"{crypto} -> No stock data")
             response.insert(0, "Crypto", crypto)
