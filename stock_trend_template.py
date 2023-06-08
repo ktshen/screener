@@ -3,7 +3,7 @@ from src.downloader import StockDownloader
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-def test_strategy(ticker: str):
+def test_strategy(ticker: str, strict=True):
     print(f"Analyzing {ticker} in thread...")
     sd = StockDownloader()
     start_date = datetime.now() - timedelta(days=400)
@@ -12,7 +12,7 @@ def test_strategy(ticker: str):
         stock, status, stock_info = sd.get_ticker(ticker, start_date, end_date)
         if status == 0:
             if stock_info:
-                print(f"{ticker} fail to get data -> {stock_info}")
+                print(f"{ticker} fails to get data -> {stock_info}")
             return None
         if stock_info.empty:
             return None
@@ -37,7 +37,7 @@ def test_strategy(ticker: str):
         stock_info["std_of_6_days"] = stock_info["Adj Close"].rolling(window=6).std()
         #degree_of_contraction = round(stock_info["Adj Close"].std() / stock_info["std_of_6_days"].values[-1], 3)
 
-        conditions_checklist = [False] * 8
+        conditions_checklist = [False] * 9
 
         if turnover < 1000000:
             print(f"{ticker} fails to meet the requirements. Not enough turnover.")
@@ -75,6 +75,18 @@ def test_strategy(ticker: str):
         # PASS NOW
         conditions_checklist[7] = True
 
+
+        # Strict mode
+        # Condition 9 : SMA30 > SMA45 > SMA60
+        if strict:
+            moving_average_30 = stock_info['SMA_30'].values[-1]
+            moving_average_45 = stock_info['SMA_45'].values[-1]
+            moving_average_60 = stock_info['SMA_60'].values[-1]
+            if moving_average_30 > moving_average_45 > moving_average_60:
+                conditions_checklist[8] = True
+        else:
+            conditions_checklist[8] = True
+
         meet_requirements = False
         if all(conditions_checklist):
             print(f"{ticker} made the requirements")
@@ -109,7 +121,7 @@ if __name__ == '__main__':
     print(f"Found {len(strong_targets)} stocks that meet the requirements. Percentage: {len(strong_targets) / len(all_symbols) * 100:.2f}%")
     print(f"Strong targets: {', '.join(strong_targets)}")
     date_str = datetime.now().strftime("%Y-%m-%d")
-    with open(f"{date_str}_strong_targets.txt", "w") as f:
+    with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
         f.write(",".join(strong_targets))
 
 

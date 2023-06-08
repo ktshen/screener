@@ -26,7 +26,7 @@ REQUEST_STOCK_TIINGO_URL = "https://api.tiingo.com/tiingo/daily/{symbol}/prices?
 REQUEST_CRYPTO_TIINGO_URL = "https://api.tiingo.com/tiingo/crypto/prices?tickers={crypto}&startDate={start_date_str}&endDate={end_date_str}&resampleFreq={interval}"
 DB_STRFTIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 CURRENT_TIMEZONE = "America/Los_Angeles"
-INCLUDE_SYMBOLS = ["SPY", "QQQ", "DIA"]
+INCLUDE_STOCK_SYMBOLS = ["SPY", "QQQ", "DIA"]
 ###########################################################################
 
 
@@ -120,7 +120,7 @@ class StockDownloader(BaseDownloader):
             return list(data.iloc[:, 0])
 
     def update_database(self, start_date=(datetime.now() - timedelta(days=400)), end_date=datetime.now(),
-                        exclude_symbols=[], include_symbols=INCLUDE_SYMBOLS):
+                        exclude_symbols=[], include_symbols=INCLUDE_STOCK_SYMBOLS):
 
         def get_ticker_loop(ticker, start_d, end_d):
             return self.get_ticker(ticker, start_d, end_d)
@@ -288,12 +288,13 @@ class CryptoDownloader(BaseDownloader):
         """
         Get all USDT pairs in binance
         """
+        exclude_cryptos = ["BUSDUSDT", "USDCUSDT", "BNBDOWNUSDT", "USDPUSDT", "EUROUSDT", "GBPUSDT"]
         spot_client = Client(base_url="https://data.binance.com")
         response = spot_client.exchange_info()
         all_symbols = []
         for item in response["symbols"]:
             symbol_name = item["symbol"]
-            if symbol_name[-4:] == "USDT" and item["status"] == "TRADING":
+            if symbol_name[-4:] == "USDT" and item["status"] == "TRADING" and symbol_name not in exclude_cryptos:
                 all_symbols.append(symbol_name)
         return all_symbols
 
@@ -409,7 +410,7 @@ class CryptoDownloader(BaseDownloader):
             for duration in CRYPTO_SMA:
                 response["SMA_" + str(duration)] = round(response.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
             status = 1
-            print(f"{crypto} -> Get data from database ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
+            print(f"{crypto} -> Get data from database successfully ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
 
         except Exception as e:
             print(f"{crypto} -> Error: {e}")
