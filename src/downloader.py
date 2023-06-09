@@ -288,12 +288,14 @@ class CryptoDownloader(BaseDownloader):
         """
         Get all USDT pairs in binance
         """
-        exclude_cryptos = ["BUSDUSDT", "USDCUSDT", "BNBDOWNUSDT", "USDPUSDT", "EUROUSDT", "GBPUSDT"]
+        exclude_cryptos = ["BUSDUSDT", "USDCUSDT", "USDPUSDT", "EURUSDT", "GBPUSDT", "USTCUSDT"]
         spot_client = Client(base_url="https://data.binance.com")
         response = spot_client.exchange_info()
         all_symbols = []
         for item in response["symbols"]:
             symbol_name = item["symbol"]
+            if "DOWN" in symbol_name:
+                continue
             if symbol_name[-4:] == "USDT" and item["status"] == "TRADING" and symbol_name not in exclude_cryptos:
                 all_symbols.append(symbol_name)
         return all_symbols
