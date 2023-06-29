@@ -3,7 +3,10 @@ from src.downloader import StockDownloader
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-def test_strategy(ticker: str, strict=True):
+def test_strategy(ticker: str, strict=False):
+    """
+    :param strict: If true, SMA30 > SMA45 > SMA60
+    """
     print(f"Analyzing {ticker} in thread...")
     sd = StockDownloader()
     start_date = datetime.now() - timedelta(days=400)
@@ -75,7 +78,6 @@ def test_strategy(ticker: str, strict=True):
         # PASS NOW
         conditions_checklist[7] = True
 
-
         # Strict mode
         # Condition 9 : SMA30 > SMA45 > SMA60
         if strict:
@@ -94,7 +96,15 @@ def test_strategy(ticker: str, strict=True):
         else:
             print(f"{ticker} fails to meet the requirements")
 
-        return {"stock": ticker, "meet_requirements": meet_requirements}
+        rs_score = 0
+        if meet_requirements:
+            rs_score_3m = 0.4 * ((current_close - stock_info['Adj Close'].values[-63]) / stock_info['Adj Close'].values[-63])
+            rs_score_6m = 0.2 * ((current_close - stock_info['Adj Close'].values[-126]) / stock_info['Adj Close'].values[-126])
+            rs_score_9m = 0.2 * ((current_close - stock_info['Adj Close'].values[-189]) / stock_info['Adj Close'].values[-189])
+            rs_score_12m = 0.2 * ((current_close - stock_info['Adj Close'].values[-250]) / stock_info['Adj Close'].values[-250])
+            rs_score = (rs_score_3m + rs_score_6m + rs_score_9m + rs_score_12m) * 100
+
+        return {"stock": ticker, "meet_requirements": meet_requirements, "rs_score": rs_score}
 
     except Exception as e:
         print(f"{ticker} failed: {e}")
@@ -108,23 +118,21 @@ if __name__ == '__main__':
     all_symbols = stock_downloader.get_all_symbols()
 
     with ThreadPoolExecutor(max_workers=20) as executor:
-        future_tasks = [executor.submit(test_strategy, symbol) for symbol in all_symbols]
+        future_tasks = [executor.submit(test_strategy, symbol, False) for symbol in all_symbols]
         results = [future.result() for future in as_completed(future_tasks)]
 
     strong_targets = []
+    target_rs_score = {}
     for result in results:
         if not result:
             continue
         if result["meet_requirements"]:
             strong_targets.append(result["stock"])
+            target_rs_score[result["stock"]] = result["rs_score"]
+    strong_targets.sort(key=lambda x: target_rs_score[x], reverse=True)
 
     print(f"Found {len(strong_targets)} stocks that meet the requirements. Percentage: {len(strong_targets) / len(all_symbols) * 100:.2f}%")
     print(f"Strong targets: {', '.join(strong_targets)}")
     date_str = datetime.now().strftime("%Y-%m-%d")
     with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
         f.write(",".join(strong_targets))
-
-
-
-
-
