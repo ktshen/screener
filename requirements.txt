@@ -3,4 +3,4 @@ pandas
 yfinance
 requests
 stocksymbol
-binance-connector
+python-binance

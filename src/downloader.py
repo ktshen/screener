@@ -13,7 +13,7 @@ from stocksymbol import StockSymbol
 from datetime import datetime, timedelta
 from requests.adapters import HTTPAdapter, Retry
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from binance.spot import Spot as Client
+from binance import Client
 
 from .utils import read_tokens, read_tradingview_csv, get_closest_market_datetime, check_timezone_to_ny, connect_db
 
@@ -43,8 +43,8 @@ class BaseDownloader:
 
 
 class StockDownloader(BaseDownloader):
-    def __init__(self, api_keys: dict = None, save_dir: str = "."):
-        super().__init__(api_keys, save_dir)
+    def __init__(self, api_keys: dict = None, save_dir: str = ".", db_name="screen.db"):
+        super().__init__(api_keys, save_dir, db_name)
 
     def check_stock_table(self):
         conn, cursor = connect_db(self.db_path)
@@ -99,17 +99,19 @@ class StockDownloader(BaseDownloader):
                 symbols_expired = True
 
         if not saved_symbols_path.exists() or symbols_expired:
+            tradingview_symbol_only_list = None
             if os.path.exists(self.save_dir / tradingview_csv):
-                symbol_only_list = read_tradingview_csv(self.save_dir / tradingview_csv, csv_column_name)
-            else:
-                api_key = self.api_keys["stocksymbol"]
-                ss = StockSymbol(api_key)
-                # First we download all ticker in US market
-                symbol_only_list = ss.get_symbol_list(market="US", symbols_only=True)
-                # The first 2 rows are for discarding any tickers that is not stock
-                symbol_only_list = [x for x in symbol_only_list if "." not in x]
-                symbol_only_list = [i for i in symbol_only_list if len(i) <= 4]
-                symbol_only_list.sort()
+                tradingview_symbol_only_list = read_tradingview_csv(self.save_dir / tradingview_csv, csv_column_name)
+            api_key = self.api_keys["stocksymbol"]
+            ss = StockSymbol(api_key)
+            # First we download all ticker in US market
+            symbol_only_list = ss.get_symbol_list(market="US", symbols_only=True)
+            # The first 2 rows are for discarding any tickers that is not stock
+            symbol_only_list = [x for x in symbol_only_list if "." not in x]
+            symbol_only_list = [i for i in symbol_only_list if len(i) <= 4]
+            if tradingview_symbol_only_list:
+                symbol_only_list = list(set(symbol_only_list) | set(tradingview_symbol_only_list))
+            symbol_only_list.sort()
             # Convert the list to pandas dataframe
             df = pd.DataFrame({'Symbol': symbol_only_list}, columns=['Symbol'])
             # saving the dataframe as csv file
@@ -284,21 +286,21 @@ class StockDownloader(BaseDownloader):
 
 
 class CryptoDownloader(BaseDownloader):
+    def __init__(self, api_keys: dict = None, save_dir: str = ".", db_name="screen.db"):
+        super().__init__(api_keys, save_dir, db_name)
+        self.binance_client = Client(requests_params={"timeout": 30})
+
     def get_all_symbols(self):
         """
         Get all USDT pairs in binance
         """
-        exclude_cryptos = ["BUSDUSDT", "USDCUSDT", "USDPUSDT", "EURUSDT", "GBPUSDT", "USTCUSDT"]
-        spot_client = Client(base_url="https://data.binance.com")
-        response = spot_client.exchange_info()
-        all_symbols = []
-        for item in response["symbols"]:
-            symbol_name = item["symbol"]
-            if "DOWN" in symbol_name:
-                continue
-            if symbol_name[-4:] == "USDT" and item["status"] == "TRADING" and symbol_name not in exclude_cryptos:
-                all_symbols.append(symbol_name)
-        return all_symbols
+        binance_response = self.binance_client.futures_exchange_info()
+        binance_symbols = set()
+        for item in binance_response["symbols"]:
+            symbol_name = item["pair"]
+            if symbol_name[-4:] == "USDT":
+                binance_symbols.add(symbol_name)
+        return list(binance_symbols)
 
     def check_crypto_table(self):
         conn, cursor = connect_db(self.db_path)
@@ -359,24 +361,40 @@ class CryptoDownloader(BaseDownloader):
                 for item in fail:
                     f.write(f"{item[0]} failed -> {item[1]}\n")
 
-    def get_crypto(self, crypto, start_date):
+    def get_crypto(self, crypto, time_interval="1h", start_date=datetime.now() - timedelta(days=60)):
         """
         1. Request binance data anyone, since it's free to download. For older data, use request_tiingo
         2. Store data to database
         3. Get data from database again, calculate SMA and return the data
         """
         status = 0  # 0 - fail, 1 - data from database
-        start_date_str = start_date.strftime("%Y-%m-%d %H%")
-        end_date_str = datetime.now().strftime("%Y-%m-%d %H:00")
+        response = None
+
+        if time_interval == "15m":
+            try:
+                binance_df = self.request_binance(crypto, time_interval)
+                binance_df.set_index('Datetime', inplace=True)
+                binance_df = binance_df[~binance_df.index.duplicated(keep='first')]
+                response = binance_df
+                response.reset_index(inplace=True)
+                for duration in CRYPTO_SMA:
+                    response["SMA_" + str(duration)] = round(response.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
+                status = 1
+                print(f"{crypto} -> Get data from binance successfully ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
+            except Exception as e:
+                print(f"{crypto} -> Error: {e}")
+                response = str(e)
+            return crypto, status, response
+
         try:
             conn, cursor = connect_db(self.db_path)
         except Exception as e:
             print(f"Failed to connect to the database: {e}")
             response = str(e)
             return crypto, status, response
-
         try:
-            response = None
+            start_date_str = start_date.strftime("%Y-%m-%d %H%")
+            end_date_str = datetime.now().strftime("%Y-%m-%d %H:00")
             binance_df = self.request_binance(crypto)
             binance_df.set_index('Datetime', inplace=True)
             binance_df = binance_df[~binance_df.index.duplicated(keep='first')]
@@ -403,7 +421,6 @@ class CryptoDownloader(BaseDownloader):
                 query = f'INSERT OR REPLACE INTO crypto ({columns}) VALUES ({values})'
                 cursor.execute(query, tuple(row))
             conn.commit()
-
             cursor.execute("SELECT * FROM crypto WHERE strftime('%Y-%m-%d %H:00', Datetime) BETWEEN ? AND ? AND Crypto = ?",
                            (start_date_str, end_date_str, crypto))
             rows = cursor.fetchall()
@@ -431,8 +448,7 @@ class CryptoDownloader(BaseDownloader):
         1hr - 382 data points only
         4hr - 96 data points only
         """
-        spot_client = Client(base_url="https://data.binance.com")
-        response = spot_client.klines(crypto, time_interval, limit=1000)
+        response = self.binance_client.futures_klines(symbol=crypto, interval=time_interval, limit=1500)
         data = pd.DataFrame(response, columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price",
                                                "Volume", "Close Time", "Quote Volume", "Number of Trades",
                                                "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
