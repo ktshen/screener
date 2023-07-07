@@ -19,13 +19,13 @@ from src.utils import read_tokens, read_tradingview_csv, get_closest_market_date
 
 
 ###########################################################################
+CURRENT_TIMEZONE = "America/Los_Angeles"
+###########################################################################
 STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
 CRYPTO_SMA = [30, 45, 60]
-###########################################################################
 REQUEST_STOCK_TIINGO_URL = "https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={start_date_str}&endDate={end_date_str}&format=json"
 REQUEST_CRYPTO_TIINGO_URL = "https://api.tiingo.com/tiingo/crypto/prices?tickers={crypto}&startDate={start_date_str}&endDate={end_date_str}&resampleFreq={interval}"
 DB_STRFTIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-CURRENT_TIMEZONE = "America/Los_Angeles"
 INCLUDE_STOCK_SYMBOLS = ["SPY", "QQQ", "DIA"]
 ###########################################################################
 
