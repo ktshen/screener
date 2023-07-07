@@ -26,8 +26,19 @@ US stock trend template: Utilize Mark Minervini's trend template to filter out s
 python3 stock_trend_template.py
 ```
 
-
 Both scripts will generate a TXT file that can be imported into [TradingView](https://www.tradingview.com/)'s watchlist.
+
+## Crypto Relative Strength Formula 
+$$ bars = 4 \times 25 \times days  \text{  (15m time frame)} $$
+
+$$ W = \frac{(bars-i)\times days}{bars} + 1 $$
+
+$$ \begin{align*}
+N_i & = \left [ (P_i - MA30_i) + (P_i - MA45_i) + (P_i - MA60_i) \right ]\times W\\  
+                       & +(MA30_i - MA60_i) +(MA30_i - MA45_i) + (MA45_i - MA60_i)\\  
+\end{align*} $$
+
+$$ Score = \sum_{i=1}^{bars} \frac{N_i} {MA60_i} \times (bars - i)  \\ \text{where i=1 means the closest bar} $$
 
 
 ## Download historical data only
