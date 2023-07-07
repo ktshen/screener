@@ -17,32 +17,21 @@ def test_strategy(symbol: str):
         print(f"Error in getting {symbol} info: {e}")
         return {"crypto": symbol, "rs_score": 0}
 
-    bars = 672   # 7 days
+    days = 7
+    bars = 4 * 24 * days
     if len(crypto_data) < bars + 60:
         return {"crypto": symbol, "rs_score": 0}
 
-    score = 0
-    for i in range(bars):
+    rs_score = 0.0
+    for i in range(1, bars+1):
         current_close = crypto_data['Close Price'].values[-i]
         moving_average_30 = crypto_data['SMA_30'].values[-i]
         moving_average_45 = crypto_data['SMA_45'].values[-i]
         moving_average_60 = crypto_data['SMA_60'].values[-i]
-        weight = i // 4
-        if current_close > moving_average_30 > moving_average_45 > moving_average_60:
-            score += 8 * weight
-        elif moving_average_30 > moving_average_45 > moving_average_60:
-            score += 6 * weight
-        elif moving_average_45 > moving_average_30 > moving_average_60:
-            score += 5 * weight
-        elif moving_average_45 > moving_average_60 > moving_average_30:
-            score += 4 * weight
-        elif moving_average_30 > moving_average_60 > moving_average_45:
-            score += 3 * weight
-        elif moving_average_60 > moving_average_30 > moving_average_45:
-            score += 2 * weight
-        elif moving_average_60 > moving_average_45 > moving_average_30:
-            score += 1 * weight
-    return {"crypto": symbol, "rs_score": score}
+        weight = (((current_close - moving_average_30) + (current_close - moving_average_45) + (current_close - moving_average_60)) * (((bars - i) * days / bars) + 1) + (moving_average_30 - moving_average_45) + (moving_average_30 - moving_average_60) + (moving_average_45 - moving_average_60)) / moving_average_60
+        rs_score += weight * (bars - i)
+
+    return {"crypto": symbol, "rs_score": rs_score}
 
 
 if __name__ == '__main__':
@@ -74,6 +63,6 @@ if __name__ == '__main__':
     txt_content = "###BTCETH\nBINANCE:BTCUSDT.P,BINANCE:ETHUSDT\n###Targets (Sort by score)\n"
     for crypto in targets:
         txt_content += f",BINANCE:{crypto}.P"
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    date_str = datetime.now().strftime("%Y-%m-%d %H-%M")
     with open(f"{date_str}_crypto_relative_strength.txt", "w") as f:
         f.write(txt_content)

@@ -9,7 +9,7 @@ def test_strategy(ticker: str, strict=False):
     """
     print(f"Analyzing {ticker} in thread...")
     sd = StockDownloader()
-    start_date = datetime.now() - timedelta(days=400)
+    start_date = datetime.now() - timedelta(days=470)
     end_date = datetime.now()
     try:
         stock, status, stock_info = sd.get_ticker(ticker, start_date, end_date)
@@ -24,25 +24,23 @@ def test_strategy(ticker: str, strict=False):
         return None
 
     try:
-        if len(stock_info) < 260:
+        if len(stock_info) < 320:
             print(f"{ticker} fails to meet the requirements. Less than 260 days.")
             return {"stock": ticker, "meet_requirements": False}
 
         current_close = stock_info['Adj Close'].values[-1]
-        previous_day_close = stock_info['Adj Close'].values[-2]
-        moving_average_20 = stock_info['SMA_20'].values[-1]
         moving_average_50 = stock_info['SMA_50'].values[-1]
         moving_average_150 = stock_info['SMA_150'].values[-1]
         moving_average_200 = stock_info['SMA_200'].values[-1]
-        turnover = stock_info["Volume"].values[-1] * stock_info["Adj Close"].values[-1]
         low_of_52_week = stock_info["Adj Close"].values[-260:].min()
         high_of_52_week = stock_info["Adj Close"].values[-260:].max()
         stock_info["std_of_6_days"] = stock_info["Adj Close"].rolling(window=6).std()
-        #degree_of_contraction = round(stock_info["Adj Close"].std() / stock_info["std_of_6_days"].values[-1], 3)
+        last_30_days_turnover = stock_info.tail(30).assign(Turnover=stock_info['Volume'] * stock_info['Adj Close'])
+        average_turnover = last_30_days_turnover['Turnover'].mean()
 
         conditions_checklist = [False] * 9
 
-        if turnover < 1000000:
+        if average_turnover < 1000000:
             print(f"{ticker} fails to meet the requirements. Not enough turnover.")
             return {"stock": ticker, "meet_requirements": False}
 
@@ -96,13 +94,24 @@ def test_strategy(ticker: str, strict=False):
         else:
             print(f"{ticker} fails to meet the requirements")
 
-        rs_score = 0
-        if meet_requirements:
-            rs_score_3m = 0.4 * ((current_close - stock_info['Adj Close'].values[-63]) / stock_info['Adj Close'].values[-63])
-            rs_score_6m = 0.2 * ((current_close - stock_info['Adj Close'].values[-126]) / stock_info['Adj Close'].values[-126])
-            rs_score_9m = 0.2 * ((current_close - stock_info['Adj Close'].values[-189]) / stock_info['Adj Close'].values[-189])
-            rs_score_12m = 0.2 * ((current_close - stock_info['Adj Close'].values[-250]) / stock_info['Adj Close'].values[-250])
-            rs_score = (rs_score_3m + rs_score_6m + rs_score_9m + rs_score_12m) * 100
+        # IBD RS ranking style
+        # rs_score = 0
+        # if meet_requirements:
+        #     rs_score_3m = 0.4 * ((current_close - stock_info['Adj Close'].values[-63]) / stock_info['Adj Close'].values[-63])
+        #     rs_score_6m = 0.2 * ((current_close - stock_info['Adj Close'].values[-126]) / stock_info['Adj Close'].values[-126])
+        #     rs_score_9m = 0.2 * ((current_close - stock_info['Adj Close'].values[-189]) / stock_info['Adj Close'].values[-189])
+        #     rs_score_12m = 0.2 * ((current_close - stock_info['Adj Close'].values[-252]) / stock_info['Adj Close'].values[-252])
+        #     rs_score = (rs_score_3m + rs_score_6m + rs_score_9m + rs_score_12m) * 100
+
+        rs_score = 0.0
+        bars = 252
+        for i in range(1, bars + 1):
+            close = stock_info["Adj Close"].values[-i]
+            moving_average_30 = stock_info['SMA_30'].values[-i]
+            moving_average_45 = stock_info['SMA_45'].values[-i]
+            moving_average_60 = stock_info['SMA_60'].values[-i]
+            weight = (((close - moving_average_30) + (close - moving_average_45) + (close - moving_average_60)) * (((bars - i) * 4 / bars) + 1) + (moving_average_30 - moving_average_45) + (moving_average_30 - moving_average_60) + (moving_average_45 - moving_average_60)) / moving_average_60
+            rs_score += weight * (bars - i)
 
         return {"stock": ticker, "meet_requirements": meet_requirements, "rs_score": rs_score}
 
@@ -133,6 +142,13 @@ if __name__ == '__main__':
 
     print(f"Found {len(strong_targets)} stocks that meet the requirements. Percentage: {len(strong_targets) / len(all_symbols) * 100:.2f}%")
     print(f"Strong targets: {', '.join(strong_targets)}")
+    print("============================== Target : Score (TOP 50) ==============================")
+    for crypto in strong_targets[:50]:
+        score = target_rs_score[crypto]
+        print(f"{crypto}: {score}")
+    print("========================================================================================")
     date_str = datetime.now().strftime("%Y-%m-%d")
+    txt_content = "###INDEX\nSPY,IXIC,DJI\n###TARGETS\n"
+    txt_content += ",".join(strong_targets)
     with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
-        f.write(",".join(strong_targets))
+        f.write(txt_content)
