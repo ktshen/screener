@@ -10,17 +10,25 @@ The purpose of this project is to download historical data for US stocks and cry
 pip3 install -r requirements.txt
 ```
 
-API keys are needed for [Tiingo](https://tiingo.com/) and [Stocksymbol](https://stock-symbol.herokuapp.com). (Not a requirement for Crypto usage)
+API keys are needed for [Tiingo](https://tiingo.com/) and [Stocksymbol](https://stock-symbol.herokuapp.com) (Not a requirement for Crypto usage)
 
 ## Strategy Usage
 
-Crypto relative strength: Within a 15-minute timeframe, identify strong performing assets by comparing them with SMA-30, SMA-45 and SMA-60.
+1. Crypto relative strength
+
+Identify strong performing assets by comparing them with SMA-30, SMA-45 and SMA-60 (Default time frame = 15m, total days = 7)
 
 ```bash
-python3 crypto_relative_strength.py
+python3 crypto_relative_strength.py  
+python3 crypto_relative_strength.py -t "1h" -d 60
 ```
+* `-t` Time frame (3m, 5m, 15m, 30m, 1h, 2h, 4h)
+* `-d` Calculation duration in days (max: 1440 bars), e.g. 1440 / (24 bars per day in 1h) = 60
+* Change CURRENT_TIMEZONE in the file if timezone is essential to you.[[Refer](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]
 
-US stock trend template: Utilize Mark Minervini's trend template to filter out strong performing stocks.
+2. US stock trend template
+
+Utilize Mark Minervini's trend template to filter out strong performing stocks.
 
 ```bash
 python3 stock_trend_template.py
@@ -50,9 +58,6 @@ from src.downloader import CryptoDownloader
 ```
 
 When devising your own strategy, feel free to refer to the existing strategies for guidance and inspiration. The stock data is downloaded from Tiingo and Yahoo Finance, and the cryptocurrency data is obtained from Binance.
-
-- Change CURRENT_TIMEZONE in src/downloader.py if timezone is essential to you.
-
 
 ## License
 

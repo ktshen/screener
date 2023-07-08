@@ -19,8 +19,6 @@ from src.utils import read_tokens, read_tradingview_csv, get_closest_market_date
 
 
 ###########################################################################
-CURRENT_TIMEZONE = "America/Los_Angeles"
-###########################################################################
 STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
 CRYPTO_SMA = [30, 45, 60]
 REQUEST_STOCK_TIINGO_URL = "https://api.tiingo.com/tiingo/daily/{symbol}/prices?startDate={start_date_str}&endDate={end_date_str}&format=json"
@@ -288,7 +286,7 @@ class StockDownloader(BaseDownloader):
 class CryptoDownloader(BaseDownloader):
     def __init__(self, api_keys: dict = None, save_dir: str = ".", db_name="screen.db"):
         super().__init__(api_keys, save_dir, db_name)
-        self.binance_client = Client(requests_params={"timeout": 30})
+        self.binance_client = Client(requests_params={"timeout": 300})
 
     def get_all_symbols(self):
         """
@@ -361,92 +359,26 @@ class CryptoDownloader(BaseDownloader):
                 for item in fail:
                     f.write(f"{item[0]} failed -> {item[1]}\n")
 
-    def get_crypto(self, crypto, time_interval="1h", start_date=datetime.now() - timedelta(days=60)):
-        """
-        1. Request binance data anyone, since it's free to download. For older data, use request_tiingo
-        2. Store data to database
-        3. Get data from database again, calculate SMA and return the data
-        """
+    def get_crypto(self, crypto, time_interval="15m", timezone="America/Los_Angeles"):
         status = 0  # 0 - fail, 1 - data from database
-        response = None
-
-        if time_interval == "15m":
-            try:
-                binance_df = self.request_binance(crypto, time_interval)
-                binance_df.set_index('Datetime', inplace=True)
-                binance_df = binance_df[~binance_df.index.duplicated(keep='first')]
-                response = binance_df
-                response.reset_index(inplace=True)
-                for duration in CRYPTO_SMA:
-                    response["SMA_" + str(duration)] = round(response.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
-                status = 1
-                print(f"{crypto} -> Get data from binance successfully ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
-            except Exception as e:
-                print(f"{crypto} -> Error: {e}")
-                response = str(e)
-            return crypto, status, response
-
         try:
-            conn, cursor = connect_db(self.db_path)
-        except Exception as e:
-            print(f"Failed to connect to the database: {e}")
-            response = str(e)
-            return crypto, status, response
-        try:
-            start_date_str = start_date.strftime("%Y-%m-%d %H%")
-            end_date_str = datetime.now().strftime("%Y-%m-%d %H:00")
-            binance_df = self.request_binance(crypto)
+            binance_df = self.request_binance(crypto, time_interval, timezone)
             binance_df.set_index('Datetime', inplace=True)
             binance_df = binance_df[~binance_df.index.duplicated(keep='first')]
-            cursor.execute("SELECT * FROM crypto WHERE Datetime LIKE ? AND Crypto = ?", (start_date_str, crypto))
-            start_date_result = cursor.fetchall()
-            if not start_date_result:
-                tiingo_df = self.request_tiingo(crypto, start_date)
-                if tiingo_df is not None and not tiingo_df.empty and len(binance_df) < len(tiingo_df):
-                    tiingo_df.set_index('Datetime', inplace=True)
-                    tiingo_df = tiingo_df[~tiingo_df.index.duplicated(keep='first')]
-                    tiingo_df.update(binance_df)
-                    response = tiingo_df
-            if response is None:
-                response = binance_df
+            response = binance_df
             response.reset_index(inplace=True)
-            if response.empty:
-                raise ValueError(f"{crypto} -> No stock data")
-            response.insert(0, "Crypto", crypto)
-            stored_columns = ['Crypto', 'Datetime', 'Close Price', 'High Price', 'Low Price', 'Open Price', 'Volume']
-            for _, row in response.iterrows():
-                # Create a tuple with the values of the row
-                columns = ', '.join(f'"{column}"' for column in stored_columns)
-                values = ', '.join('?' for _ in row.index)
-                query = f'INSERT OR REPLACE INTO crypto ({columns}) VALUES ({values})'
-                cursor.execute(query, tuple(row))
-            conn.commit()
-            cursor.execute("SELECT * FROM crypto WHERE strftime('%Y-%m-%d %H:00', Datetime) BETWEEN ? AND ? AND Crypto = ?",
-                           (start_date_str, end_date_str, crypto))
-            rows = cursor.fetchall()
-            column_names = [description[0] for description in cursor.description]
-            response = pd.DataFrame(rows, columns=column_names)
             for duration in CRYPTO_SMA:
                 response["SMA_" + str(duration)] = round(response.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
             status = 1
-            print(f"{crypto} -> Get data from database successfully ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
-
+            print(f"{crypto} -> Get data from binance successfully ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
         except Exception as e:
             print(f"{crypto} -> Error: {e}")
             response = str(e)
-
-        finally:
-            cursor.close()
-            conn.close()
-
         return crypto, status, response
 
-    def request_binance(self, crypto, time_interval="1h", timezone="America/Los_Angeles"):
+    def request_binance(self, crypto, time_interval="15m", timezone="America/Los_Angeles"):
         """
-        Fetch data from binance.com.
-        15min - 1000 data points
-        1hr - 382 data points only
-        4hr - 96 data points only
+        1500 data points for all timeframe using binance futures instead of binance spots
         """
         response = self.binance_client.futures_klines(symbol=crypto, interval=time_interval, limit=1500)
         data = pd.DataFrame(response, columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price",
