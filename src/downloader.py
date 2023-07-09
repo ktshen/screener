@@ -261,7 +261,7 @@ class StockDownloader(BaseDownloader):
         session.mount('https://', adapter)
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': self.api_keys["tiingo"]
+            'Authorization': f'Token {self.api_keys["tiingo"]}'
         }
         start_date_str = start_date.strftime("%Y-%m-%d")
         end_date_str = end_date.strftime("%Y-%m-%d")
@@ -410,7 +410,7 @@ class CryptoDownloader(BaseDownloader):
         session.mount('https://', adapter)
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': self.api_keys["tiingo"]
+            'Authorization': f'Token {self.api_keys["tiingo"]}'
         }
         start_date_str = start_date.strftime("%Y-%m-%d")
         end_date_str = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")  # plus one day to get the latest
