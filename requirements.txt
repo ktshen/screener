@@ -5,3 +5,4 @@ requests
 stocksymbol
 python-binance
 pandas-market-calendars
+discord-webhook
