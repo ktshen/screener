@@ -7,15 +7,18 @@ on:
       - main
 jobs:
   run-python-command:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS, ARM64, crypto]
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.10"  # Replace with the desired Python version
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: "3.9"  # Replace with the desired Python version
 
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install packages
+        run: pip install -r requirements.txt
+
       - name: Run Python command
-        run: python crypto_relative_strength.py -u ${{ secrets.WEBHOOK }}  # Replace with your Python command
+        run: python3 crypto_relative_strength.py -u ${{ secrets.WEBHOOK }}  # Replace with your Python command
