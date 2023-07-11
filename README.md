@@ -37,7 +37,7 @@ python3 stock_trend_template.py
 Both scripts will generate a TXT file that can be imported into [TradingView](https://www.tradingview.com/)'s watchlist.
 
 ## Crypto Relative Strength Formula 
-$$ bars = 4 \times 25 \times days  \text{  (15m time frame)} $$
+$$ bars = 4 \times 24 \times days  \text{  (15m time frame)} $$
 
 $$ W = \frac{(bars-i)\times days}{bars} + 1 $$
 
