@@ -163,11 +163,11 @@ class StockDownloader(BaseDownloader):
         start_date = check_timezone_to_ny(start_date)
         end_date = check_timezone_to_ny(end_date)
         status = 0  # 0 - fail, 1 - data from database, 2 - data from API
-        response = None
         start_date = get_closest_market_datetime(start_date)
         end_date = get_closest_market_datetime(end_date)
         start_date_str = start_date.strftime("%Y-%m-%d")
         end_date_str = end_date.strftime("%Y-%m-%d")
+
         try:
             conn, cursor = connect_db(self.db_path)
         except Exception as e:
@@ -181,7 +181,6 @@ class StockDownloader(BaseDownloader):
             start_date_result = cursor.fetchall()
             cursor.execute("SELECT * FROM stock WHERE Datetime LIKE ? AND Stock = ? ", (end_date_str + '%', symbol))
             end_date_result = cursor.fetchall()
-
             # If start date and end_date exist in the table, fetch data from database, otherwise fetch data from web
             if start_date_result and end_date_result:
                 cursor.execute("SELECT * FROM stock WHERE date(Datetime) BETWEEN date(?) AND date(?) AND Stock = ?",
@@ -200,6 +199,10 @@ class StockDownloader(BaseDownloader):
                     raise Exception(f"{symbol} -> Error in requesting data from web: {e}")
                 if response.empty:
                     raise ValueError(f"{symbol} -> No stock data")
+                last_datetime_value = check_timezone_to_ny(datetime.strptime(response["Datetime"].values[-1], DB_STRFTIME_FORMAT))
+                if end_date - last_datetime_value >= timedelta(days=4):
+                    raise ValueError(f"{symbol} -> Symbol is off-market")
+
                 # store the data to sqlite3
                 response.insert(0, "Stock", symbol)
                 stored_columns = ['Stock', 'Datetime', 'Close Price', 'High Price', 'Low Price', 'Open Price',
@@ -261,12 +264,12 @@ class StockDownloader(BaseDownloader):
         session.mount('https://', adapter)
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': self.api_keys["tiingo"]
+            'Authorization': f'Token {self.api_keys["tiingo"]}'
         }
         start_date_str = start_date.strftime("%Y-%m-%d")
         end_date_str = end_date.strftime("%Y-%m-%d")
         url = REQUEST_STOCK_TIINGO_URL.format(symbol=symbol, start_date_str=start_date_str, end_date_str=end_date_str)
-        response = session.get(url, headers=headers, timeout=5)
+        response = session.get(url, headers=headers, timeout=30)
         df = None
         if response.status_code == 200:
             data = response.json()
@@ -410,13 +413,13 @@ class CryptoDownloader(BaseDownloader):
         session.mount('https://', adapter)
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': self.api_keys["tiingo"]
+            'Authorization': f'Token {self.api_keys["tiingo"]}'
         }
         start_date_str = start_date.strftime("%Y-%m-%d")
         end_date_str = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")  # plus one day to get the latest
         url = REQUEST_CRYPTO_TIINGO_URL.format(crypto=crypto, start_date_str=start_date_str, end_date_str=end_date_str,
                                                interval=interval)
-        response = session.get(url, headers=headers, timeout=5)
+        response = session.get(url, headers=headers, timeout=30)
         df = None
         if response.status_code == 200:
             data = response.json()

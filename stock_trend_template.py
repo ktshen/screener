@@ -1,6 +1,13 @@
 from datetime import datetime, timedelta
-from src.downloader import StockDownloader
+from pytz import timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+from src.downloader import StockDownloader
+
+
+##################### CONFIGURATIONS #####################
+CURRENT_TIMEZONE = "America/Los_Angeles"
+##########################################################
 
 
 def test_strategy(ticker: str, strict=False):
@@ -9,8 +16,8 @@ def test_strategy(ticker: str, strict=False):
     """
     print(f"Analyzing {ticker} in thread...")
     sd = StockDownloader()
-    start_date = datetime.now() - timedelta(days=470)
-    end_date = datetime.now()
+    start_date = timezone(CURRENT_TIMEZONE).localize(datetime.now() - timedelta(days=480))
+    end_date = timezone(CURRENT_TIMEZONE).localize(datetime.now())
     try:
         stock, status, stock_info = sd.get_ticker(ticker, start_date, end_date)
         if status == 0:
@@ -37,7 +44,6 @@ def test_strategy(ticker: str, strict=False):
         stock_info["std_of_6_days"] = stock_info["Adj Close"].rolling(window=6).std()
         last_30_days_turnover = stock_info.tail(30).assign(Turnover=stock_info['Volume'] * stock_info['Adj Close'])
         average_turnover = last_30_days_turnover['Turnover'].mean()
-
         conditions_checklist = [False] * 9
 
         if average_turnover < 1000000:
@@ -102,7 +108,6 @@ def test_strategy(ticker: str, strict=False):
         #     rs_score_9m = 0.2 * ((current_close - stock_info['Adj Close'].values[-189]) / stock_info['Adj Close'].values[-189])
         #     rs_score_12m = 0.2 * ((current_close - stock_info['Adj Close'].values[-252]) / stock_info['Adj Close'].values[-252])
         #     rs_score = (rs_score_3m + rs_score_6m + rs_score_9m + rs_score_12m) * 100
-
         rs_score = 0.0
         bars = 252
         for i in range(1, bars + 1):
@@ -126,7 +131,7 @@ if __name__ == '__main__':
     stock_downloader.update_database()
     all_symbols = stock_downloader.get_all_symbols()
 
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor(max_workers=32) as executor:
         future_tasks = [executor.submit(test_strategy, symbol, False) for symbol in all_symbols]
         results = [future.result() for future in as_completed(future_tasks)]
 

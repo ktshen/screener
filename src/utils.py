@@ -41,7 +41,7 @@ def get_closest_market_datetime(dt=datetime.now(), backward=True):
             if market_close >= dt:
                 closest_market_close = market_close
                 break
-
+    closest_market_close = check_timezone_to_ny(closest_market_close)
     return closest_market_close
 
 
