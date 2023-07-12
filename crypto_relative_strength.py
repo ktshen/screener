@@ -2,7 +2,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from src.downloader import CryptoDownloader
 from discord_webhook import DiscordWebhook
-from datetime import date
+from datetime import datetime, timedelta
 
 ##################### CONFIGURATIONS #####################
 CURRENT_TIMEZONE = "America/Los_Angeles"
@@ -89,8 +89,11 @@ if __name__ == '__main__':
     print("===============================================================================")
     print(strong_targets[0:10])
     print(strong_targets[11:])
-    today = date.today()
-    d1 = today.strftime("%Y/%m/%d")
+    local_date = datetime.now().date()
+    gmt_offset = timedelta(hours=8)
+    gmt_date = local_date + gmt_offset
+    d1 = gmt_date.strftime("%Y/%m/%d")
+    print(d1)
     high_potential_target = ', '.join(strong_targets[0:10])
     moderate_potential_target = ', '.join(strong_targets[11:])
     webhook = DiscordWebhook(url=webhook_url, content=f'{d1} 標的篩選\n強勢標的: {high_potential_target}\n次強勢標的: {moderate_potential_target}')
