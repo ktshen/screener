@@ -55,7 +55,7 @@ if __name__ == '__main__':
     print("crypto")
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--timeframe', type=str, help='Time frame (3m, 5m, 15m, 30m, 1h, 2h, 4h)', default="4h")
-    parser.add_argument('-d', '--total_days', type=int, help='Calculation duration in days (default 7 days)', default=7)
+    parser.add_argument('-d', '--total_days', type=int, help='Calculation duration in days (default 7 days)', default=5)
     parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
     args = parser.parse_args()
     timeframe = args.timeframe
@@ -93,15 +93,14 @@ if __name__ == '__main__':
     gmt_offset = timedelta(hours=8)
     gmt_date = local_date + gmt_offset
     d1 = gmt_date.strftime("%Y/%m/%d")
-    print(d1)
     high_potential_target = ', '.join(strong_targets[0:10])
     moderate_potential_target = ', '.join(strong_targets[11:])
     webhook = DiscordWebhook(url=webhook_url, content=f'{d1} 標的篩選\n強勢標的: {high_potential_target}\n次強勢標的: {moderate_potential_target}')
     response = webhook.execute()
     # Write to txt file
-    txt_content = "###BTCETH\nBINANCE:BTCUSDT.P,BINANCE:ETHUSDT\n###Targets (Sort by score)\n"
-    for crypto in targets:
-        txt_content += f"BINANCE:{crypto}.P,"
+    # txt_content = "###BTCETH\nBINANCE:BTCUSDT.P,BINANCE:ETHUSDT\n###Targets (Sort by score)\n"
+    # for crypto in targets:
+    #     txt_content += f"BINANCE:{crypto}.P,"
     # date_str = datetime.now().strftime("%Y-%m-%d %H%M")
     # with open(f"{date_str}_crypto_relative_strength_{timeframe}_{total_days}.txt", "w") as f:
     #     f.write(txt_content)
