@@ -2,7 +2,9 @@ name: Run Python Command
 on:
   schedule:
     - cron: '0 0 * * *' # This cron expression runs the workflow every day at 8:00 AM GMT
-    
+  push:
+    branches:
+      - main
 jobs:
   run-python-command:
     runs-on: [self-hosted, macOS, ARM64, crypto]
@@ -12,6 +14,15 @@ jobs:
       #   with:
       #     python-version: "3.9"  # Replace with the desired Python version
 
+      - name: Cache Primes
+        id: cache-primes
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+        
       - name: Checkout code
         uses: actions/checkout@v2
 

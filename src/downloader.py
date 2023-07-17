@@ -378,6 +378,38 @@ class CryptoDownloader(BaseDownloader):
             print(f"{crypto} -> Error: {e}")
             response = str(e)
         return crypto, status, response
+    
+    def get_futures_top_10(self):
+        top_10_quoteVolume = []
+        try:
+            futures_all = self.binance_client.futures_ticker()
+            sorted_data = sorted(futures_all, key=lambda x: float(x['quoteVolume']), reverse=True)
+            top_10_quoteVolume_symbol =  [d['symbol'] for d in sorted_data[:12]]
+            for symbol in top_10_quoteVolume_symbol:
+                if 'BTC' not in symbol or 'ETH' not in symbol:
+                    top_10_quoteVolume.append(symbol.split('USDT')[0])
+            print(top_10_quoteVolume)
+        except Exception as e:
+            print("can't get futures data")
+
+        return top_10_quoteVolume
+    
+    def find_important_crypto_targets(self, top_10, strong_targets):
+        import_targets = [element for element in top_10 if element in strong_targets]
+        return import_targets
+
+    def write_targets_file(self, date, targets: dict):
+        file_str = ""
+        for k,v in targets.items():
+            file_str += f"###{k},"
+            for crypto in v:
+                if "BUSD" not in crypto:
+                    file_str = file_str + "BINANCE:" + crypto + "USDT.P,"
+                else:
+                    file_str = file_str + "BINANCE:" + crypto + ".P,"
+
+        with open(f"{date}_標的.txt", "w", encoding="utf-8") as file:
+            file.write(file_str)
 
     def request_binance(self, crypto, time_interval="15m", timezone="America/Los_Angeles"):
         """

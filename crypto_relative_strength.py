@@ -93,10 +93,22 @@ if __name__ == '__main__':
     gmt_offset = timedelta(hours=8)
     gmt_date = local_date + gmt_offset
     d1 = gmt_date.strftime("%Y/%m/%d")
+    date_str = d1.replace('/', '_')
     high_potential_target = ', '.join(strong_targets[0:10])
     moderate_potential_target = ', '.join(strong_targets[11:])
-    webhook = DiscordWebhook(url=webhook_url, content=f'{d1} 標的篩選\n強勢標的: {high_potential_target}\n次強勢標的: {moderate_potential_target}')
-    response = webhook.execute()
+    top_10_volume = crypto_downloader.get_futures_top_10()
+    important_targets = crypto_downloader.find_important_crypto_targets(top_10_volume, strong_targets)
+    important_targets_str = ', '.join(important_targets)
+    crypto_downloader.write_targets_file(date_str, {"重點標的": important_targets, "強勢標的": strong_targets, "前十交易量":top_10_volume})
+    webhook_str = f'{d1} 標的篩選\n強勢標的: {high_potential_target}\n次強勢標的: {moderate_potential_target}\n重點標的: {important_targets_str}'
+    print(webhook_str)
+    if webhook_url:
+        webhook = DiscordWebhook(url=webhook_url, content=webhook_str)
+        with open(f"{date_str}_標的.txt", "rb") as f:
+            webhook.add_file(file=f.read(), filename=f"{date_str}_strong_targets.txt")
+        response = webhook.execute()
+        print(response)
+
     # Write to txt file
     # txt_content = "###BTCETH\nBINANCE:BTCUSDT.P,BINANCE:ETHUSDT\n###Targets (Sort by score)\n"
     # for crypto in targets:
