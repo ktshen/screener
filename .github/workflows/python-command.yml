@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install packages
-        run: pip install -r requirements.txt
+        run: pip3 install -r requirements.txt
 
       - name: Run Python command
         run: python3 crypto_relative_strength.py -u ${{ secrets.WEBHOOK }}  # Replace with your Python command
