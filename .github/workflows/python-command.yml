@@ -2,9 +2,9 @@ name: Run Python Command
 on:
   schedule:
     - cron: '0 */12 * * *' # This cron expression runs the workflow every day at 8:00 AM and 8:00 PM GMT+8
-#   push:
-#     branches:
-#       - main
+  push:
+    branches:
+      - main
 jobs:
   run-python-command:
     runs-on: [self-hosted, macOS, ARM64, crypto]
