@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-      description: 'Test scenario tags'
-      required: false
-      type: boolean
-      
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+
 jobs:
   run-python-command:
     runs-on: [self-hosted, macOS, ARM64, crypto]
