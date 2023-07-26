@@ -1,0 +1,40 @@
+name: Run Python Command
+on:
+  schedule:
+    - cron: '0 22 * * *' # This cron expression runs the workflow every day at 8:00 AM and 8:00 PM GMT+8
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      tags:
+      description: 'Test scenario tags'
+      required: false
+      type: boolean
+      
+jobs:
+  run-python-command:
+    runs-on: [self-hosted, macOS, ARM64, crypto]
+    steps:
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: "3.9"  # Replace with the desired Python version
+
+      - name: Cache Primes
+        id: cache-primes
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+        
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install packages
+        run: pip3 install -r requirements.txt
+
+      - name: Run Python command
+        run: python3 stock_trend_template.py -u ${{ secrets.STOCK_WEBHOOK }}  # Replace with your Python command

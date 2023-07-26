@@ -95,7 +95,7 @@ if __name__ == '__main__':
     d1 = gmt_date.strftime("%Y/%m/%d")
     date_str = d1.replace('/', '_')
     high_potential_target = ', '.join(strong_targets[0:10])
-    moderate_potential_target = ', '.join(strong_targets[11:])
+    moderate_potential_target = ', '.join(strong_targets[10:])
     top_10_volume = crypto_downloader.get_futures_top_10()
     important_targets = crypto_downloader.find_important_crypto_targets(top_10_volume, strong_targets)
     important_targets_str = ', '.join(important_targets)

@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 from pytz import timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+import argparse
+from discord_webhook import DiscordWebhook
 from src.downloader import StockDownloader
 
 
@@ -131,6 +132,10 @@ if __name__ == '__main__':
     stock_downloader.update_database()
     all_symbols = stock_downloader.get_all_symbols()
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
+    args = parser.parse_args()
+    webhook_url = args.webhook
     with ThreadPoolExecutor(max_workers=32) as executor:
         future_tasks = [executor.submit(test_strategy, symbol, False) for symbol in all_symbols]
         results = [future.result() for future in as_completed(future_tasks)]
@@ -153,6 +158,12 @@ if __name__ == '__main__':
         print(f"{crypto}: {score}")
     print("========================================================================================")
     date_str = datetime.now().strftime("%Y-%m-%d")
+    webhook_str = f'{date_str} 美股標的篩選\n1~10: {", ".join(strong_targets[0:10])}\n11~20: {", ".join(strong_targets[10:20])}\n21~30: {", ".join(strong_targets[20:30])}\n31~40: {", ".join(strong_targets[30:40])}\n41~50: {", ".join(strong_targets[40:50])}'
+    print(webhook_str)
+    if webhook_url:
+        webhook = DiscordWebhook(url=webhook_url, content=webhook_str)
+        response = webhook.execute()
+        print(response)
     txt_content = "###INDEX\nSPY,IXIC,DJI\n###TARGETS\n"
     txt_content += ",".join(strong_targets)
     with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
