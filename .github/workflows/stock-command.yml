@@ -18,14 +18,12 @@ jobs:
       #   with:
       #     python-version: "3.9"  # Replace with the desired Python version
 
-      - name: Cache Primes
-        id: cache-primes
-        uses: actions/cache@v3
+      - uses: actions/cache/restore@v3
+        id: restore-cache
         with:
-          path: screen.db
-          key: stock_screen_db
-        restore-keys: |
-          ${{ runner.os }}-stock_screen_db
+          path: ./screen.db
+          key: stock_db-cache
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -37,3 +35,10 @@ jobs:
 
       - name: Run Python command
         run: python3 stock_trend_template.py -u ${{ secrets.STOCK_WEBHOOK }}  # Replace with your Python command
+
+      - name: Cache db
+        id: cache-db
+        uses: actions/cache@v3
+        with:
+          path: ./screen.db
+          key: stock_db-cache
