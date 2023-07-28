@@ -25,10 +25,8 @@ jobs:
         id: cache-primes
         uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          path: screen.db
+          key: stock_screen_db
         
       - name: Checkout code
         uses: actions/checkout@v2
