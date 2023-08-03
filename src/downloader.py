@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from requests.adapters import HTTPAdapter, Retry
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from binance import Client
+from tenacity import *
 
 from src.utils import read_tokens, read_tradingview_csv, get_closest_market_datetime, check_timezone_to_ny, connect_db
 
@@ -233,13 +234,14 @@ class StockDownloader(BaseDownloader):
             conn.close()
         return symbol, status, response
 
+    @retry(stop=stop_after_attempt(3))
     def request_yfinance(self, symbol, start_date, end_date):
         start_date_str = start_date.strftime("%Y-%m-%d")
         end_date = end_date + timedelta(days=1)
         end_date_str = end_date.strftime("%Y-%m-%d")
         try:
             df = yf.download(symbol, start=start_date_str, end=end_date_str)
-            time.sleep(0.2)
+            time.sleep(0.3)
         except Exception as e:
             raise Exception(f"{symbol} -> Fetching data from yfinance. Error: {e}")
         df = df.reset_index()
@@ -284,7 +286,6 @@ class StockDownloader(BaseDownloader):
             for duration in STOCK_SMA:
                 df["SMA_" + str(duration)] = round(df.loc[:, "Adj Close"].rolling(window=duration).mean(), 2)
         return df
-
 
 class CryptoDownloader(BaseDownloader):
     def __init__(self, api_keys: dict = None, save_dir: str = ".", db_name="screen.db"):
@@ -379,12 +380,13 @@ class CryptoDownloader(BaseDownloader):
             response = str(e)
         return crypto, status, response
     
-    def get_futures_top_10(self):
+    def get_futures_top(self, num):
+        top_num = num + 2
         top_10_quoteVolume = []
         try:
             futures_all = self.binance_client.futures_ticker()
             sorted_data = sorted(futures_all, key=lambda x: float(x['quoteVolume']), reverse=True)
-            top_10_quoteVolume_symbol =  [d['symbol'] for d in sorted_data[:12]]
+            top_10_quoteVolume_symbol =  [d['symbol'] for d in sorted_data[:top_num]]
             for symbol in top_10_quoteVolume_symbol:
                 if 'BTC' not in symbol or 'ETH' not in symbol:
                     top_10_quoteVolume.append(symbol.split('USDT')[0])

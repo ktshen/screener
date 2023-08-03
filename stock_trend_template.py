@@ -4,12 +4,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import argparse
 from discord_webhook import DiscordWebhook
 from src.downloader import StockDownloader
-
+import schedule
+import time
 
 ##################### CONFIGURATIONS #####################
 CURRENT_TIMEZONE = "America/Los_Angeles"
 ##########################################################
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
+args = parser.parse_args()
+webhook_url = args.webhook
 
 def test_strategy(ticker: str, strict=False):
     """
@@ -125,17 +130,14 @@ def test_strategy(ticker: str, strict=False):
         print(f"{ticker} failed: {e}")
         return None
 
-
-if __name__ == '__main__':
+def main(webhook_url):
     stock_downloader = StockDownloader()
     stock_downloader.check_stock_table()
     stock_downloader.update_database()
     all_symbols = stock_downloader.get_all_symbols()
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
-    args = parser.parse_args()
-    webhook_url = args.webhook
+    print(webhook_url)
+
     with ThreadPoolExecutor(max_workers=32) as executor:
         future_tasks = [executor.submit(test_strategy, symbol, False) for symbol in all_symbols]
         results = [future.result() for future in as_completed(future_tasks)]
@@ -164,7 +166,14 @@ if __name__ == '__main__':
         webhook = DiscordWebhook(url=webhook_url, content=webhook_str)
         response = webhook.execute()
         print(response)
-    txt_content = "###INDEX\nSPY,IXIC,DJI\n###TARGETS\n"
-    txt_content += ",".join(strong_targets)
-    with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
-        f.write(txt_content)
+    # txt_content = "###INDEX\nSPY,IXIC,DJI\n###TARGETS\n"
+    # txt_content += ",".join(strong_targets)
+    # with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
+    #     f.write(txt_content)
+
+schedule.every().day.at("21:00").do(main, webhook_url=webhook_url)
+
+while True:
+    # print("Start schedule")
+    schedule.run_pending()
+    time.sleep(60)

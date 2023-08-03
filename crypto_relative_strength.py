@@ -96,10 +96,10 @@ if __name__ == '__main__':
     date_str = d1.replace('/', '_')
     high_potential_target = ', '.join(strong_targets[0:10])
     moderate_potential_target = ', '.join(strong_targets[10:])
-    top_10_volume = crypto_downloader.get_futures_top_10()
+    top_10_volume = crypto_downloader.get_futures_top(30)
     important_targets = crypto_downloader.find_important_crypto_targets(top_10_volume, strong_targets)
     important_targets_str = ', '.join(important_targets)
-    crypto_downloader.write_targets_file(date_str, {"重點標的": important_targets, "強勢標的": strong_targets, "前十交易量":top_10_volume})
+    crypto_downloader.write_targets_file(date_str, {"重點標的": important_targets, "強勢標的": strong_targets, "前三十交易量":top_10_volume})
     webhook_str = f'{d1} 標的篩選\n強勢標的: {high_potential_target}\n次強勢標的: {moderate_potential_target}\n重點標的: {important_targets_str}'
     print(webhook_str)
     if webhook_url:
