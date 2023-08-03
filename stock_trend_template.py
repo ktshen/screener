@@ -171,7 +171,7 @@ def main(webhook_url):
     # with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
     #     f.write(txt_content)
 
-schedule.every().day.at("21:00").do(main, webhook_url=webhook_url)
+schedule.every().day.at("12:00").do(main, webhook_url=webhook_url)
 
 while True:
     # print("Start schedule")
