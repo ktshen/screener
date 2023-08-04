@@ -1,7 +1,5 @@
 name: Run Python Command
 on:
-  schedule:
-    - cron: '0 4 * * *' # This cron expression runs the workflow every day at 8:00 AM and 8:00 PM GMT+8
   workflow_dispatch:
     inputs:
       tags:
