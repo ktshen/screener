@@ -1,7 +1,7 @@
 name: Run Python Command
 on:
   schedule:
-    - cron: '30 10,22 * * *' # This cron expression runs the workflow every day at 8:00 AM and 8:00 PM GMT+8
+    - cron: '55 11,23 * * *' # This cron expression runs the workflow every day at 8:00 AM and 8:00 PM GMT+8
 
 jobs:
   run-python-command:
