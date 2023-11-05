@@ -8,3 +8,4 @@ pandas-market-calendars
 discord-webhook
 schedule
 tenacity
+APScheduler

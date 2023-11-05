@@ -3,6 +3,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from src.downloader import CryptoDownloader
 from discord_webhook import DiscordWebhook
 from datetime import datetime, timedelta
+from apscheduler.schedulers.blocking import BlockingScheduler
+from pytz import timezone
 
 ##################### CONFIGURATIONS #####################
 CURRENT_TIMEZONE = "America/Los_Angeles"
@@ -51,16 +53,9 @@ def test_strategy(symbol: str, time_interval: str, days: int):
 
     return {"crypto": symbol, "rs_score": rs_score}
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+def crpto(timeframe, total_days, webhook_url):
     print("crypto")
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-t', '--timeframe', type=str, help='Time frame (3m, 5m, 15m, 30m, 1h, 2h, 4h)', default="4h")
-    parser.add_argument('-d', '--total_days', type=int, help='Calculation duration in days (default 7 days)', default=5)
-    parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
-    args = parser.parse_args()
-    timeframe = args.timeframe
-    total_days = args.total_days
-    webhook_url = args.webhook
     crypto_downloader = CryptoDownloader()
     crypto_downloader.check_crypto_table()
     all_cryptos = crypto_downloader.get_all_symbols()
@@ -108,6 +103,27 @@ if __name__ == '__main__':
             webhook.add_file(file=f.read(), filename=f"{date_str}_strong_targets.txt")
         response = webhook.execute()
         print(response)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--timeframe', type=str, help='Time frame (3m, 5m, 15m, 30m, 1h, 2h, 4h)', default="4h")
+    parser.add_argument('-d', '--total_days', type=int, help='Calculation duration in days (default 7 days)', default=5)
+    parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
+    args = parser.parse_args()
+    timeframe = args.timeframe
+    total_days = args.total_days
+    webhook_url = args.webhook
+
+    scheduler = BlockingScheduler()
+    scheduler.timezone = timezone('Asia/Taipei')
+
+    scheduler.add_job(crpto, 'cron', hour=8, args=[timeframe, total_days, webhook_url])
+
+    scheduler.add_job(crpto, 'cron', hour=20, args=[timeframe, total_days, webhook_url])
+
+    # scheduler.add_job(crpto, 'cron', hour=13, minute=15, args=[timeframe, total_days, webhook_url])
+
+    scheduler.start()
 
     # Write to txt file
     # txt_content = "###BTCETH\nBINANCE:BTCUSDT.P,BINANCE:ETHUSDT\n###Targets (Sort by score)\n"
