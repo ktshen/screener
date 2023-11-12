@@ -290,7 +290,7 @@ class StockDownloader(BaseDownloader):
 class CryptoDownloader(BaseDownloader):
     def __init__(self, api_keys: dict = None, save_dir: str = ".", db_name="screen.db"):
         super().__init__(api_keys, save_dir, db_name)
-        self.binance_client = Client(requests_params={"timeout": 300}, api_key=os.getenv("KEY"), api_secret=os.getenv("SECRET"))
+        self.binance_client = Client(requests_params={"timeout": 300})
 
     def get_all_symbols(self):
         """
@@ -384,6 +384,7 @@ class CryptoDownloader(BaseDownloader):
         top_num = num + 2
         top_10_quoteVolume = []
         try:
+            time.sleep(65)
             futures_all = self.binance_client.futures_ticker()
             sorted_data = sorted(futures_all, key=lambda x: float(x['quoteVolume']), reverse=True)
             top_10_quoteVolume_symbol =  [d['symbol'] for d in sorted_data[:top_num]]

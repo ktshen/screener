@@ -5,7 +5,6 @@ from discord_webhook import DiscordWebhook
 from datetime import datetime, timedelta
 from apscheduler.schedulers.blocking import BlockingScheduler
 from pytz import timezone
-from dotenv import load_dotenv
 ##################### CONFIGURATIONS #####################
 CURRENT_TIMEZONE = "America/Los_Angeles"
 ##########################################################
@@ -122,8 +121,6 @@ if __name__ == '__main__':
     scheduler.add_job(crpto, 'cron', hour=20, args=[timeframe, total_days, webhook_url])
 
     # scheduler.add_job(crpto, 'cron', hour=14, minute=30, args=[timeframe, total_days, webhook_url])
-
-    # scheduler.add_job(crpto, 'cron', hour=13, minute=15, args=[timeframe, total_days, webhook_url])
 
     scheduler.start()
 
