@@ -9,3 +9,4 @@ discord-webhook
 schedule
 tenacity
 APScheduler
+python-dotenv

@@ -290,7 +290,7 @@ class StockDownloader(BaseDownloader):
 class CryptoDownloader(BaseDownloader):
     def __init__(self, api_keys: dict = None, save_dir: str = ".", db_name="screen.db"):
         super().__init__(api_keys, save_dir, db_name)
-        self.binance_client = Client(requests_params={"timeout": 300})
+        self.binance_client = Client(requests_params={"timeout": 300}, api_key=os.getenv("KEY"), api_secret=os.getenv("SECRET"))
 
     def get_all_symbols(self):
         """
