@@ -121,8 +121,8 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
     scheduler.timezone = timezone('Asia/Taipei')
 
-    scheduler.add_job(execute, 'cron', hour=23, minute=3, args=[webhook_url])
+    scheduler.add_job(execute, 'cron', hour=8, minute=5, args=[webhook_url])
 
-    scheduler.add_job(execute, 'cron', hour=20, args=[webhook_url])
-    
+    scheduler.add_job(execute, 'cron', hour=20, minute=5, args=[webhook_url])
+
     scheduler.start()
