@@ -1,5 +1,6 @@
 pytz
 pandas
+numpy
 yfinance
 requests
 stocksymbol
@@ -10,3 +11,5 @@ schedule
 tenacity
 APScheduler
 python-dotenv
+ccxt
+TA-Lib
