@@ -19,8 +19,10 @@ def slope(point0, point1, point2):
     return normalization_slope
 
 # 获取所有交易对 
+keywords = ["ABC", "UP", "DOWN", "BULL", "BEAR", "GXS"]
 symbols = exchange.load_markets().keys()  
 usdt_symbols = [s for s in symbols if s[-5:] == "/USDT"]
+cleaned_list = [x for x in usdt_symbols if all(key not in x for key in keywords)]
 timeframes = ['1d', '4h', '2h', '1h', '15m']
 ema_cols = ['ema20', 'ema50', 'ema200']
 
@@ -39,7 +41,7 @@ def run(symbol):
         if timeframe == "1d":
             bars = exchange.fetch_ohlcv(symbol, timeframe, limit=50)
         else:
-            bars = exchange.fetch_ohlcv(symbol, timeframe, limit=205)
+            bars = exchange.fetch_ohlcv(symbol, timeframe, limit=280)
 
         df_frames = pd.DataFrame(bars, columns=['time', 'open', 'high', 'low', 'close', 'volume'])
         closes = df_frames['close']
