@@ -71,7 +71,7 @@ def run(symbol):
             if (None in ema20[-3:]):
                 break
             four_hour_slope = slope(ema20[-1],ema20[-2],ema20[-3])
-            if four_hour_slope >= 1:
+            if four_hour_slope >= 0.92:
                 condition5 = True
                 conditions_met[timeframe] = all([condition1, condition5])
         else:
@@ -86,7 +86,7 @@ def execute(webhook_url):
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         
         futures = []
-        for symbol in usdt_symbols:
+        for symbol in cleaned_list:
             futures.append(executor.submit(
                 run, symbol))
         
