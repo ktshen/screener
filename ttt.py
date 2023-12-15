@@ -63,15 +63,14 @@ def run(symbol):
         elif timeframe == "1h":
             last_close = closes.tail(60)
             test_ema200_60 = talib.EMA(closes, 200).tail(60)
-            mask = last_close < test_ema200_60
-            condition5 = mask.sum() > 0
-            conditions_met[timeframe] = all([condition1, not condition5])
+            result = (last_close > test_ema200_60).all()
+            conditions_met[timeframe] = all([condition1, result])
         elif timeframe == "4h":
             condition5 = False
             if (None in ema20[-3:]):
                 break
             four_hour_slope = slope(ema20[-1],ema20[-2],ema20[-3])
-            if four_hour_slope >= 0.92:
+            if four_hour_slope >= 1:
                 condition5 = True
                 conditions_met[timeframe] = all([condition1, condition5])
         else:
