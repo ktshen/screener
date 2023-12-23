@@ -152,7 +152,7 @@ def execute(webhook_url = None):
 
     # 输出路径 
     output_path = os.path.join(os.getcwd(), "output.txt")  
-
+    discord_content = binance_doc_content + ",".join(binance_formatted_symbols) + "\n" + bybit_doc_content + ",".join(bybit_formatted_symbols) + "\n" + okx_doc_content + ",".join(okx_formatted_symbols)
     # 写入文档
     with open(output_path, "w") as f:
         f.write(binance_doc_content + ",".join(binance_formatted_symbols) + "\n")
@@ -161,7 +161,7 @@ def execute(webhook_url = None):
 
     # 过滤并打印结果  
     if webhook_url is not None:
-        webhook = DiscordWebhook(url=webhook_url, content=", ".join(binance_selected_symbols))
+        webhook = DiscordWebhook(url=webhook_url, content=discord_content)
         with open("output.txt", "rb") as f:
             webhook.add_file(file=f.read(), filename="test.txt")
         response = webhook.execute()
@@ -173,14 +173,13 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--webhook', type=str, help='discord webhook url', default='')
     args = parser.parse_args()
 
-    execute()
-    # webhook_url = args.webhook
+    webhook_url = args.webhook
 
-    # scheduler = BlockingScheduler()
-    # scheduler.timezone = timezone('Asia/Taipei')
+    scheduler = BlockingScheduler()
+    scheduler.timezone = timezone('Asia/Taipei')
 
-    # scheduler.add_job(execute, 'cron', hour=8, minute=5, args=[webhook_url])
+    scheduler.add_job(execute, 'cron', hour=8, minute=5, args=[webhook_url])
 
-    # scheduler.add_job(execute, 'cron', hour=20, minute=5, args=[webhook_url])
+    scheduler.add_job(execute, 'cron', hour=20, minute=5, args=[webhook_url])
 
-    # scheduler.start()
+    scheduler.start()
