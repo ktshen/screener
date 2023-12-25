@@ -152,7 +152,10 @@ def execute(webhook_url = None):
 
     # 输出路径 
     output_path = os.path.join(os.getcwd(), "output.txt")  
-    discord_content = binance_doc_content + ",".join(binance_formatted_symbols) + "\n" + bybit_doc_content + ",".join(bybit_formatted_symbols) + "\n" + okx_doc_content + ",".join(okx_formatted_symbols)
+    binance_content = binance_doc_content + ", ".join(binance_formatted_symbols)
+    bybit_content = bybit_doc_content + ", ".join(bybit_formatted_symbols)
+    okx_content = okx_doc_content + ", ".join(okx_formatted_symbols)
+    # discord_content = binance_doc_content + ",".join(binance_formatted_symbols) + "\n" + bybit_doc_content + ",".join(bybit_formatted_symbols) + "\n" + okx_doc_content + ",".join(okx_formatted_symbols)
     # 写入文档
     with open(output_path, "w") as f:
         f.write(binance_doc_content + ",".join(binance_formatted_symbols) + "\n")
@@ -161,10 +164,14 @@ def execute(webhook_url = None):
 
     # 过滤并打印结果  
     if webhook_url is not None:
-        webhook = DiscordWebhook(url=webhook_url, content=discord_content)
+        webhook1 = DiscordWebhook(url=webhook_url, content=binance_content)
+        webhook2 = DiscordWebhook(url=webhook_url, content=bybit_content)
+        webhook3 = DiscordWebhook(url=webhook_url, content=okx_content)
         with open("output.txt", "rb") as f:
-            webhook.add_file(file=f.read(), filename="test.txt")
-        response = webhook.execute()
+            webhook3.add_file(file=f.read(), filename="test.txt")
+        webhook1.execute()
+        webhook2.execute()
+        response = webhook3.execute()
         print(response)
 
 if __name__ == '__main__':
