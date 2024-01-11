@@ -62,10 +62,9 @@ if __name__ == '__main__':
     total_days = args.total_days
 
     crypto_downloader = CryptoDownloader()
-    crypto_downloader.check_crypto_table()
     all_cryptos = crypto_downloader.get_all_symbols()
 
-    with ThreadPoolExecutor(max_workers=20) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         future_tasks = [executor.submit(test_strategy, crypto, timeframe, total_days) for crypto in all_cryptos]
         results = [future.result() for future in as_completed(future_tasks)]
 
