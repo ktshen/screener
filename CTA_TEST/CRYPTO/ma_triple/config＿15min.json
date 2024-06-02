@@ -1,0 +1,27 @@
+
+    {
+        "config": {
+            "freq": "15min",
+            "fee": 0.0003,
+            "weekend_filter": "False"
+        },
+        "params": {
+            "AVAX": {
+                "short": {
+                    "0": {
+                        "short_window": 44,
+                        "middle_window": 44,
+                        "long_window": 44
+                    }
+                }
+            },
+            "RUNE":{
+                "long":{
+                    "short_window": 12,
+                    "middle_window": 12,
+                    "long_window": 18
+                }
+            }
+
+        }
+    }

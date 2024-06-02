@@ -1,0 +1,543 @@
+{
+    "params": {
+        "INJ": {
+            "long": {
+                "0": {
+                    "window_ma": 148,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_ma": 148,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_ma": 152,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_ma": 152,
+                    "multiplier": 2.0
+                },
+                "4": {
+                    "window_ma": 132,
+                    "multiplier": 2.0
+                },
+                "5": {
+                    "window_ma": 132,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "window_ma": 304,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_ma": 304,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_ma": 300,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_ma": 300,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_ma": 296,
+                    "multiplier": 2.0
+                },
+                "5": {
+                    "window_ma": 296,
+                    "multiplier": 2.5
+                },
+                "6": {
+                    "window_ma": 288,
+                    "multiplier": 2.5
+                },
+                "7": {
+                    "window_ma": 288,
+                    "multiplier": 2.0
+                },
+                "8": {
+                    "window_ma": 292,
+                    "multiplier": 2.5
+                },
+                "9": {
+                    "window_ma": 292,
+                    "multiplier": 2.0
+                },
+                "10": {
+                    "window_ma": 284,
+                    "multiplier": 2.0
+                },
+                "11": {
+                    "window_ma": 284,
+                    "multiplier": 2.5
+                },
+                "12": {
+                    "window_ma": 280,
+                    "multiplier": 2.0
+                },
+                "13": {
+                    "window_ma": 280,
+                    "multiplier": 2.5
+                },
+                "14": {
+                    "window_ma": 276,
+                    "multiplier": 2.0
+                },
+                "15": {
+                    "window_ma": 276,
+                    "multiplier": 2.5
+                },
+                "16": {
+                    "window_ma": 368,
+                    "multiplier": 2.0
+                },
+                "17": {
+                    "window_ma": 368,
+                    "multiplier": 2.5
+                },
+                "18": {
+                    "window_ma": 348,
+                    "multiplier": 2.5
+                },
+                "19": {
+                    "window_ma": 348,
+                    "multiplier": 2.0
+                },
+                "20": {
+                    "window_ma": 264,
+                    "multiplier": 2.5
+                },
+                "21": {
+                    "window_ma": 264,
+                    "multiplier": 2.0
+                },
+                "22": {
+                    "window_ma": 360,
+                    "multiplier": 2.5
+                },
+                "23": {
+                    "window_ma": 360,
+                    "multiplier": 2.0
+                },
+                "24": {
+                    "window_ma": 364,
+                    "multiplier": 2.5
+                },
+                "25": {
+                    "window_ma": 364,
+                    "multiplier": 2.0
+                },
+                "26": {
+                    "window_ma": 356,
+                    "multiplier": 2.5
+                },
+                "27": {
+                    "window_ma": 356,
+                    "multiplier": 2.0
+                },
+                "28": {
+                    "window_ma": 260,
+                    "multiplier": 2.5
+                },
+                "29": {
+                    "window_ma": 260,
+                    "multiplier": 2.0
+                },
+                "30": {
+                    "window_ma": 352,
+                    "multiplier": 2.5
+                },
+                "31": {
+                    "window_ma": 352,
+                    "multiplier": 2.0
+                },
+                "32": {
+                    "window_ma": 344,
+                    "multiplier": 2.5
+                },
+                "33": {
+                    "window_ma": 344,
+                    "multiplier": 2.0
+                },
+                "34": {
+                    "window_ma": 372,
+                    "multiplier": 2.5
+                },
+                "35": {
+                    "window_ma": 372,
+                    "multiplier": 2.0
+                },
+                "36": {
+                    "window_ma": 268,
+                    "multiplier": 2.5
+                },
+                "37": {
+                    "window_ma": 268,
+                    "multiplier": 2.0
+                },
+                "38": {
+                    "window_ma": 332,
+                    "multiplier": 2.5
+                },
+                "39": {
+                    "window_ma": 332,
+                    "multiplier": 2.0
+                },
+                "40": {
+                    "window_ma": 380,
+                    "multiplier": 2.5
+                },
+                "41": {
+                    "window_ma": 380,
+                    "multiplier": 2.0
+                },
+                "42": {
+                    "window_ma": 376,
+                    "multiplier": 2.5
+                },
+                "43": {
+                    "window_ma": 376,
+                    "multiplier": 2.0
+                },
+                "44": {
+                    "window_ma": 340,
+                    "multiplier": 2.5
+                },
+                "45": {
+                    "window_ma": 340,
+                    "multiplier": 2.0
+                },
+                "46": {
+                    "window_ma": 256,
+                    "multiplier": 2.5
+                },
+                "47": {
+                    "window_ma": 256,
+                    "multiplier": 2.0
+                },
+                "48": {
+                    "window_ma": 336,
+                    "multiplier": 2.5
+                },
+                "49": {
+                    "window_ma": 336,
+                    "multiplier": 2.0
+                },
+                "50": {
+                    "window_ma": 328,
+                    "multiplier": 2.0
+                },
+                "51": {
+                    "window_ma": 328,
+                    "multiplier": 2.5
+                },
+                "52": {
+                    "window_ma": 252,
+                    "multiplier": 2.0
+                },
+                "53": {
+                    "window_ma": 252,
+                    "multiplier": 2.5
+                },
+                "54": {
+                    "window_ma": 244,
+                    "multiplier": 2.0
+                },
+                "55": {
+                    "window_ma": 244,
+                    "multiplier": 2.5
+                },
+                "56": {
+                    "window_ma": 384,
+                    "multiplier": 2.0
+                },
+                "57": {
+                    "window_ma": 384,
+                    "multiplier": 2.5
+                },
+                "58": {
+                    "window_ma": 388,
+                    "multiplier": 2.0
+                },
+                "59": {
+                    "window_ma": 388,
+                    "multiplier": 2.5
+                },
+                "60": {
+                    "window_ma": 392,
+                    "multiplier": 2.0
+                },
+                "61": {
+                    "window_ma": 392,
+                    "multiplier": 2.5
+                },
+                "62": {
+                    "window_ma": 396,
+                    "multiplier": 2.0
+                },
+                "63": {
+                    "window_ma": 396,
+                    "multiplier": 2.5
+                },
+                "64": {
+                    "window_ma": 324,
+                    "multiplier": 2.0
+                },
+                "65": {
+                    "window_ma": 324,
+                    "multiplier": 2.5
+                },
+                "66": {
+                    "window_ma": 240,
+                    "multiplier": 2.5
+                },
+                "67": {
+                    "window_ma": 240,
+                    "multiplier": 2.0
+                },
+                "68": {
+                    "window_ma": 316,
+                    "multiplier": 2.0
+                },
+                "69": {
+                    "window_ma": 316,
+                    "multiplier": 2.5
+                },
+                "70": {
+                    "window_ma": 320,
+                    "multiplier": 2.0
+                },
+                "71": {
+                    "window_ma": 320,
+                    "multiplier": 2.5
+                },
+                "72": {
+                    "window_ma": 312,
+                    "multiplier": 2.0
+                },
+                "73": {
+                    "window_ma": 312,
+                    "multiplier": 2.5
+                },
+                "74": {
+                    "window_ma": 248,
+                    "multiplier": 2.0
+                },
+                "75": {
+                    "window_ma": 248,
+                    "multiplier": 2.5
+                },
+                "76": {
+                    "window_ma": 308,
+                    "multiplier": 2.5
+                },
+                "77": {
+                    "window_ma": 308,
+                    "multiplier": 2.0
+                },
+                "78": {
+                    "window_ma": 272,
+                    "multiplier": 2.0
+                },
+                "79": {
+                    "window_ma": 272,
+                    "multiplier": 2.5
+                },
+                "80": {
+                    "window_ma": 216,
+                    "multiplier": 2.5
+                },
+                "81": {
+                    "window_ma": 216,
+                    "multiplier": 2.0
+                },
+                "82": {
+                    "window_ma": 236,
+                    "multiplier": 2.5
+                },
+                "83": {
+                    "window_ma": 236,
+                    "multiplier": 2.0
+                },
+                "84": {
+                    "window_ma": 220,
+                    "multiplier": 2.5
+                },
+                "85": {
+                    "window_ma": 220,
+                    "multiplier": 2.0
+                },
+                "86": {
+                    "window_ma": 160,
+                    "multiplier": 2.5
+                },
+                "87": {
+                    "window_ma": 160,
+                    "multiplier": 2.0
+                },
+                "88": {
+                    "window_ma": 168,
+                    "multiplier": 2.0
+                },
+                "89": {
+                    "window_ma": 168,
+                    "multiplier": 2.5
+                },
+                "90": {
+                    "window_ma": 204,
+                    "multiplier": 2.0
+                },
+                "91": {
+                    "window_ma": 204,
+                    "multiplier": 2.5
+                },
+                "92": {
+                    "window_ma": 192,
+                    "multiplier": 2.5
+                },
+                "93": {
+                    "window_ma": 192,
+                    "multiplier": 2.0
+                },
+                "94": {
+                    "window_ma": 164,
+                    "multiplier": 2.0
+                },
+                "95": {
+                    "window_ma": 164,
+                    "multiplier": 2.5
+                },
+                "96": {
+                    "window_ma": 172,
+                    "multiplier": 2.0
+                },
+                "97": {
+                    "window_ma": 172,
+                    "multiplier": 2.5
+                },
+                "98": {
+                    "window_ma": 224,
+                    "multiplier": 2.0
+                },
+                "99": {
+                    "window_ma": 224,
+                    "multiplier": 2.5
+                },
+                "100": {
+                    "window_ma": 228,
+                    "multiplier": 2.5
+                },
+                "101": {
+                    "window_ma": 228,
+                    "multiplier": 2.0
+                },
+                "102": {
+                    "window_ma": 196,
+                    "multiplier": 2.5
+                },
+                "103": {
+                    "window_ma": 196,
+                    "multiplier": 2.0
+                },
+                "104": {
+                    "window_ma": 200,
+                    "multiplier": 2.0
+                },
+                "105": {
+                    "window_ma": 200,
+                    "multiplier": 2.5
+                },
+                "106": {
+                    "window_ma": 232,
+                    "multiplier": 2.0
+                },
+                "107": {
+                    "window_ma": 232,
+                    "multiplier": 2.5
+                },
+                "108": {
+                    "window_ma": 156,
+                    "multiplier": 2.0
+                },
+                "109": {
+                    "window_ma": 156,
+                    "multiplier": 2.5
+                },
+                "110": {
+                    "window_ma": 212,
+                    "multiplier": 2.5
+                },
+                "111": {
+                    "window_ma": 212,
+                    "multiplier": 2.0
+                },
+                "112": {
+                    "window_ma": 208,
+                    "multiplier": 2.0
+                },
+                "113": {
+                    "window_ma": 208,
+                    "multiplier": 2.5
+                },
+                "114": {
+                    "window_ma": 180,
+                    "multiplier": 2.0
+                },
+                "115": {
+                    "window_ma": 180,
+                    "multiplier": 2.5
+                },
+                "116": {
+                    "window_ma": 184,
+                    "multiplier": 2.0
+                },
+                "117": {
+                    "window_ma": 184,
+                    "multiplier": 2.5
+                },
+                "118": {
+                    "window_ma": 188,
+                    "multiplier": 2.0
+                },
+                "119": {
+                    "window_ma": 188,
+                    "multiplier": 2.5
+                },
+                "120": {
+                    "window_ma": 176,
+                    "multiplier": 2.0
+                },
+                "121": {
+                    "window_ma": 176,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {
+                "0": {
+                    "window_ma": 332,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_ma": 332,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_ma": 328,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_ma": 328,
+                    "multiplier": 2.0
+                }
+            }
+        }
+    }
+}

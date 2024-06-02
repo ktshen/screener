@@ -1,0 +1,353 @@
+{
+    "params": {
+        "AVAX": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 20,
+                    "long_window": 32
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 44
+                },
+                "2": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "3": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "4": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "5": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "6": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "7": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 56
+                },
+                "8": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "9": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 32
+                },
+                "10": {
+                    "short_window": 32,
+                    "middle_window": 32,
+                    "long_window": 44
+                },
+                "11": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "12": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 32
+                },
+                "13": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "14": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "15": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 20
+                }
+            }
+        },
+        "OP": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        },
+        "RUNE": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 8,
+                    "middle_window": 8,
+                    "long_window": 32
+                },
+                "2": {
+                    "short_window": 20,
+                    "middle_window": 8,
+                    "long_window": 8
+                },
+                "3": {
+                    "short_window": 8,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "4": {
+                    "short_window": 8,
+                    "middle_window": 20,
+                    "long_window": 32
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 8
+                }
+            }
+        },
+        "ARB": {
+            "long": {},
+            "short": {
+                "0": {
+                    "short_window": 44,
+                    "middle_window": 8,
+                    "long_window": 44
+                },
+                "1": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 44
+                }
+            }
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 20
+                },
+                "2": {
+                    "short_window": 44,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "3": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "4": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "5": {
+                    "short_window": 8,
+                    "middle_window": 8,
+                    "long_window": 44
+                },
+                "6": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "7": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 44
+                },
+                "8": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "9": {
+                    "short_window": 8,
+                    "middle_window": 56,
+                    "long_window": 56
+                },
+                "10": {
+                    "short_window": 44,
+                    "middle_window": 8,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        },
+        "LDO": {
+            "long": {
+                "0": {
+                    "short_window": 20,
+                    "middle_window": 20,
+                    "long_window": 44
+                },
+                "1": {
+                    "short_window": 20,
+                    "middle_window": 20,
+                    "long_window": 20
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "2": {
+                    "short_window": 20,
+                    "middle_window": 8,
+                    "long_window": 56
+                },
+                "3": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "4": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "5": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 44
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "2": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 56
+                }
+            }
+        },
+        "WAVES": {
+            "long": {
+                "0": {
+                    "short_window": 20,
+                    "middle_window": 8,
+                    "long_window": 44
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "1": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 32
+                },
+                "2": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "3": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "4": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "5": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "6": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 44
+                }
+            }
+        },
+        "STX": {
+            "long": {
+                "0": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "2": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 32
+                }
+            },
+            "short": {}
+        }
+    }
+}

@@ -1,0 +1,127 @@
+
+{
+    "config": {
+        "freq": "1h",
+        "fee": 0.0003,
+        "weekend_filter": "False"
+    },
+    "params": {
+        "ETH": {
+            "both": {
+                "0": {"window_k": 36, 
+                    "window_d": 152
+                }
+            },
+            "long":{
+                "0":{
+                    "window_k": 50, 
+                    "window_d": 130
+                }
+            },
+            "short":{
+                "0":{
+                    "window_k": 14, 
+                    "window_d": 86
+                }
+            }
+        },
+        "SOL":{
+            "both":{
+                "0":{
+                    "window_k": 120, 
+                    "window_d": 96
+                },
+                "1":{
+                    "window_k": 140, 
+                    "window_d": 72
+                }
+            }
+        },
+        "MATIC":{
+            "short":{
+                "0":{
+                    "window_k": 12, 
+                    "window_d": 84
+                }
+            }
+        },
+        "XRP":{
+            "both":{
+                "0":{
+                    "window_k": 88, 
+                    "window_d": 76
+                    }
+            },
+            "long":{
+                "0":{
+                    "window_k": 88, 
+                    "window_d": 76
+                }
+            },
+            "short":{
+                "0":{
+                    "window_k": 92, 
+                    "window_d": 84
+                }
+            }
+        },
+        "RUNE":{
+            "long":{
+                "0":{
+                    "window_k": 44, 
+                    "window_d": 4
+                }
+            },
+            "both":{
+                "0":{
+                    "window_k": 44, 
+                    "window_d": 4
+                }
+            }
+        },
+        "INJ":{
+            "long":{
+                "0":{
+                    "window_k": 164, 
+                    "window_d": 68
+                }
+            },
+            "both":{
+                "0":{
+                    "window_k": 92, 
+                    "window_d": 124
+                }
+            }
+        },
+        "ATOM":{
+            "short":{
+                "0":{
+                    "window_k": 4, 
+                    "window_d": 84
+                }
+            }
+        },
+        "ETC":{
+            "short":{
+                "0":{
+                    "window_k": 44, 
+                    "window_d": 84
+                }
+            },
+            "both":{
+                "0":{
+                    "window_k": 28, 
+                    "window_d": 84
+                }
+            }
+        },
+        "GMT":{
+            "both":{
+                "0":{
+                    "window_k": 128, 
+                    "window_d": 40
+                }
+            }
+        }
+    }
+}

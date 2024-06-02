@@ -1,0 +1,154 @@
+{
+    "params": {
+        "BTC": {
+            "long": {
+                "0": {
+                    "window_size": 308,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 308,
+                    "multiplier": 2.0
+                },
+                "2": {
+                    "window_size": 300,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_size": 300,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_size": 304,
+                    "multiplier": 2.5
+                },
+                "5": {
+                    "window_size": 304,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "window_size": 32,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 32,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "INJ": {
+            "long": {
+                "0": {
+                    "window_size": 248,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 248,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_size": 164,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_size": 164,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_size": 244,
+                    "multiplier": 2.0
+                },
+                "5": {
+                    "window_size": 244,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "window_size": 40,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 40,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "FET": {
+            "long": {
+                "0": {
+                    "window_size": 56,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 56,
+                    "multiplier": 2.0
+                },
+                "2": {
+                    "window_size": 52,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_size": 52,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_size": 24,
+                    "multiplier": 2.0
+                },
+                "5": {
+                    "window_size": 24,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "STX": {
+            "long": {},
+            "short": {
+                "0": {
+                    "window_size": 148,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 148,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_size": 36,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_size": 36,
+                    "multiplier": 2.0
+                },
+                "4": {
+                    "window_size": 152,
+                    "multiplier": 2.0
+                },
+                "5": {
+                    "window_size": 152,
+                    "multiplier": 2.5
+                },
+                "6": {
+                    "window_size": 140,
+                    "multiplier": 2.0
+                },
+                "7": {
+                    "window_size": 140,
+                    "multiplier": 2.5
+                }
+            }
+        }
+    }
+}

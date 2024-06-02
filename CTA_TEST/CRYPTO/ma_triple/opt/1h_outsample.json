@@ -1,0 +1,478 @@
+{
+    "params": {
+        "OP": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "2": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "3": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 56
+                },
+                "4": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "5": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        },
+        "ARB": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 20
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 8,
+                    "middle_window": 32,
+                    "long_window": 44
+                }
+            }
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "2": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "3": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "4": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "5": {
+                    "short_window": 8,
+                    "middle_window": 32,
+                    "long_window": 44
+                },
+                "6": {
+                    "short_window": 56,
+                    "middle_window": 8,
+                    "long_window": 20
+                },
+                "7": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 20
+                },
+                "8": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 32
+                },
+                "9": {
+                    "short_window": 56,
+                    "middle_window": 8,
+                    "long_window": 32
+                },
+                "10": {
+                    "short_window": 44,
+                    "middle_window": 8,
+                    "long_window": 44
+                },
+                "11": {
+                    "short_window": 44,
+                    "middle_window": 8,
+                    "long_window": 56
+                },
+                "12": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 56
+                },
+                "13": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "14": {
+                    "short_window": 44,
+                    "middle_window": 8,
+                    "long_window": 20
+                },
+                "15": {
+                    "short_window": 44,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "16": {
+                    "short_window": 56,
+                    "middle_window": 8,
+                    "long_window": 8
+                },
+                "17": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "18": {
+                    "short_window": 32,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "19": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 20
+                },
+                "20": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "21": {
+                    "short_window": 20,
+                    "middle_window": 20,
+                    "long_window": 44
+                },
+                "22": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 20
+                },
+                "23": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "24": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 44
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "1": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 56
+                }
+            }
+        },
+        "INJ": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 8
+                },
+                "1": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 56
+                },
+                "2": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "3": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "4": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "5": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "6": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 56
+                },
+                "7": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "8": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 44
+                },
+                "9": {
+                    "short_window": 44,
+                    "middle_window": 8,
+                    "long_window": 56
+                },
+                "10": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "11": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "12": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 44
+                },
+                "13": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 32
+                },
+                "14": {
+                    "short_window": 32,
+                    "middle_window": 8,
+                    "long_window": 56
+                },
+                "15": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "16": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "17": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "18": {
+                    "short_window": 8,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "19": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 56,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "2": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 44
+                },
+                "3": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "4": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "5": {
+                    "short_window": 8,
+                    "middle_window": 20,
+                    "long_window": 56
+                },
+                "6": {
+                    "short_window": 20,
+                    "middle_window": 8,
+                    "long_window": 32
+                },
+                "7": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "8": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "9": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "10": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 32
+                },
+                "11": {
+                    "short_window": 20,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "12": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 56
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 32,
+                    "middle_window": 8,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "2": {
+                    "short_window": 32,
+                    "middle_window": 8,
+                    "long_window": 44
+                },
+                "3": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "4": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "5": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 20
+                }
+            }
+        },
+        "WAVES": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 56,
+                    "long_window": 32
+                },
+                "1": {
+                    "short_window": 8,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "2": {
+                    "short_window": 20,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "3": {
+                    "short_window": 8,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "4": {
+                    "short_window": 20,
+                    "middle_window": 8,
+                    "long_window": 56
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 8,
+                    "middle_window": 20,
+                    "long_window": 56
+                }
+            }
+        },
+        "FET": {
+            "long": {
+                "0": {
+                    "short_window": 8,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "1": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "2": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "3": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 20
+                },
+                "4": {
+                    "short_window": 56,
+                    "middle_window": 56,
+                    "long_window": 56
+                }
+            },
+            "short": {}
+        }
+    }
+}

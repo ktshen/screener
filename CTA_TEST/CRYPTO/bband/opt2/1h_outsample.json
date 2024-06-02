@@ -1,0 +1,223 @@
+{
+    "params": {
+        "OP": {
+            "long": {
+                "0": {
+                    "window_size": 132,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 132,
+                    "multiplier": 2.0
+                },
+                "2": {
+                    "window_size": 128,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_size": 128,
+                    "multiplier": 2.0
+                },
+                "4": {
+                    "window_size": 20,
+                    "multiplier": 2.5
+                },
+                "5": {
+                    "window_size": 20,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        },
+        "RUNE": {
+            "long": {
+                "0": {
+                    "window_size": 44,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 44,
+                    "multiplier": 2.0
+                },
+                "2": {
+                    "window_size": 88,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_size": 88,
+                    "multiplier": 2.0
+                },
+                "4": {
+                    "window_size": 72,
+                    "multiplier": 2.5
+                },
+                "5": {
+                    "window_size": 72,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {
+                "0": {
+                    "window_size": 48,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 48,
+                    "multiplier": 2.0
+                }
+            }
+        },
+        "ARB": {
+            "long": {},
+            "short": {
+                "0": {
+                    "window_size": 244,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 244,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_size": 240,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_size": 240,
+                    "multiplier": 2.0
+                }
+            }
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "window_size": 20,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 20,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_size": 136,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_size": 136,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "LDO": {
+            "long": {
+                "0": {
+                    "window_size": 252,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 252,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "window_size": 80,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 80,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_size": 16,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_size": 16,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_size": 148,
+                    "multiplier": 2.5
+                },
+                "5": {
+                    "window_size": 148,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        },
+        "EOS": {
+            "long": {
+                "0": {
+                    "window_size": 148,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 148,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "NEAR": {
+            "long": {
+                "0": {
+                    "window_size": 188,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 188,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "FET": {
+            "long": {
+                "0": {
+                    "window_size": 228,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 228,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_size": 220,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_size": 220,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_size": 368,
+                    "multiplier": 2.5
+                },
+                "5": {
+                    "window_size": 368,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        },
+        "STX": {
+            "long": {},
+            "short": {
+                "0": {
+                    "window_size": 144,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 144,
+                    "multiplier": 2.0
+                }
+            }
+        }
+    }
+}

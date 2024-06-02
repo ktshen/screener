@@ -1,0 +1,72 @@
+
+{
+    "config": {
+        "freq": "15m",
+        "fee": 0.0003,
+        "weekend_filter": "False"
+    },
+    "params": {
+        "ETH": {
+            "both": {
+                "0": {
+                    "long_ma": 40, 
+                    "short_ma": 52,
+                    "hour": 2, 
+                    "sl": 4
+                },
+                "1": {
+                    "long_ma": 32,
+                     "short_ma": 60,
+                     "hour": 2, 
+                     "sl": 5
+                }
+            }
+        },
+        "BTC":{
+            "both":{
+                "0":{
+                    "long_ma": 88,
+                    "short_ma": 32,
+                    "hour": 2, 
+                    "sl": 4
+                }
+            }
+        },
+        "AAVE":{
+            "both":{
+                "0":{
+                    "long_ma": 148,
+                    "short_ma": 44,
+                    "hour": 2, 
+                    "sl": 4
+                }
+            }
+        },
+        "ADA":{
+            "both":{
+                "0":{
+                    "long_ma": 92,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "ALGO":{
+            "both":{
+                "0":{
+                    "long_ma": 96,
+                    "short_ma": 32,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 100,
+                    "short_ma": 36,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        }
+    }
+}

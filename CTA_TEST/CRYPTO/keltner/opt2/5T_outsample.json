@@ -1,0 +1,41 @@
+{
+    "params": {
+        "GMT": {
+            "long": {
+                "0": {
+                    "window_ma": 28,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_ma": 28,
+                    "multiplier": 2.5
+                },
+                "2": {
+                    "window_ma": 32,
+                    "multiplier": 2.0
+                },
+                "3": {
+                    "window_ma": 32,
+                    "multiplier": 2.5
+                },
+                "4": {
+                    "window_ma": 24,
+                    "multiplier": 2.0
+                },
+                "5": {
+                    "window_ma": 24,
+                    "multiplier": 2.5
+                },
+                "6": {
+                    "window_ma": 36,
+                    "multiplier": 2.0
+                },
+                "7": {
+                    "window_ma": 36,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        }
+    }
+}

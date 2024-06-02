@@ -1,0 +1,17 @@
+{
+    "params": {
+        "GMT": {
+            "long": {
+                "0": {
+                    "window_ma": 76,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_ma": 76,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        }
+    }
+}

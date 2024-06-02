@@ -1,0 +1,491 @@
+{
+    "params": {
+        "GMT": {
+            "long": {
+                "0": {
+                    "window_size": 12,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 2
+                },
+                "1": {
+                    "window_size": 12,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 2
+                },
+                "2": {
+                    "window_size": 18,
+                    "multiplier": 2.0,
+                    "bigger_width": 6,
+                    "smaller_width": 3
+                },
+                "3": {
+                    "window_size": 18,
+                    "multiplier": 2.5,
+                    "bigger_width": 6,
+                    "smaller_width": 3
+                },
+                "4": {
+                    "window_size": 18,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 3
+                },
+                "5": {
+                    "window_size": 18,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 3
+                },
+                "6": {
+                    "window_size": 12,
+                    "multiplier": 2.5,
+                    "bigger_width": 7,
+                    "smaller_width": 2
+                },
+                "7": {
+                    "window_size": 12,
+                    "multiplier": 2.0,
+                    "bigger_width": 7,
+                    "smaller_width": 2
+                },
+                "8": {
+                    "window_size": 12,
+                    "multiplier": 2.5,
+                    "bigger_width": 6,
+                    "smaller_width": 2
+                },
+                "9": {
+                    "window_size": 12,
+                    "multiplier": 2.0,
+                    "bigger_width": 6,
+                    "smaller_width": 2
+                },
+                "10": {
+                    "window_size": 18,
+                    "multiplier": 2.5,
+                    "bigger_width": 6,
+                    "smaller_width": 4
+                },
+                "11": {
+                    "window_size": 18,
+                    "multiplier": 2.0,
+                    "bigger_width": 6,
+                    "smaller_width": 4
+                },
+                "12": {
+                    "window_size": 18,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "13": {
+                    "window_size": 18,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                }
+            },
+            "short": {}
+        },
+        "INJ": {
+            "long": {
+                "0": {
+                    "window_size": 126,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "1": {
+                    "window_size": 126,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "2": {
+                    "window_size": 126,
+                    "multiplier": 2.5,
+                    "bigger_width": 6,
+                    "smaller_width": 4
+                },
+                "3": {
+                    "window_size": 126,
+                    "multiplier": 2.0,
+                    "bigger_width": 6,
+                    "smaller_width": 4
+                },
+                "4": {
+                    "window_size": 204,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "5": {
+                    "window_size": 204,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "6": {
+                    "window_size": 228,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "7": {
+                    "window_size": 228,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "8": {
+                    "window_size": 210,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "9": {
+                    "window_size": 210,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "10": {
+                    "window_size": 66,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 3
+                },
+                "11": {
+                    "window_size": 66,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 3
+                },
+                "12": {
+                    "window_size": 216,
+                    "multiplier": 2.0,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                },
+                "13": {
+                    "window_size": 216,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 4
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "window_size": 60,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "1": {
+                    "window_size": 60,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "2": {
+                    "window_size": 54,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "3": {
+                    "window_size": 54,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "4": {
+                    "window_size": 42,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "5": {
+                    "window_size": 42,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "6": {
+                    "window_size": 12,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 1
+                },
+                "7": {
+                    "window_size": 12,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 1
+                },
+                "8": {
+                    "window_size": 42,
+                    "multiplier": 2.5,
+                    "bigger_width": 8,
+                    "smaller_width": 3
+                },
+                "9": {
+                    "window_size": 42,
+                    "multiplier": 2.0,
+                    "bigger_width": 8,
+                    "smaller_width": 3
+                },
+                "10": {
+                    "window_size": 66,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "11": {
+                    "window_size": 66,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "12": {
+                    "window_size": 30,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "13": {
+                    "window_size": 30,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "14": {
+                    "window_size": 72,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "15": {
+                    "window_size": 72,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "16": {
+                    "window_size": 54,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "17": {
+                    "window_size": 54,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "18": {
+                    "window_size": 72,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "19": {
+                    "window_size": 72,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "20": {
+                    "window_size": 60,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "21": {
+                    "window_size": 60,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "22": {
+                    "window_size": 66,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "23": {
+                    "window_size": 66,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "24": {
+                    "window_size": 84,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "25": {
+                    "window_size": 84,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "26": {
+                    "window_size": 36,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "27": {
+                    "window_size": 36,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "28": {
+                    "window_size": 42,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "29": {
+                    "window_size": 42,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "30": {
+                    "window_size": 78,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "31": {
+                    "window_size": 78,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                }
+            },
+            "short": {}
+        },
+        "BLUR": {
+            "long": {},
+            "short": {
+                "0": {
+                    "window_size": 174,
+                    "multiplier": 2.5,
+                    "bigger_width": 7,
+                    "smaller_width": 1
+                },
+                "1": {
+                    "window_size": 174,
+                    "multiplier": 2.0,
+                    "bigger_width": 7,
+                    "smaller_width": 1
+                },
+                "2": {
+                    "window_size": 162,
+                    "multiplier": 2.5,
+                    "bigger_width": 5,
+                    "smaller_width": 1
+                }
+            }
+        },
+        "STX": {
+            "long": {
+                "0": {
+                    "window_size": 20,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "1": {
+                    "window_size": 20,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 2
+                },
+                "2": {
+                    "window_size": 36,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "3": {
+                    "window_size": 36,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 3
+                },
+                "4": {
+                    "window_size": 36,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "5": {
+                    "window_size": 36,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "6": {
+                    "window_size": 28,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "7": {
+                    "window_size": 28,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "8": {
+                    "window_size": 44,
+                    "multiplier": 2.0,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "9": {
+                    "window_size": 44,
+                    "multiplier": 2.5,
+                    "bigger_width": 9,
+                    "smaller_width": 4
+                },
+                "10": {
+                    "window_size": 36,
+                    "multiplier": 2.5,
+                    "bigger_width": 8,
+                    "smaller_width": 4
+                },
+                "11": {
+                    "window_size": 36,
+                    "multiplier": 2.0,
+                    "bigger_width": 8,
+                    "smaller_width": 4
+                },
+                "12": {
+                    "window_size": 44,
+                    "multiplier": 2.5,
+                    "bigger_width": 8,
+                    "smaller_width": 4
+                },
+                "13": {
+                    "window_size": 44,
+                    "multiplier": 2.0,
+                    "bigger_width": 8,
+                    "smaller_width": 4
+                }
+            },
+            "short": {}
+        }
+    }
+}

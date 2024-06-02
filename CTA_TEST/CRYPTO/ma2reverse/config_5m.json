@@ -1,0 +1,236 @@
+
+{
+    "config": {
+        "freq": "15m",
+        "fee": 0.0003,
+        "weekend_filter": "False"
+    },
+    "params": {
+        "ETH": {
+            "both": {
+                "0": {
+                    "long_ma": 52, 
+                    "short_ma": 92,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 52, 
+                    "short_ma": 92,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "BTC":{
+            "both":{
+                "0":{
+                    "long_ma": 124, 
+                    "short_ma": 44,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 88, 
+                    "short_ma": 52,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "BNB":{
+            "both":{
+                "0":{
+                    "long_ma": 20,
+                    "short_ma": 16,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "ALGO":{
+            "both":{
+                "0":{
+                    "long_ma": 112,
+                    "short_ma": 100,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 112,
+                    "short_ma": 96,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "APT":{
+            "both":{
+                "0":{
+                    "long_ma": 136,
+                    "short_ma": 48,
+                    "hour": 2, 
+                    "sl": 4
+                },
+                "1":{
+                    "long_ma": 104,
+                    "short_ma": 84,
+                    "hour": 2, 
+                    "sl": 4
+                }
+            }
+        },
+        "ARB":{
+            "both":{
+                "0":{
+                    "long_ma": 60,
+                    "short_ma": 36,
+                    "hour": 2, 
+                    "sl": 5
+                }   
+            }
+        },
+        "ATOM":{
+            "both":{
+                "0":{
+                    "long_ma": 56,
+                    "short_ma": 64,
+                    "hour": 2, 
+                    "sl": 5
+                }   
+            }
+        },
+        "AVAX":{
+            "both":{
+                "0":{
+                    "long_ma": 44,
+                    "short_ma": 96,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 116,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 4
+                },
+                "2":{
+                    "long_ma": 28,
+                    "short_ma": 96,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "3":{
+                    "long_ma": 52,
+                    "short_ma": 92,
+                    "hour": 2, 
+                    "sl": 4
+                }
+
+
+            }
+        },
+        "ETC":{
+            "both":{
+                "0":{
+                    "long_ma": 60,
+                    "short_ma": 32,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "FIL":{
+            "both":{
+                "0":{
+                    "long_ma": 128,
+                    "short_ma": 88,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 132,
+                    "short_ma": 84,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "2":{
+                    "long_ma": 136,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "GALA":{
+            "both":{
+                "0":{
+                    "long_ma": 128,
+                    "short_ma": 88,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "LINK":{
+            "both":{
+                "0":{
+                    "long_ma": 112,
+                    "short_ma": 72,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 100,
+                    "short_ma": 72,
+                    "hour": 2, 
+                    "sl": 4
+                }
+            }
+        },
+        "OMG":{
+            "both":{
+                "0":{
+                    "long_ma": 108,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 124,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "2":{
+                    "long_ma": 112,
+                    "short_ma": 80,
+                    "hour": 2, 
+                    "sl": 5
+                }
+            }
+        },
+        "OP":{
+            "both":{
+                "0":{
+                    "long_ma": 128,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "1":{
+                    "long_ma": 132,
+                    "short_ma": 72,
+                    "hour": 2, 
+                    "sl": 5
+                },
+                "2":{
+                    "long_ma": 120,
+                    "short_ma": 76,
+                    "hour": 2, 
+                    "sl": 5
+                },
+            }
+        }
+    }
+}

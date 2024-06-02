@@ -1,0 +1,185 @@
+{
+    "params": {
+        "RUNE": {
+            "long": {
+                "0": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "2": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "3": {
+                    "short_window": 32,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "4": {
+                    "short_window": 44,
+                    "middle_window": 32,
+                    "long_window": 20
+                },
+                "5": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 56
+                },
+                "6": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "7": {
+                    "short_window": 56,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "8": {
+                    "short_window": 56,
+                    "middle_window": 8,
+                    "long_window": 32
+                },
+                "9": {
+                    "short_window": 56,
+                    "middle_window": 32,
+                    "long_window": 32
+                },
+                "10": {
+                    "short_window": 44,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "11": {
+                    "short_window": 44,
+                    "middle_window": 20,
+                    "long_window": 44
+                },
+                "12": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 44
+                },
+                "13": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 20
+                },
+                "14": {
+                    "short_window": 20,
+                    "middle_window": 20,
+                    "long_window": 32
+                },
+                "15": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 8
+                },
+                "16": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "17": {
+                    "short_window": 56,
+                    "middle_window": 20,
+                    "long_window": 8
+                },
+                "18": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 32
+                },
+                "19": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 44
+                },
+                "20": {
+                    "short_window": 32,
+                    "middle_window": 56,
+                    "long_window": 8
+                },
+                "21": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 44
+                },
+                "22": {
+                    "short_window": 44,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "23": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 20
+                },
+                "24": {
+                    "short_window": 20,
+                    "middle_window": 44,
+                    "long_window": 32
+                },
+                "25": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 44
+                },
+                "26": {
+                    "short_window": 32,
+                    "middle_window": 32,
+                    "long_window": 20
+                },
+                "27": {
+                    "short_window": 32,
+                    "middle_window": 32,
+                    "long_window": 56
+                },
+                "28": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 32
+                }
+            },
+            "short": {
+                "0": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 32
+                }
+            }
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 20
+                },
+                "1": {
+                    "short_window": 20,
+                    "middle_window": 32,
+                    "long_window": 8
+                },
+                "2": {
+                    "short_window": 32,
+                    "middle_window": 20,
+                    "long_window": 20
+                },
+                "3": {
+                    "short_window": 20,
+                    "middle_window": 56,
+                    "long_window": 8
+                }
+            },
+            "short": {}
+        }
+    }
+}

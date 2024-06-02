@@ -1,0 +1,59 @@
+{
+    "params": {
+        "ARB": {
+            "long": {
+                "0": {
+                    "window_size": 388,
+                    "multiplier": 2.0
+                },
+                "1": {
+                    "window_size": 388,
+                    "multiplier": 2.5
+                }
+            },
+            "short": {}
+        },
+        "GMT": {
+            "long": {
+                "0": {
+                    "window_size": 392,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 392,
+                    "multiplier": 2.0
+                },
+                "2": {
+                    "window_size": 396,
+                    "multiplier": 2.5
+                },
+                "3": {
+                    "window_size": 396,
+                    "multiplier": 2.0
+                },
+                "4": {
+                    "window_size": 364,
+                    "multiplier": 2.5
+                },
+                "5": {
+                    "window_size": 364,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "window_size": 380,
+                    "multiplier": 2.5
+                },
+                "1": {
+                    "window_size": 380,
+                    "multiplier": 2.0
+                }
+            },
+            "short": {}
+        }
+    }
+}

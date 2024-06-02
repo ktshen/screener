@@ -1,0 +1,25 @@
+{
+        "config": {
+            "freq": "5min",
+            "fee": 0.0003,
+            "weekend_filter": "False"
+        },
+        "params": {
+            "RUNE": {
+                "both": {
+                    "0": {
+                        "short_window": 20,
+                        "middle_window": 52,
+                        "long_window": 40
+                    }
+                },
+                "long":{
+                    "0":{
+                        "short_window": 44,
+                        "middle_window": 44,
+                        "long_window": 44
+                    }
+                }
+            }
+        }
+    }

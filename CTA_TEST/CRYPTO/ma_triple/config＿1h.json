@@ -1,0 +1,23 @@
+
+    {
+        "config": {
+            "freq": "1h",
+            "fee": 0.0003,
+            "weekend_filter": "False"
+        },
+        "params": {
+            "INJ": {
+                "long": {
+                    "0": {
+                        "short_window": 32,
+                        "middle_window": 12,
+                        "long_window": 56
+                    },
+                    "1":{
+                        "short_window": 20,
+                        "middle_window": 8,
+                        "long_window": 56}
+                }
+            }
+        }
+    }

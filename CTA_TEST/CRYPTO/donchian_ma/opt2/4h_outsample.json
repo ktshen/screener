@@ -1,0 +1,2209 @@
+{
+    "params": {
+        "OP": {
+            "long": {
+                "0": {
+                    "uchannel": 100,
+                    "lchannel": 220,
+                    "ma_window": 10
+                },
+                "1": {
+                    "uchannel": 100,
+                    "lchannel": 115,
+                    "ma_window": 10
+                },
+                "2": {
+                    "uchannel": 100,
+                    "lchannel": 235,
+                    "ma_window": 10
+                },
+                "3": {
+                    "uchannel": 100,
+                    "lchannel": 205,
+                    "ma_window": 10
+                },
+                "4": {
+                    "uchannel": 100,
+                    "lchannel": 190,
+                    "ma_window": 10
+                },
+                "5": {
+                    "uchannel": 100,
+                    "lchannel": 175,
+                    "ma_window": 10
+                },
+                "6": {
+                    "uchannel": 100,
+                    "lchannel": 160,
+                    "ma_window": 10
+                },
+                "7": {
+                    "uchannel": 100,
+                    "lchannel": 130,
+                    "ma_window": 10
+                },
+                "8": {
+                    "uchannel": 100,
+                    "lchannel": 145,
+                    "ma_window": 10
+                },
+                "9": {
+                    "uchannel": 100,
+                    "lchannel": 100,
+                    "ma_window": 10
+                },
+                "10": {
+                    "uchannel": 100,
+                    "lchannel": 85,
+                    "ma_window": 10
+                },
+                "11": {
+                    "uchannel": 100,
+                    "lchannel": 70,
+                    "ma_window": 10
+                },
+                "12": {
+                    "uchannel": 100,
+                    "lchannel": 55,
+                    "ma_window": 10
+                },
+                "13": {
+                    "uchannel": 100,
+                    "lchannel": 40,
+                    "ma_window": 10
+                },
+                "14": {
+                    "uchannel": 100,
+                    "lchannel": 25,
+                    "ma_window": 10
+                },
+                "15": {
+                    "uchannel": 100,
+                    "lchannel": 10,
+                    "ma_window": 10
+                },
+                "16": {
+                    "uchannel": 25,
+                    "lchannel": 205,
+                    "ma_window": 10
+                },
+                "17": {
+                    "uchannel": 25,
+                    "lchannel": 190,
+                    "ma_window": 10
+                },
+                "18": {
+                    "uchannel": 25,
+                    "lchannel": 175,
+                    "ma_window": 10
+                },
+                "19": {
+                    "uchannel": 25,
+                    "lchannel": 235,
+                    "ma_window": 10
+                },
+                "20": {
+                    "uchannel": 25,
+                    "lchannel": 160,
+                    "ma_window": 10
+                },
+                "21": {
+                    "uchannel": 25,
+                    "lchannel": 40,
+                    "ma_window": 10
+                },
+                "22": {
+                    "uchannel": 25,
+                    "lchannel": 145,
+                    "ma_window": 10
+                },
+                "23": {
+                    "uchannel": 25,
+                    "lchannel": 130,
+                    "ma_window": 10
+                },
+                "24": {
+                    "uchannel": 25,
+                    "lchannel": 115,
+                    "ma_window": 10
+                },
+                "25": {
+                    "uchannel": 25,
+                    "lchannel": 100,
+                    "ma_window": 10
+                },
+                "26": {
+                    "uchannel": 25,
+                    "lchannel": 85,
+                    "ma_window": 10
+                },
+                "27": {
+                    "uchannel": 25,
+                    "lchannel": 220,
+                    "ma_window": 10
+                },
+                "28": {
+                    "uchannel": 25,
+                    "lchannel": 70,
+                    "ma_window": 10
+                },
+                "29": {
+                    "uchannel": 25,
+                    "lchannel": 55,
+                    "ma_window": 10
+                },
+                "30": {
+                    "uchannel": 25,
+                    "lchannel": 25,
+                    "ma_window": 10
+                },
+                "31": {
+                    "uchannel": 25,
+                    "lchannel": 10,
+                    "ma_window": 10
+                }
+            },
+            "short": {}
+        },
+        "INJ": {
+            "long": {
+                "0": {
+                    "uchannel": 10,
+                    "lchannel": 85,
+                    "ma_window": 25
+                },
+                "1": {
+                    "uchannel": 10,
+                    "lchannel": 205,
+                    "ma_window": 25
+                },
+                "2": {
+                    "uchannel": 10,
+                    "lchannel": 145,
+                    "ma_window": 25
+                },
+                "3": {
+                    "uchannel": 10,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "4": {
+                    "uchannel": 10,
+                    "lchannel": 25,
+                    "ma_window": 25
+                },
+                "5": {
+                    "uchannel": 10,
+                    "lchannel": 175,
+                    "ma_window": 25
+                },
+                "6": {
+                    "uchannel": 10,
+                    "lchannel": 115,
+                    "ma_window": 25
+                },
+                "7": {
+                    "uchannel": 10,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "8": {
+                    "uchannel": 10,
+                    "lchannel": 10,
+                    "ma_window": 25
+                },
+                "9": {
+                    "uchannel": 10,
+                    "lchannel": 70,
+                    "ma_window": 25
+                },
+                "10": {
+                    "uchannel": 10,
+                    "lchannel": 100,
+                    "ma_window": 25
+                },
+                "11": {
+                    "uchannel": 10,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "12": {
+                    "uchannel": 10,
+                    "lchannel": 235,
+                    "ma_window": 25
+                },
+                "13": {
+                    "uchannel": 10,
+                    "lchannel": 55,
+                    "ma_window": 25
+                },
+                "14": {
+                    "uchannel": 10,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "15": {
+                    "uchannel": 10,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "16": {
+                    "uchannel": 25,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "17": {
+                    "uchannel": 25,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "18": {
+                    "uchannel": 25,
+                    "lchannel": 115,
+                    "ma_window": 25
+                },
+                "19": {
+                    "uchannel": 25,
+                    "lchannel": 10,
+                    "ma_window": 25
+                },
+                "20": {
+                    "uchannel": 25,
+                    "lchannel": 175,
+                    "ma_window": 25
+                },
+                "21": {
+                    "uchannel": 25,
+                    "lchannel": 70,
+                    "ma_window": 25
+                },
+                "22": {
+                    "uchannel": 25,
+                    "lchannel": 100,
+                    "ma_window": 25
+                },
+                "23": {
+                    "uchannel": 25,
+                    "lchannel": 145,
+                    "ma_window": 25
+                },
+                "24": {
+                    "uchannel": 25,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "25": {
+                    "uchannel": 25,
+                    "lchannel": 55,
+                    "ma_window": 25
+                },
+                "26": {
+                    "uchannel": 25,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "27": {
+                    "uchannel": 25,
+                    "lchannel": 235,
+                    "ma_window": 25
+                },
+                "28": {
+                    "uchannel": 25,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "29": {
+                    "uchannel": 25,
+                    "lchannel": 25,
+                    "ma_window": 25
+                },
+                "30": {
+                    "uchannel": 25,
+                    "lchannel": 205,
+                    "ma_window": 25
+                },
+                "31": {
+                    "uchannel": 25,
+                    "lchannel": 85,
+                    "ma_window": 25
+                },
+                "32": {
+                    "uchannel": 40,
+                    "lchannel": 55,
+                    "ma_window": 25
+                },
+                "33": {
+                    "uchannel": 40,
+                    "lchannel": 25,
+                    "ma_window": 25
+                },
+                "34": {
+                    "uchannel": 40,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "35": {
+                    "uchannel": 40,
+                    "lchannel": 145,
+                    "ma_window": 25
+                },
+                "36": {
+                    "uchannel": 40,
+                    "lchannel": 10,
+                    "ma_window": 25
+                },
+                "37": {
+                    "uchannel": 40,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "38": {
+                    "uchannel": 40,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "39": {
+                    "uchannel": 40,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "40": {
+                    "uchannel": 40,
+                    "lchannel": 100,
+                    "ma_window": 25
+                },
+                "41": {
+                    "uchannel": 40,
+                    "lchannel": 205,
+                    "ma_window": 25
+                },
+                "42": {
+                    "uchannel": 40,
+                    "lchannel": 70,
+                    "ma_window": 25
+                },
+                "43": {
+                    "uchannel": 40,
+                    "lchannel": 235,
+                    "ma_window": 25
+                },
+                "44": {
+                    "uchannel": 40,
+                    "lchannel": 175,
+                    "ma_window": 25
+                },
+                "45": {
+                    "uchannel": 40,
+                    "lchannel": 115,
+                    "ma_window": 25
+                },
+                "46": {
+                    "uchannel": 40,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "47": {
+                    "uchannel": 40,
+                    "lchannel": 85,
+                    "ma_window": 25
+                }
+            },
+            "short": {}
+        },
+        "APT": {
+            "long": {
+                "0": {
+                    "uchannel": 160,
+                    "lchannel": 70,
+                    "ma_window": 40
+                },
+                "1": {
+                    "uchannel": 70,
+                    "lchannel": 115,
+                    "ma_window": 55
+                },
+                "2": {
+                    "uchannel": 100,
+                    "lchannel": 205,
+                    "ma_window": 40
+                },
+                "3": {
+                    "uchannel": 160,
+                    "lchannel": 10,
+                    "ma_window": 40
+                },
+                "4": {
+                    "uchannel": 145,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "5": {
+                    "uchannel": 175,
+                    "lchannel": 130,
+                    "ma_window": 70
+                },
+                "6": {
+                    "uchannel": 100,
+                    "lchannel": 205,
+                    "ma_window": 55
+                },
+                "7": {
+                    "uchannel": 10,
+                    "lchannel": 175,
+                    "ma_window": 190
+                },
+                "8": {
+                    "uchannel": 25,
+                    "lchannel": 205,
+                    "ma_window": 40
+                },
+                "9": {
+                    "uchannel": 10,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "10": {
+                    "uchannel": 85,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "11": {
+                    "uchannel": 190,
+                    "lchannel": 175,
+                    "ma_window": 40
+                },
+                "12": {
+                    "uchannel": 115,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "13": {
+                    "uchannel": 70,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "14": {
+                    "uchannel": 145,
+                    "lchannel": 145,
+                    "ma_window": 70
+                },
+                "15": {
+                    "uchannel": 205,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "16": {
+                    "uchannel": 205,
+                    "lchannel": 10,
+                    "ma_window": 55
+                },
+                "17": {
+                    "uchannel": 145,
+                    "lchannel": 55,
+                    "ma_window": 40
+                },
+                "18": {
+                    "uchannel": 145,
+                    "lchannel": 10,
+                    "ma_window": 40
+                },
+                "19": {
+                    "uchannel": 100,
+                    "lchannel": 100,
+                    "ma_window": 40
+                },
+                "20": {
+                    "uchannel": 145,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "21": {
+                    "uchannel": 145,
+                    "lchannel": 205,
+                    "ma_window": 70
+                },
+                "22": {
+                    "uchannel": 175,
+                    "lchannel": 175,
+                    "ma_window": 85
+                },
+                "23": {
+                    "uchannel": 115,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "24": {
+                    "uchannel": 100,
+                    "lchannel": 10,
+                    "ma_window": 85
+                },
+                "25": {
+                    "uchannel": 100,
+                    "lchannel": 55,
+                    "ma_window": 85
+                },
+                "26": {
+                    "uchannel": 205,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "27": {
+                    "uchannel": 235,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "28": {
+                    "uchannel": 55,
+                    "lchannel": 175,
+                    "ma_window": 40
+                },
+                "29": {
+                    "uchannel": 175,
+                    "lchannel": 220,
+                    "ma_window": 85
+                },
+                "30": {
+                    "uchannel": 160,
+                    "lchannel": 40,
+                    "ma_window": 70
+                },
+                "31": {
+                    "uchannel": 175,
+                    "lchannel": 85,
+                    "ma_window": 25
+                },
+                "32": {
+                    "uchannel": 160,
+                    "lchannel": 205,
+                    "ma_window": 85
+                },
+                "33": {
+                    "uchannel": 115,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "34": {
+                    "uchannel": 205,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "35": {
+                    "uchannel": 220,
+                    "lchannel": 205,
+                    "ma_window": 55
+                },
+                "36": {
+                    "uchannel": 220,
+                    "lchannel": 160,
+                    "ma_window": 40
+                },
+                "37": {
+                    "uchannel": 235,
+                    "lchannel": 100,
+                    "ma_window": 25
+                },
+                "38": {
+                    "uchannel": 175,
+                    "lchannel": 70,
+                    "ma_window": 25
+                },
+                "39": {
+                    "uchannel": 235,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "40": {
+                    "uchannel": 70,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "41": {
+                    "uchannel": 100,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "42": {
+                    "uchannel": 130,
+                    "lchannel": 190,
+                    "ma_window": 85
+                },
+                "43": {
+                    "uchannel": 55,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "44": {
+                    "uchannel": 130,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "45": {
+                    "uchannel": 175,
+                    "lchannel": 100,
+                    "ma_window": 70
+                },
+                "46": {
+                    "uchannel": 175,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "47": {
+                    "uchannel": 115,
+                    "lchannel": 160,
+                    "ma_window": 40
+                },
+                "48": {
+                    "uchannel": 145,
+                    "lchannel": 10,
+                    "ma_window": 70
+                },
+                "49": {
+                    "uchannel": 160,
+                    "lchannel": 235,
+                    "ma_window": 40
+                },
+                "50": {
+                    "uchannel": 115,
+                    "lchannel": 100,
+                    "ma_window": 85
+                },
+                "51": {
+                    "uchannel": 175,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "52": {
+                    "uchannel": 55,
+                    "lchannel": 160,
+                    "ma_window": 40
+                },
+                "53": {
+                    "uchannel": 40,
+                    "lchannel": 115,
+                    "ma_window": 55
+                },
+                "54": {
+                    "uchannel": 190,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "55": {
+                    "uchannel": 25,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "56": {
+                    "uchannel": 220,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "57": {
+                    "uchannel": 10,
+                    "lchannel": 100,
+                    "ma_window": 55
+                },
+                "58": {
+                    "uchannel": 130,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "59": {
+                    "uchannel": 220,
+                    "lchannel": 100,
+                    "ma_window": 40
+                },
+                "60": {
+                    "uchannel": 130,
+                    "lchannel": 175,
+                    "ma_window": 55
+                },
+                "61": {
+                    "uchannel": 235,
+                    "lchannel": 70,
+                    "ma_window": 25
+                },
+                "62": {
+                    "uchannel": 145,
+                    "lchannel": 70,
+                    "ma_window": 40
+                },
+                "63": {
+                    "uchannel": 130,
+                    "lchannel": 40,
+                    "ma_window": 55
+                },
+                "64": {
+                    "uchannel": 115,
+                    "lchannel": 40,
+                    "ma_window": 85
+                },
+                "65": {
+                    "uchannel": 100,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "66": {
+                    "uchannel": 190,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "67": {
+                    "uchannel": 130,
+                    "lchannel": 235,
+                    "ma_window": 85
+                },
+                "68": {
+                    "uchannel": 25,
+                    "lchannel": 100,
+                    "ma_window": 40
+                },
+                "69": {
+                    "uchannel": 70,
+                    "lchannel": 55,
+                    "ma_window": 40
+                },
+                "70": {
+                    "uchannel": 175,
+                    "lchannel": 85,
+                    "ma_window": 70
+                },
+                "71": {
+                    "uchannel": 130,
+                    "lchannel": 130,
+                    "ma_window": 85
+                },
+                "72": {
+                    "uchannel": 10,
+                    "lchannel": 190,
+                    "ma_window": 190
+                },
+                "73": {
+                    "uchannel": 190,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "74": {
+                    "uchannel": 235,
+                    "lchannel": 115,
+                    "ma_window": 55
+                },
+                "75": {
+                    "uchannel": 190,
+                    "lchannel": 100,
+                    "ma_window": 40
+                },
+                "76": {
+                    "uchannel": 55,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "77": {
+                    "uchannel": 175,
+                    "lchannel": 205,
+                    "ma_window": 55
+                },
+                "78": {
+                    "uchannel": 145,
+                    "lchannel": 175,
+                    "ma_window": 55
+                },
+                "79": {
+                    "uchannel": 130,
+                    "lchannel": 160,
+                    "ma_window": 85
+                },
+                "80": {
+                    "uchannel": 220,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "81": {
+                    "uchannel": 55,
+                    "lchannel": 10,
+                    "ma_window": 40
+                },
+                "82": {
+                    "uchannel": 130,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "83": {
+                    "uchannel": 85,
+                    "lchannel": 100,
+                    "ma_window": 55
+                },
+                "84": {
+                    "uchannel": 190,
+                    "lchannel": 220,
+                    "ma_window": 55
+                },
+                "85": {
+                    "uchannel": 25,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "86": {
+                    "uchannel": 130,
+                    "lchannel": 160,
+                    "ma_window": 70
+                },
+                "87": {
+                    "uchannel": 220,
+                    "lchannel": 205,
+                    "ma_window": 40
+                },
+                "88": {
+                    "uchannel": 25,
+                    "lchannel": 145,
+                    "ma_window": 190
+                },
+                "89": {
+                    "uchannel": 40,
+                    "lchannel": 85,
+                    "ma_window": 55
+                },
+                "90": {
+                    "uchannel": 175,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "91": {
+                    "uchannel": 220,
+                    "lchannel": 205,
+                    "ma_window": 25
+                },
+                "92": {
+                    "uchannel": 85,
+                    "lchannel": 25,
+                    "ma_window": 40
+                },
+                "93": {
+                    "uchannel": 70,
+                    "lchannel": 100,
+                    "ma_window": 40
+                },
+                "94": {
+                    "uchannel": 145,
+                    "lchannel": 40,
+                    "ma_window": 70
+                },
+                "95": {
+                    "uchannel": 130,
+                    "lchannel": 40,
+                    "ma_window": 40
+                },
+                "96": {
+                    "uchannel": 100,
+                    "lchannel": 10,
+                    "ma_window": 55
+                },
+                "97": {
+                    "uchannel": 235,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "98": {
+                    "uchannel": 25,
+                    "lchannel": 10,
+                    "ma_window": 190
+                },
+                "99": {
+                    "uchannel": 25,
+                    "lchannel": 40,
+                    "ma_window": 40
+                },
+                "100": {
+                    "uchannel": 175,
+                    "lchannel": 25,
+                    "ma_window": 40
+                },
+                "101": {
+                    "uchannel": 205,
+                    "lchannel": 10,
+                    "ma_window": 40
+                },
+                "102": {
+                    "uchannel": 175,
+                    "lchannel": 220,
+                    "ma_window": 40
+                },
+                "103": {
+                    "uchannel": 235,
+                    "lchannel": 220,
+                    "ma_window": 40
+                },
+                "104": {
+                    "uchannel": 115,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "105": {
+                    "uchannel": 10,
+                    "lchannel": 55,
+                    "ma_window": 40
+                },
+                "106": {
+                    "uchannel": 190,
+                    "lchannel": 190,
+                    "ma_window": 70
+                },
+                "107": {
+                    "uchannel": 100,
+                    "lchannel": 145,
+                    "ma_window": 85
+                },
+                "108": {
+                    "uchannel": 130,
+                    "lchannel": 190,
+                    "ma_window": 55
+                },
+                "109": {
+                    "uchannel": 130,
+                    "lchannel": 55,
+                    "ma_window": 40
+                },
+                "110": {
+                    "uchannel": 70,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "111": {
+                    "uchannel": 85,
+                    "lchannel": 55,
+                    "ma_window": 40
+                },
+                "112": {
+                    "uchannel": 175,
+                    "lchannel": 235,
+                    "ma_window": 55
+                },
+                "113": {
+                    "uchannel": 130,
+                    "lchannel": 55,
+                    "ma_window": 70
+                },
+                "114": {
+                    "uchannel": 145,
+                    "lchannel": 100,
+                    "ma_window": 55
+                },
+                "115": {
+                    "uchannel": 100,
+                    "lchannel": 25,
+                    "ma_window": 85
+                },
+                "116": {
+                    "uchannel": 160,
+                    "lchannel": 40,
+                    "ma_window": 85
+                },
+                "117": {
+                    "uchannel": 25,
+                    "lchannel": 190,
+                    "ma_window": 190
+                },
+                "118": {
+                    "uchannel": 130,
+                    "lchannel": 220,
+                    "ma_window": 70
+                },
+                "119": {
+                    "uchannel": 40,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "120": {
+                    "uchannel": 130,
+                    "lchannel": 70,
+                    "ma_window": 40
+                },
+                "121": {
+                    "uchannel": 145,
+                    "lchannel": 145,
+                    "ma_window": 55
+                },
+                "122": {
+                    "uchannel": 205,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "123": {
+                    "uchannel": 100,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "124": {
+                    "uchannel": 25,
+                    "lchannel": 25,
+                    "ma_window": 190
+                },
+                "125": {
+                    "uchannel": 100,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "126": {
+                    "uchannel": 130,
+                    "lchannel": 70,
+                    "ma_window": 70
+                },
+                "127": {
+                    "uchannel": 40,
+                    "lchannel": 40,
+                    "ma_window": 40
+                },
+                "128": {
+                    "uchannel": 115,
+                    "lchannel": 100,
+                    "ma_window": 40
+                },
+                "129": {
+                    "uchannel": 70,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "130": {
+                    "uchannel": 130,
+                    "lchannel": 190,
+                    "ma_window": 40
+                },
+                "131": {
+                    "uchannel": 115,
+                    "lchannel": 10,
+                    "ma_window": 85
+                },
+                "132": {
+                    "uchannel": 85,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "133": {
+                    "uchannel": 55,
+                    "lchannel": 115,
+                    "ma_window": 55
+                },
+                "134": {
+                    "uchannel": 100,
+                    "lchannel": 85,
+                    "ma_window": 85
+                },
+                "135": {
+                    "uchannel": 160,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "136": {
+                    "uchannel": 190,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "137": {
+                    "uchannel": 145,
+                    "lchannel": 160,
+                    "ma_window": 70
+                },
+                "138": {
+                    "uchannel": 160,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "139": {
+                    "uchannel": 40,
+                    "lchannel": 220,
+                    "ma_window": 55
+                },
+                "140": {
+                    "uchannel": 115,
+                    "lchannel": 85,
+                    "ma_window": 55
+                },
+                "141": {
+                    "uchannel": 145,
+                    "lchannel": 175,
+                    "ma_window": 85
+                },
+                "142": {
+                    "uchannel": 100,
+                    "lchannel": 205,
+                    "ma_window": 85
+                },
+                "143": {
+                    "uchannel": 190,
+                    "lchannel": 85,
+                    "ma_window": 70
+                },
+                "144": {
+                    "uchannel": 160,
+                    "lchannel": 130,
+                    "ma_window": 70
+                },
+                "145": {
+                    "uchannel": 175,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "146": {
+                    "uchannel": 10,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "147": {
+                    "uchannel": 175,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "148": {
+                    "uchannel": 115,
+                    "lchannel": 40,
+                    "ma_window": 25
+                },
+                "149": {
+                    "uchannel": 100,
+                    "lchannel": 40,
+                    "ma_window": 55
+                },
+                "150": {
+                    "uchannel": 10,
+                    "lchannel": 25,
+                    "ma_window": 40
+                },
+                "151": {
+                    "uchannel": 25,
+                    "lchannel": 160,
+                    "ma_window": 190
+                },
+                "152": {
+                    "uchannel": 175,
+                    "lchannel": 145,
+                    "ma_window": 70
+                },
+                "153": {
+                    "uchannel": 130,
+                    "lchannel": 10,
+                    "ma_window": 70
+                },
+                "154": {
+                    "uchannel": 160,
+                    "lchannel": 25,
+                    "ma_window": 70
+                },
+                "155": {
+                    "uchannel": 10,
+                    "lchannel": 115,
+                    "ma_window": 40
+                },
+                "156": {
+                    "uchannel": 220,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "157": {
+                    "uchannel": 130,
+                    "lchannel": 100,
+                    "ma_window": 25
+                },
+                "158": {
+                    "uchannel": 175,
+                    "lchannel": 55,
+                    "ma_window": 25
+                },
+                "159": {
+                    "uchannel": 100,
+                    "lchannel": 220,
+                    "ma_window": 85
+                },
+                "160": {
+                    "uchannel": 160,
+                    "lchannel": 145,
+                    "ma_window": 55
+                },
+                "161": {
+                    "uchannel": 190,
+                    "lchannel": 160,
+                    "ma_window": 85
+                },
+                "162": {
+                    "uchannel": 235,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "163": {
+                    "uchannel": 145,
+                    "lchannel": 160,
+                    "ma_window": 40
+                },
+                "164": {
+                    "uchannel": 55,
+                    "lchannel": 205,
+                    "ma_window": 40
+                },
+                "165": {
+                    "uchannel": 190,
+                    "lchannel": 160,
+                    "ma_window": 40
+                },
+                "166": {
+                    "uchannel": 25,
+                    "lchannel": 70,
+                    "ma_window": 40
+                },
+                "167": {
+                    "uchannel": 100,
+                    "lchannel": 160,
+                    "ma_window": 85
+                },
+                "168": {
+                    "uchannel": 10,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "169": {
+                    "uchannel": 145,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "170": {
+                    "uchannel": 190,
+                    "lchannel": 100,
+                    "ma_window": 85
+                },
+                "171": {
+                    "uchannel": 160,
+                    "lchannel": 85,
+                    "ma_window": 55
+                },
+                "172": {
+                    "uchannel": 175,
+                    "lchannel": 145,
+                    "ma_window": 55
+                },
+                "173": {
+                    "uchannel": 220,
+                    "lchannel": 70,
+                    "ma_window": 25
+                },
+                "174": {
+                    "uchannel": 160,
+                    "lchannel": 25,
+                    "ma_window": 55
+                },
+                "175": {
+                    "uchannel": 130,
+                    "lchannel": 40,
+                    "ma_window": 70
+                },
+                "176": {
+                    "uchannel": 145,
+                    "lchannel": 220,
+                    "ma_window": 40
+                },
+                "177": {
+                    "uchannel": 40,
+                    "lchannel": 55,
+                    "ma_window": 55
+                },
+                "178": {
+                    "uchannel": 70,
+                    "lchannel": 235,
+                    "ma_window": 40
+                },
+                "179": {
+                    "uchannel": 220,
+                    "lchannel": 85,
+                    "ma_window": 25
+                },
+                "180": {
+                    "uchannel": 175,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "181": {
+                    "uchannel": 130,
+                    "lchannel": 85,
+                    "ma_window": 25
+                },
+                "182": {
+                    "uchannel": 130,
+                    "lchannel": 55,
+                    "ma_window": 25
+                },
+                "183": {
+                    "uchannel": 145,
+                    "lchannel": 115,
+                    "ma_window": 85
+                },
+                "184": {
+                    "uchannel": 160,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "185": {
+                    "uchannel": 115,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "186": {
+                    "uchannel": 175,
+                    "lchannel": 115,
+                    "ma_window": 55
+                },
+                "187": {
+                    "uchannel": 175,
+                    "lchannel": 40,
+                    "ma_window": 55
+                },
+                "188": {
+                    "uchannel": 70,
+                    "lchannel": 145,
+                    "ma_window": 40
+                },
+                "189": {
+                    "uchannel": 190,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "190": {
+                    "uchannel": 55,
+                    "lchannel": 100,
+                    "ma_window": 55
+                },
+                "191": {
+                    "uchannel": 40,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "192": {
+                    "uchannel": 40,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "193": {
+                    "uchannel": 130,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "194": {
+                    "uchannel": 190,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "195": {
+                    "uchannel": 235,
+                    "lchannel": 145,
+                    "ma_window": 25
+                },
+                "196": {
+                    "uchannel": 115,
+                    "lchannel": 205,
+                    "ma_window": 85
+                },
+                "197": {
+                    "uchannel": 115,
+                    "lchannel": 160,
+                    "ma_window": 85
+                },
+                "198": {
+                    "uchannel": 130,
+                    "lchannel": 85,
+                    "ma_window": 55
+                },
+                "199": {
+                    "uchannel": 85,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "200": {
+                    "uchannel": 115,
+                    "lchannel": 70,
+                    "ma_window": 85
+                },
+                "201": {
+                    "uchannel": 55,
+                    "lchannel": 130,
+                    "ma_window": 40
+                },
+                "202": {
+                    "uchannel": 235,
+                    "lchannel": 115,
+                    "ma_window": 25
+                },
+                "203": {
+                    "uchannel": 205,
+                    "lchannel": 220,
+                    "ma_window": 55
+                },
+                "204": {
+                    "uchannel": 100,
+                    "lchannel": 55,
+                    "ma_window": 55
+                },
+                "205": {
+                    "uchannel": 175,
+                    "lchannel": 10,
+                    "ma_window": 70
+                },
+                "206": {
+                    "uchannel": 145,
+                    "lchannel": 115,
+                    "ma_window": 70
+                },
+                "207": {
+                    "uchannel": 130,
+                    "lchannel": 220,
+                    "ma_window": 55
+                },
+                "208": {
+                    "uchannel": 100,
+                    "lchannel": 100,
+                    "ma_window": 55
+                },
+                "209": {
+                    "uchannel": 100,
+                    "lchannel": 175,
+                    "ma_window": 40
+                },
+                "210": {
+                    "uchannel": 175,
+                    "lchannel": 160,
+                    "ma_window": 70
+                },
+                "211": {
+                    "uchannel": 190,
+                    "lchannel": 205,
+                    "ma_window": 85
+                },
+                "212": {
+                    "uchannel": 235,
+                    "lchannel": 205,
+                    "ma_window": 25
+                },
+                "213": {
+                    "uchannel": 160,
+                    "lchannel": 40,
+                    "ma_window": 40
+                },
+                "214": {
+                    "uchannel": 100,
+                    "lchannel": 235,
+                    "ma_window": 40
+                },
+                "215": {
+                    "uchannel": 40,
+                    "lchannel": 190,
+                    "ma_window": 55
+                },
+                "216": {
+                    "uchannel": 130,
+                    "lchannel": 55,
+                    "ma_window": 55
+                },
+                "217": {
+                    "uchannel": 235,
+                    "lchannel": 175,
+                    "ma_window": 40
+                },
+                "218": {
+                    "uchannel": 25,
+                    "lchannel": 55,
+                    "ma_window": 40
+                },
+                "219": {
+                    "uchannel": 235,
+                    "lchannel": 205,
+                    "ma_window": 55
+                },
+                "220": {
+                    "uchannel": 130,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "221": {
+                    "uchannel": 10,
+                    "lchannel": 160,
+                    "ma_window": 190
+                },
+                "222": {
+                    "uchannel": 115,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "223": {
+                    "uchannel": 160,
+                    "lchannel": 190,
+                    "ma_window": 40
+                },
+                "224": {
+                    "uchannel": 25,
+                    "lchannel": 40,
+                    "ma_window": 55
+                }
+            },
+            "short": {}
+        },
+        "BLUR": {
+            "long": {},
+            "short": {
+                "0": {
+                    "uchannel": 70,
+                    "lchannel": 160,
+                    "ma_window": 205
+                },
+                "1": {
+                    "uchannel": 145,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "2": {
+                    "uchannel": 25,
+                    "lchannel": 40,
+                    "ma_window": 205
+                },
+                "3": {
+                    "uchannel": 10,
+                    "lchannel": 40,
+                    "ma_window": 205
+                },
+                "4": {
+                    "uchannel": 70,
+                    "lchannel": 10,
+                    "ma_window": 175
+                },
+                "5": {
+                    "uchannel": 130,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "6": {
+                    "uchannel": 190,
+                    "lchannel": 40,
+                    "ma_window": 85
+                },
+                "7": {
+                    "uchannel": 25,
+                    "lchannel": 85,
+                    "ma_window": 190
+                },
+                "8": {
+                    "uchannel": 220,
+                    "lchannel": 190,
+                    "ma_window": 220
+                },
+                "9": {
+                    "uchannel": 145,
+                    "lchannel": 55,
+                    "ma_window": 85
+                },
+                "10": {
+                    "uchannel": 25,
+                    "lchannel": 115,
+                    "ma_window": 25
+                },
+                "11": {
+                    "uchannel": 175,
+                    "lchannel": 40,
+                    "ma_window": 85
+                },
+                "12": {
+                    "uchannel": 55,
+                    "lchannel": 130,
+                    "ma_window": 205
+                },
+                "13": {
+                    "uchannel": 115,
+                    "lchannel": 160,
+                    "ma_window": 220
+                },
+                "14": {
+                    "uchannel": 130,
+                    "lchannel": 175,
+                    "ma_window": 220
+                },
+                "15": {
+                    "uchannel": 205,
+                    "lchannel": 40,
+                    "ma_window": 190
+                },
+                "16": {
+                    "uchannel": 70,
+                    "lchannel": 190,
+                    "ma_window": 220
+                },
+                "17": {
+                    "uchannel": 160,
+                    "lchannel": 85,
+                    "ma_window": 85
+                },
+                "18": {
+                    "uchannel": 235,
+                    "lchannel": 70,
+                    "ma_window": 10
+                },
+                "19": {
+                    "uchannel": 190,
+                    "lchannel": 130,
+                    "ma_window": 205
+                },
+                "20": {
+                    "uchannel": 70,
+                    "lchannel": 115,
+                    "ma_window": 10
+                },
+                "21": {
+                    "uchannel": 10,
+                    "lchannel": 175,
+                    "ma_window": 25
+                },
+                "22": {
+                    "uchannel": 85,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "23": {
+                    "uchannel": 175,
+                    "lchannel": 130,
+                    "ma_window": 220
+                },
+                "24": {
+                    "uchannel": 10,
+                    "lchannel": 85,
+                    "ma_window": 10
+                },
+                "25": {
+                    "uchannel": 205,
+                    "lchannel": 55,
+                    "ma_window": 85
+                },
+                "26": {
+                    "uchannel": 100,
+                    "lchannel": 55,
+                    "ma_window": 205
+                },
+                "27": {
+                    "uchannel": 25,
+                    "lchannel": 100,
+                    "ma_window": 85
+                },
+                "28": {
+                    "uchannel": 175,
+                    "lchannel": 115,
+                    "ma_window": 205
+                },
+                "29": {
+                    "uchannel": 160,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "30": {
+                    "uchannel": 175,
+                    "lchannel": 25,
+                    "ma_window": 205
+                },
+                "31": {
+                    "uchannel": 130,
+                    "lchannel": 220,
+                    "ma_window": 220
+                },
+                "32": {
+                    "uchannel": 190,
+                    "lchannel": 55,
+                    "ma_window": 220
+                },
+                "33": {
+                    "uchannel": 175,
+                    "lchannel": 145,
+                    "ma_window": 190
+                },
+                "34": {
+                    "uchannel": 205,
+                    "lchannel": 40,
+                    "ma_window": 85
+                },
+                "35": {
+                    "uchannel": 190,
+                    "lchannel": 85,
+                    "ma_window": 85
+                },
+                "36": {
+                    "uchannel": 205,
+                    "lchannel": 160,
+                    "ma_window": 25
+                },
+                "37": {
+                    "uchannel": 25,
+                    "lchannel": 85,
+                    "ma_window": 10
+                },
+                "38": {
+                    "uchannel": 115,
+                    "lchannel": 70,
+                    "ma_window": 190
+                },
+                "39": {
+                    "uchannel": 235,
+                    "lchannel": 175,
+                    "ma_window": 205
+                },
+                "40": {
+                    "uchannel": 40,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "41": {
+                    "uchannel": 190,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "42": {
+                    "uchannel": 190,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "43": {
+                    "uchannel": 100,
+                    "lchannel": 115,
+                    "ma_window": 10
+                },
+                "44": {
+                    "uchannel": 145,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "45": {
+                    "uchannel": 70,
+                    "lchannel": 145,
+                    "ma_window": 205
+                },
+                "46": {
+                    "uchannel": 220,
+                    "lchannel": 145,
+                    "ma_window": 190
+                },
+                "47": {
+                    "uchannel": 85,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "48": {
+                    "uchannel": 235,
+                    "lchannel": 55,
+                    "ma_window": 85
+                },
+                "49": {
+                    "uchannel": 160,
+                    "lchannel": 40,
+                    "ma_window": 190
+                },
+                "50": {
+                    "uchannel": 145,
+                    "lchannel": 55,
+                    "ma_window": 220
+                },
+                "51": {
+                    "uchannel": 100,
+                    "lchannel": 85,
+                    "ma_window": 10
+                },
+                "52": {
+                    "uchannel": 85,
+                    "lchannel": 100,
+                    "ma_window": 10
+                },
+                "53": {
+                    "uchannel": 205,
+                    "lchannel": 55,
+                    "ma_window": 220
+                },
+                "54": {
+                    "uchannel": 235,
+                    "lchannel": 160,
+                    "ma_window": 55
+                },
+                "55": {
+                    "uchannel": 10,
+                    "lchannel": 55,
+                    "ma_window": 220
+                },
+                "56": {
+                    "uchannel": 130,
+                    "lchannel": 70,
+                    "ma_window": 190
+                },
+                "57": {
+                    "uchannel": 130,
+                    "lchannel": 100,
+                    "ma_window": 220
+                },
+                "58": {
+                    "uchannel": 175,
+                    "lchannel": 40,
+                    "ma_window": 220
+                },
+                "59": {
+                    "uchannel": 190,
+                    "lchannel": 145,
+                    "ma_window": 220
+                },
+                "60": {
+                    "uchannel": 175,
+                    "lchannel": 25,
+                    "ma_window": 190
+                },
+                "61": {
+                    "uchannel": 190,
+                    "lchannel": 70,
+                    "ma_window": 220
+                },
+                "62": {
+                    "uchannel": 85,
+                    "lchannel": 220,
+                    "ma_window": 220
+                },
+                "63": {
+                    "uchannel": 10,
+                    "lchannel": 130,
+                    "ma_window": 205
+                },
+                "64": {
+                    "uchannel": 70,
+                    "lchannel": 115,
+                    "ma_window": 55
+                },
+                "65": {
+                    "uchannel": 235,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "66": {
+                    "uchannel": 220,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "67": {
+                    "uchannel": 70,
+                    "lchannel": 115,
+                    "ma_window": 25
+                },
+                "68": {
+                    "uchannel": 115,
+                    "lchannel": 55,
+                    "ma_window": 220
+                },
+                "69": {
+                    "uchannel": 100,
+                    "lchannel": 205,
+                    "ma_window": 220
+                },
+                "70": {
+                    "uchannel": 115,
+                    "lchannel": 85,
+                    "ma_window": 205
+                },
+                "71": {
+                    "uchannel": 85,
+                    "lchannel": 10,
+                    "ma_window": 175
+                },
+                "72": {
+                    "uchannel": 160,
+                    "lchannel": 220,
+                    "ma_window": 220
+                },
+                "73": {
+                    "uchannel": 235,
+                    "lchannel": 235,
+                    "ma_window": 10
+                },
+                "74": {
+                    "uchannel": 85,
+                    "lchannel": 220,
+                    "ma_window": 205
+                },
+                "75": {
+                    "uchannel": 115,
+                    "lchannel": 130,
+                    "ma_window": 25
+                },
+                "76": {
+                    "uchannel": 235,
+                    "lchannel": 85,
+                    "ma_window": 25
+                },
+                "77": {
+                    "uchannel": 10,
+                    "lchannel": 70,
+                    "ma_window": 190
+                },
+                "78": {
+                    "uchannel": 190,
+                    "lchannel": 70,
+                    "ma_window": 40
+                },
+                "79": {
+                    "uchannel": 130,
+                    "lchannel": 70,
+                    "ma_window": 205
+                },
+                "80": {
+                    "uchannel": 175,
+                    "lchannel": 205,
+                    "ma_window": 25
+                },
+                "81": {
+                    "uchannel": 190,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "82": {
+                    "uchannel": 40,
+                    "lchannel": 70,
+                    "ma_window": 10
+                },
+                "83": {
+                    "uchannel": 55,
+                    "lchannel": 85,
+                    "ma_window": 190
+                },
+                "84": {
+                    "uchannel": 25,
+                    "lchannel": 10,
+                    "ma_window": 190
+                },
+                "85": {
+                    "uchannel": 40,
+                    "lchannel": 115,
+                    "ma_window": 10
+                },
+                "86": {
+                    "uchannel": 115,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "87": {
+                    "uchannel": 175,
+                    "lchannel": 70,
+                    "ma_window": 190
+                },
+                "88": {
+                    "uchannel": 85,
+                    "lchannel": 115,
+                    "ma_window": 190
+                },
+                "89": {
+                    "uchannel": 190,
+                    "lchannel": 70,
+                    "ma_window": 190
+                },
+                "90": {
+                    "uchannel": 175,
+                    "lchannel": 100,
+                    "ma_window": 190
+                },
+                "91": {
+                    "uchannel": 220,
+                    "lchannel": 70,
+                    "ma_window": 55
+                },
+                "92": {
+                    "uchannel": 100,
+                    "lchannel": 40,
+                    "ma_window": 205
+                },
+                "93": {
+                    "uchannel": 70,
+                    "lchannel": 235,
+                    "ma_window": 10
+                },
+                "94": {
+                    "uchannel": 115,
+                    "lchannel": 190,
+                    "ma_window": 25
+                },
+                "95": {
+                    "uchannel": 190,
+                    "lchannel": 55,
+                    "ma_window": 205
+                },
+                "96": {
+                    "uchannel": 160,
+                    "lchannel": 145,
+                    "ma_window": 205
+                },
+                "97": {
+                    "uchannel": 190,
+                    "lchannel": 115,
+                    "ma_window": 190
+                },
+                "98": {
+                    "uchannel": 205,
+                    "lchannel": 85,
+                    "ma_window": 10
+                },
+                "99": {
+                    "uchannel": 145,
+                    "lchannel": 115,
+                    "ma_window": 220
+                },
+                "100": {
+                    "uchannel": 160,
+                    "lchannel": 25,
+                    "ma_window": 205
+                },
+                "101": {
+                    "uchannel": 205,
+                    "lchannel": 220,
+                    "ma_window": 205
+                },
+                "102": {
+                    "uchannel": 55,
+                    "lchannel": 205,
+                    "ma_window": 220
+                },
+                "103": {
+                    "uchannel": 85,
+                    "lchannel": 70,
+                    "ma_window": 40
+                },
+                "104": {
+                    "uchannel": 235,
+                    "lchannel": 100,
+                    "ma_window": 190
+                },
+                "105": {
+                    "uchannel": 40,
+                    "lchannel": 10,
+                    "ma_window": 175
+                },
+                "106": {
+                    "uchannel": 100,
+                    "lchannel": 220,
+                    "ma_window": 25
+                },
+                "107": {
+                    "uchannel": 40,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "108": {
+                    "uchannel": 175,
+                    "lchannel": 130,
+                    "ma_window": 55
+                },
+                "109": {
+                    "uchannel": 25,
+                    "lchannel": 100,
+                    "ma_window": 190
+                },
+                "110": {
+                    "uchannel": 235,
+                    "lchannel": 100,
+                    "ma_window": 220
+                },
+                "111": {
+                    "uchannel": 145,
+                    "lchannel": 85,
+                    "ma_window": 205
+                },
+                "112": {
+                    "uchannel": 220,
+                    "lchannel": 70,
+                    "ma_window": 190
+                },
+                "113": {
+                    "uchannel": 40,
+                    "lchannel": 25,
+                    "ma_window": 220
+                },
+                "114": {
+                    "uchannel": 25,
+                    "lchannel": 160,
+                    "ma_window": 220
+                },
+                "115": {
+                    "uchannel": 190,
+                    "lchannel": 175,
+                    "ma_window": 220
+                },
+                "116": {
+                    "uchannel": 205,
+                    "lchannel": 40,
+                    "ma_window": 205
+                },
+                "117": {
+                    "uchannel": 220,
+                    "lchannel": 100,
+                    "ma_window": 205
+                },
+                "118": {
+                    "uchannel": 115,
+                    "lchannel": 115,
+                    "ma_window": 205
+                },
+                "119": {
+                    "uchannel": 85,
+                    "lchannel": 130,
+                    "ma_window": 220
+                },
+                "120": {
+                    "uchannel": 10,
+                    "lchannel": 190,
+                    "ma_window": 220
+                },
+                "121": {
+                    "uchannel": 145,
+                    "lchannel": 55,
+                    "ma_window": 205
+                },
+                "122": {
+                    "uchannel": 55,
+                    "lchannel": 10,
+                    "ma_window": 220
+                },
+                "123": {
+                    "uchannel": 175,
+                    "lchannel": 85,
+                    "ma_window": 205
+                },
+                "124": {
+                    "uchannel": 130,
+                    "lchannel": 115,
+                    "ma_window": 190
+                },
+                "125": {
+                    "uchannel": 130,
+                    "lchannel": 85,
+                    "ma_window": 40
+                },
+                "126": {
+                    "uchannel": 85,
+                    "lchannel": 55,
+                    "ma_window": 220
+                }
+            }
+        },
+        "FET": {
+            "long": {
+                "0": {
+                    "uchannel": 40,
+                    "lchannel": 70,
+                    "ma_window": 205
+                },
+                "1": {
+                    "uchannel": 40,
+                    "lchannel": 10,
+                    "ma_window": 205
+                },
+                "2": {
+                    "uchannel": 40,
+                    "lchannel": 85,
+                    "ma_window": 205
+                },
+                "3": {
+                    "uchannel": 40,
+                    "lchannel": 25,
+                    "ma_window": 205
+                }
+            },
+            "short": {}
+        }
+    }
+}
