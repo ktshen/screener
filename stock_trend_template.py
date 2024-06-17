@@ -1,55 +1,56 @@
+import argparse
 from datetime import datetime, timedelta
-from pytz import timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+import numpy as np
+import pandas as pd
 from src.downloader import StockDownloader
 
-
-##################### CONFIGURATIONS #####################
+#================= CONFIGURATIONS =================#
+_1D_OF_DAYS_TRACEBACK = 252
+_1H_OF_DAYS_TRACEBACK = 126
 CURRENT_TIMEZONE = "America/Los_Angeles"
-##########################################################
+STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
+#==================================================#
 
 
-def test_strategy(ticker: str, strict=False):
-    """
-    :param strict: If true, SMA30 > SMA45 > SMA60
-    """
-    print(f"Analyzing {ticker} in thread...")
-    sd = StockDownloader()
-    start_date = timezone(CURRENT_TIMEZONE).localize(datetime.now() - timedelta(days=480))
-    end_date = timezone(CURRENT_TIMEZONE).localize(datetime.now())
+def find_relative_strength(ticker: str, sd: StockDownloader):
     try:
-        stock, status, stock_info = sd.get_ticker(ticker, start_date, end_date)
-        if status == 0:
-            if stock_info:
-                print(f"{ticker} fails to get data -> {stock_info}")
-            return None
-        if stock_info.empty:
-            return None
+        success, daily_stock_data = sd.request_ticker_all_range(ticker, timeframe="1d", current_tz=CURRENT_TIMEZONE)
     except Exception as e:
-        print(f"Error in getting {ticker} info: {e}")
+        print("ERROR in request_ticker_all_range")
+        print(e)
+        return None
+    if not success:
+        print(f"{ticker} fails to get data -> {daily_stock_data}")
         return None
 
     try:
-        if len(stock_info) < 320:
-            print(f"{ticker} fails to meet the requirements. Less than 260 days.")
+        if len(daily_stock_data) < _1D_OF_DAYS_TRACEBACK:
+            print(f"{ticker} fails to meet the requirements. Less than {_1D_OF_DAYS_TRACEBACK} days.")
             return {"stock": ticker, "meet_requirements": False}
 
-        current_close = stock_info['Adj Close'].values[-1]
-        moving_average_50 = stock_info['SMA_50'].values[-1]
-        moving_average_150 = stock_info['SMA_150'].values[-1]
-        moving_average_200 = stock_info['SMA_200'].values[-1]
-        low_of_52_week = stock_info["Adj Close"].values[-260:].min()
-        high_of_52_week = stock_info["Adj Close"].values[-260:].max()
-        stock_info["std_of_6_days"] = stock_info["Adj Close"].rolling(window=6).std()
-        last_30_days_turnover = stock_info.tail(30).assign(Turnover=stock_info['Volume'] * stock_info['Adj Close'])
-        average_turnover = last_30_days_turnover['Turnover'].mean()
+        daily_stock_data = daily_stock_data.tail(_1D_OF_DAYS_TRACEBACK)
+        daily_stock_data.reset_index(drop=True, inplace=True)
+
+        for duration in STOCK_SMA:
+            daily_stock_data["SMA_" + str(duration)] = round(daily_stock_data.loc[:, "Close"].rolling(window=duration).mean(), 2)
+
+        current_close = daily_stock_data['Close'].values[-1]
+        moving_average_50 = daily_stock_data['SMA_50'].values[-1]
+        moving_average_150 = daily_stock_data['SMA_150'].values[-1]
+        moving_average_200 = daily_stock_data['SMA_200'].values[-1]
+        low_of_52_week = daily_stock_data["Close"].values[-260:].min()
+        high_of_52_week = daily_stock_data["Close"].values[-260:].max()
+        daily_stock_data["std_of_6_days"] = daily_stock_data["Close"].rolling(window=6).std()
+        last_10_days_turnover = daily_stock_data.tail(10).assign(Turnover=daily_stock_data['Volume'] * daily_stock_data['Close'])
+        average_turnover = last_10_days_turnover['Turnover'].mean()
         conditions_checklist = [False] * 9
 
-        if average_turnover < 1000000:
+        if average_turnover < 5000000:
             print(f"{ticker} fails to meet the requirements. Not enough turnover.")
             return {"stock": ticker, "meet_requirements": False}
 
+        # Mark Minervini's Trend Template's Conditions Check
         # Condition 1 :  Current Price > 150 SMA and Current Price > 200 SMA
         if (current_close > moving_average_150) and (current_close > moving_average_200):
             conditions_checklist[0] = True
@@ -59,16 +60,17 @@ def test_strategy(ticker: str, strict=False):
             conditions_checklist[1] = True
 
         # Condition 3 : 200 SMA trending up for at least 1 month (ideally 4-5 months)
-        # PASS NOW
-        conditions_checklist[2] = True
+        conditions_checklist[2] = True  # PASS NOW
 
         # Condition 4 : 50 SMA > 150 SMA and 50 SMA > 200 SMA
         if moving_average_50 > moving_average_150 > moving_average_200:
             conditions_checklist[3] = True
+        # conditions_checklist[3] = True  # Pass now
 
         # Condition 5 : Current Price > 50 SMA
         if current_close > moving_average_50:
             conditions_checklist[4] = True
+        conditions_checklist[4] = True  # Pass now
 
         # Condition 6 : Current Price must at least outperform 52week low about 30%
         if current_close > low_of_52_week * 1.3:
@@ -82,15 +84,8 @@ def test_strategy(ticker: str, strict=False):
         # PASS NOW
         conditions_checklist[7] = True
 
-        # Strict mode
-        # Condition 9 : SMA30 > SMA45 > SMA60
-        if strict:
-            moving_average_30 = stock_info['SMA_30'].values[-1]
-            moving_average_45 = stock_info['SMA_45'].values[-1]
-            moving_average_60 = stock_info['SMA_60'].values[-1]
-            if moving_average_30 > moving_average_45 > moving_average_60:
-                conditions_checklist[8] = True
-        else:
+        # Condition 9 : Avoid Penny Stock (Price < 10)
+        if current_close >= 10:
             conditions_checklist[8] = True
 
         meet_requirements = False
@@ -100,24 +95,34 @@ def test_strategy(ticker: str, strict=False):
         else:
             print(f"{ticker} fails to meet the requirements")
 
-        # IBD RS ranking style
-        # rs_score = 0
-        # if meet_requirements:
-        #     rs_score_3m = 0.4 * ((current_close - stock_info['Adj Close'].values[-63]) / stock_info['Adj Close'].values[-63])
-        #     rs_score_6m = 0.2 * ((current_close - stock_info['Adj Close'].values[-126]) / stock_info['Adj Close'].values[-126])
-        #     rs_score_9m = 0.2 * ((current_close - stock_info['Adj Close'].values[-189]) / stock_info['Adj Close'].values[-189])
-        #     rs_score_12m = 0.2 * ((current_close - stock_info['Adj Close'].values[-252]) / stock_info['Adj Close'].values[-252])
-        #     rs_score = (rs_score_3m + rs_score_6m + rs_score_9m + rs_score_12m) * 100
-        rs_score = 0.0
-        bars = 252
-        for i in range(1, bars + 1):
-            close = stock_info["Adj Close"].values[-i]
-            moving_average_30 = stock_info['SMA_30'].values[-i]
-            moving_average_45 = stock_info['SMA_45'].values[-i]
-            moving_average_60 = stock_info['SMA_60'].values[-i]
-            weight = (((close - moving_average_30) + (close - moving_average_45) + (close - moving_average_60)) * (((bars - i) * 4 / bars) + 1) + (moving_average_30 - moving_average_45) + (moving_average_30 - moving_average_60) + (moving_average_45 - moving_average_60)) / moving_average_60
-            rs_score += weight * (bars - i)
+        success, one_hour_stock_data = sd.request_ticker_all_range(ticker, timeframe="1h", current_tz=CURRENT_TIMEZONE)
+        if not success:
+            print(f"{ticker} fails to get data -> {one_hour_stock_data}")
+            return None
 
+        start_time = '09:00:00'
+        end_time = '16:00:00'
+        one_hour_stock_data = one_hour_stock_data[one_hour_stock_data['Datetime'].dt.time.between(pd.to_datetime(start_time).time(), pd.to_datetime(end_time).time())]
+        one_hour_stock_data = one_hour_stock_data.tail(_1H_OF_DAYS_TRACEBACK * 8)
+        one_hour_stock_data.reset_index(drop=True, inplace=True)
+        for duration in STOCK_SMA:
+            one_hour_stock_data["SMA_" + str(duration)] = round(one_hour_stock_data.loc[:, "Close"].rolling(window=duration).mean(), 2)
+
+        rs_score = 0.0
+        bars = len(one_hour_stock_data) - 60
+        if bars <= 0:
+            raise ValueError("Not enough days to calculate MA60")
+        weights = np.exp(-0.0015 * np.arange(bars))
+        weights /= np.sum(weights)
+        for i in range(1, bars + 1):
+            # close = one_hour_stock_data["Close"].values[-i]
+            one_hour_ma30 = one_hour_stock_data['SMA_30'].values[-i]
+            one_hour_ma45 = one_hour_stock_data['SMA_45'].values[-i]
+            one_hour_ma60 = one_hour_stock_data['SMA_60'].values[-i]
+            # weight = ((close - one_hour_ma30) + (close - four_hour_ma45) + (close - four_hour_ma60) + (one_hour_ma30 - four_hour_ma45) + (one_hour_ma30 - four_hour_ma60) + (four_hour_ma45 - four_hour_ma60)) / four_hour_ma60
+            M = ((one_hour_ma30 - one_hour_ma45) + (one_hour_ma30 - one_hour_ma60) + (one_hour_ma45 - one_hour_ma60)) / one_hour_ma60
+            rs_score += M * weights[i-1]
+            # rs_score += M * (bars - i)
         return {"stock": ticker, "meet_requirements": meet_requirements, "rs_score": rs_score}
 
     except Exception as e:
@@ -127,12 +132,10 @@ def test_strategy(ticker: str, strict=False):
 
 if __name__ == '__main__':
     stock_downloader = StockDownloader()
-    stock_downloader.check_stock_table()
-    stock_downloader.update_database()
-    all_symbols = stock_downloader.get_all_symbols()
+    all_tickers = stock_downloader.get_all_tickers()
 
     with ThreadPoolExecutor(max_workers=32) as executor:
-        future_tasks = [executor.submit(test_strategy, symbol, False) for symbol in all_symbols]
+        future_tasks = [executor.submit(find_relative_strength, ticker, stock_downloader) for ticker in all_tickers]
         results = [future.result() for future in as_completed(future_tasks)]
 
     strong_targets = []
@@ -145,15 +148,15 @@ if __name__ == '__main__':
             target_rs_score[result["stock"]] = result["rs_score"]
     strong_targets.sort(key=lambda x: target_rs_score[x], reverse=True)
 
-    print(f"Found {len(strong_targets)} stocks that meet the requirements. Percentage: {len(strong_targets) / len(all_symbols) * 100:.2f}%")
+    print(f"Found {len(strong_targets)} stocks that meet the requirements. Percentage: {len(strong_targets) / len(all_tickers) * 100:.2f}%")
     print(f"Strong targets: {', '.join(strong_targets)}")
     print("============================== Target : Score (TOP 50) ==============================")
-    for crypto in strong_targets[:50]:
-        score = target_rs_score[crypto]
-        print(f"{crypto}: {score}")
+    for ticker in strong_targets[:50]:
+        score = target_rs_score[ticker]
+        print(f"{ticker}: {score}")
     print("========================================================================================")
     date_str = datetime.now().strftime("%Y-%m-%d")
     txt_content = "###INDEX\nSPY,IXIC,DJI\n###TARGETS\n"
-    txt_content += ",".join(strong_targets)
-    with open(f"{date_str}_stock_strong_targets.txt", "w") as f:
+    txt_content += ",".join(strong_targets[:980])
+    with open(f"{date_str}_stock_strong_targets_using_weight.txt", "w") as f:
         f.write(txt_content)
