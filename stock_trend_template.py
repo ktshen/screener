@@ -1,5 +1,4 @@
-import argparse
-from datetime import datetime, timedelta
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import numpy as np
 import pandas as pd
@@ -13,7 +12,7 @@ STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
 #==================================================#
 
 
-def find_relative_strength(ticker: str, sd: StockDownloader):
+def calc_relative_strength(ticker: str, sd: StockDownloader):
     try:
         success, daily_stock_data = sd.request_ticker_all_range(ticker, timeframe="1d", current_tz=CURRENT_TIMEZONE)
     except Exception as e:
@@ -37,6 +36,7 @@ def find_relative_strength(ticker: str, sd: StockDownloader):
 
         current_close = daily_stock_data['Close'].values[-1]
         moving_average_50 = daily_stock_data['SMA_50'].values[-1]
+        moving_average_60 = daily_stock_data['SMA_60'].values[-1]
         moving_average_150 = daily_stock_data['SMA_150'].values[-1]
         moving_average_200 = daily_stock_data['SMA_200'].values[-1]
         low_of_52_week = daily_stock_data["Close"].values[-260:].min()
@@ -46,7 +46,7 @@ def find_relative_strength(ticker: str, sd: StockDownloader):
         average_turnover = last_10_days_turnover['Turnover'].mean()
         conditions_checklist = [False] * 9
 
-        if average_turnover < 5000000:
+        if average_turnover < 10000000:
             print(f"{ticker} fails to meet the requirements. Not enough turnover.")
             return {"stock": ticker, "meet_requirements": False}
 
@@ -68,8 +68,8 @@ def find_relative_strength(ticker: str, sd: StockDownloader):
         # conditions_checklist[3] = True  # Pass now
 
         # Condition 5 : Current Price > 50 SMA
-        if current_close > moving_average_50:
-            conditions_checklist[4] = True
+        # if current_close > moving_average_50:
+        #     conditions_checklist[4] = True
         conditions_checklist[4] = True  # Pass now
 
         # Condition 6 : Current Price must at least outperform 52week low about 30%
@@ -111,8 +111,8 @@ def find_relative_strength(ticker: str, sd: StockDownloader):
         rs_score = 0.0
         bars = len(one_hour_stock_data) - 60
         if bars <= 0:
-            raise ValueError("Not enough days to calculate MA60")
-        weights = np.exp(-0.0015 * np.arange(bars))
+            raise ValueError("Not enough data to calculate 1H MA60")
+        weights = np.exp(-0.0015 * np.arange(bars))     # The weight of the median is approximately half of the first one.
         weights /= np.sum(weights)
         for i in range(1, bars + 1):
             # close = one_hour_stock_data["Close"].values[-i]
@@ -120,8 +120,9 @@ def find_relative_strength(ticker: str, sd: StockDownloader):
             one_hour_ma45 = one_hour_stock_data['SMA_45'].values[-i]
             one_hour_ma60 = one_hour_stock_data['SMA_60'].values[-i]
             # weight = ((close - one_hour_ma30) + (close - four_hour_ma45) + (close - four_hour_ma60) + (one_hour_ma30 - four_hour_ma45) + (one_hour_ma30 - four_hour_ma60) + (four_hour_ma45 - four_hour_ma60)) / four_hour_ma60
-            M = ((one_hour_ma30 - one_hour_ma45) + (one_hour_ma30 - one_hour_ma60) + (one_hour_ma45 - one_hour_ma60)) / one_hour_ma60
-            rs_score += M * weights[i-1]
+            M = ((one_hour_ma30 - one_hour_ma45) + (one_hour_ma30 - one_hour_ma60) + (one_hour_ma45 - one_hour_ma60)) / ((one_hour_ma30 + one_hour_ma45 + one_hour_ma60) / 3)
+            # rs_score += M * weights[i-1]
+            rs_score += M
             # rs_score += M * (bars - i)
         return {"stock": ticker, "meet_requirements": meet_requirements, "rs_score": rs_score}
 
@@ -134,8 +135,11 @@ if __name__ == '__main__':
     stock_downloader = StockDownloader()
     all_tickers = stock_downloader.get_all_tickers()
 
+    spy_result = calc_relative_strength("SPY", stock_downloader)
+    spy_rs_score = spy_result["rs_score"]
+
     with ThreadPoolExecutor(max_workers=32) as executor:
-        future_tasks = [executor.submit(find_relative_strength, ticker, stock_downloader) for ticker in all_tickers]
+        future_tasks = [executor.submit(calc_relative_strength, ticker, stock_downloader) for ticker in all_tickers]
         results = [future.result() for future in as_completed(future_tasks)]
 
     strong_targets = []
@@ -143,12 +147,12 @@ if __name__ == '__main__':
     for result in results:
         if not result:
             continue
-        if result["meet_requirements"]:
+        if result["meet_requirements"] and result["rs_score"] > spy_rs_score:
             strong_targets.append(result["stock"])
             target_rs_score[result["stock"]] = result["rs_score"]
     strong_targets.sort(key=lambda x: target_rs_score[x], reverse=True)
 
-    print(f"Found {len(strong_targets)} stocks that meet the requirements. Percentage: {len(strong_targets) / len(all_tickers) * 100:.2f}%")
+    print(f"Found {len(strong_targets)} stocks that meet the requirements and stronger than SPY. Percentage: {len(strong_targets) / len(all_tickers) * 100:.2f}%")
     print(f"Strong targets: {', '.join(strong_targets)}")
     print("============================== Target : Score (TOP 50) ==============================")
     for ticker in strong_targets[:50]:
@@ -156,7 +160,7 @@ if __name__ == '__main__':
         print(f"{ticker}: {score}")
     print("========================================================================================")
     date_str = datetime.now().strftime("%Y-%m-%d")
-    txt_content = "###INDEX\nSPY,IXIC,DJI\n###TARGETS\n"
+    txt_content = "###INDEX\nSPY,QQQ,DJI\n###TARGETS\n"
     txt_content += ",".join(strong_targets[:980])
     with open(f"{date_str}_stock_strong_targets_using_weight.txt", "w") as f:
         f.write(txt_content)
