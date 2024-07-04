@@ -156,9 +156,9 @@ class StockDownloader:
         else:
             return success, response
 
-    def request_ticker_all_range(self, ticker, timeframe="4h", current_tz="America/Los_Angeles"):
-        stock_client = polygon.StocksClient(self.api_keys["polygon"])
-        start_date = datetime.now() - timedelta(days=365*2)
+    def request_ticker_all_range(self, ticker, timeframe="1h", current_tz="America/Los_Angeles", request_days=450):
+        stock_client = polygon.StocksClient(self.api_keys["polygon"], connect_timeout=300, read_timeout=300)
+        start_date = datetime.now() - timedelta(days=request_days)
         end_date = timezone(current_tz).localize(datetime.now())
         multiplier, timespan = parse_time_string(timeframe)
         response = stock_client.get_aggregate_bars(ticker, start_date, end_date, multiplier=multiplier,
@@ -166,8 +166,8 @@ class StockDownloader:
                                                    warnings=False, info=False)
         return self.parse_polygon_response(response)
 
-    def request_ticker_by_date(self, ticker, start_datetime, end_datetime, timeframe="4h"):
-        stock_client = polygon.StocksClient(self.api_keys["polygon"])
+    def request_ticker_by_date(self, ticker, start_datetime, end_datetime, timeframe="1h"):
+        stock_client = polygon.StocksClient(self.api_keys["polygon"], connect_timeout=300, read_timeout=300)
         multiplier, timespan = parse_time_string(timeframe)
         response = stock_client.get_aggregate_bars(ticker, start_datetime, end_datetime, multiplier=multiplier,
                                                    timespan=timespan, full_range=True, run_parallel=False,
@@ -210,19 +210,74 @@ class CryptoDownloader:
                    "Ignore"], axis=1, inplace=True)
         return data
 
-    def get_crypto(self, crypto, time_interval="15m", timezone="America/Los_Angeles"):
-        success = False  # 0 - fail, 1 - success
+    def get_crypto(self, crypto, start_date=None, time_interval="4h", timezone="America/Los_Angeles"):
+        success = False
         try:
-            binance_df = self.request_binance(crypto, time_interval, timezone)
-            binance_df.set_index('Datetime', inplace=True)
-            binance_df = binance_df[~binance_df.index.duplicated(keep='first')]
-            response = binance_df
-            response.reset_index(inplace=True)
+            if start_date is None:
+                # Fetch only the latest 1500 datapoints
+                response = self.binance_client.futures_klines(
+                    symbol=crypto,
+                    interval=time_interval,
+                    limit=1500
+                )
+                df = pd.DataFrame(response,
+                                  columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price", "Volume",
+                                           "Close Time", "Quote Volume", "Number of Trades",
+                                           "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
+            else:
+                # Fetch historical data from the start_date
+                start_timestamp = int(datetime.strptime(start_date, "%Y-%m-%d").timestamp() * 1000)
+                end_timestamp = int(datetime.now().timestamp() * 1000)
+
+                all_data = []
+                current_timestamp = start_timestamp
+
+                while current_timestamp < end_timestamp:
+                    response = self.binance_client.futures_klines(
+                        symbol=crypto,
+                        interval=time_interval,
+                        startTime=current_timestamp,
+                        limit=1500
+                    )
+
+                    if not response:
+                        break
+
+                    df = pd.DataFrame(response,
+                                      columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price",
+                                               "Volume", "Close Time", "Quote Volume", "Number of Trades",
+                                               "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
+                    all_data.append(df)
+
+                    current_timestamp = int(df.iloc[-1]['Close Time']) + 1
+
+                if not all_data:
+                    raise Exception("No data retrieved")
+
+                df = pd.concat(all_data, ignore_index=True)
+
+            df = df.drop_duplicates(subset=['Datetime'], keep='first')
+
+            for col in ["Open Price", "High Price", "Low Price", "Close Price", "Volume"]:
+                df[col] = df[col].astype(float)
+
+            local_timezone = pytz.timezone(timezone)
+            df["Datetime"] = pd.to_datetime(df['Datetime'], unit='ms', utc=True).dt.tz_convert(
+                local_timezone).dt.strftime('%Y-%m-%d %H:%M:%S')
+
+            df.drop(["Close Time", "Quote Volume", "Number of Trades", "Taker buy base asset volume",
+                     "Taker buy quote asset volume", "Ignore"], axis=1, inplace=True)
+
+            df.reset_index(drop=True, inplace=True)
+
             for duration in CRYPTO_SMA:
-                response["SMA_" + str(duration)] = round(response.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
+                df[f"SMA_{duration}"] = round(df.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
+
             success = True
-            print(f"{crypto} -> Get data from binance successfully ({response.iloc[0]['Datetime']} to {response.iloc[-1]['Datetime']})")
+            print(f"{crypto} -> Get data from binance successfully ({df['Datetime'].iloc[0]} to {df['Datetime'].iloc[-1]})")
+
+            return crypto, success, df
+
         except Exception as e:
             print(f"{crypto} -> Error: {e}")
-            response = str(e)
-        return crypto, success, response
+            return crypto, success, str(e)
