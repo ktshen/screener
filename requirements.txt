@@ -1,8 +1,6 @@
 pytz
 pandas
-yfinance
 requests
 stocksymbol
 python-binance
-pandas-market-calendars
 polygon

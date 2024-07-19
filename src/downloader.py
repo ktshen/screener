@@ -11,7 +11,6 @@ import re
 from stocksymbol import StockSymbol
 from binance import Client
 
-STRFTIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 CRYPTO_SMA = [30, 45, 60]
 
 

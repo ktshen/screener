@@ -10,7 +10,7 @@ The purpose of this project is to download historical data for US stocks and cry
 pip3 install -r requirements.txt
 ```
 
-API keys are needed for [Tiingo](https://tiingo.com/) and [Stocksymbol](https://stock-symbol.herokuapp.com) (Not a requirement for Crypto usage)
+API keys are needed for [Polygon](https://polygon.io) and [Stocksymbol](https://stock-symbol.herokuapp.com) (Not a requirement for Crypto usage)
 
 ## Strategy Usage
 
@@ -57,7 +57,7 @@ from src.downloader import StockDownloader
 from src.downloader import CryptoDownloader
 ```
 
-When devising your own strategy, feel free to refer to the existing strategies for guidance and inspiration. The stock data is downloaded from Tiingo and Yahoo Finance, and the cryptocurrency data is obtained from Binance.
+When devising your own strategy, feel free to refer to the existing strategies for guidance and inspiration. The stock data is downloaded from Polygon.io and the cryptocurrency data is obtained from Binance.
 
 ## License
 
