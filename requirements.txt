@@ -3,4 +3,4 @@ pandas
 requests
 stocksymbol
 python-binance
-polygon
+polygon-api-client

@@ -1,16 +1,20 @@
-import os
-from datetime import datetime, timedelta
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pytz import timezone
 import pandas as pd
 import pytz
 import json
-import polygon
 import re
 from stocksymbol import StockSymbol
+from polygon import RESTClient
+from urllib3.util.retry import Retry
 from binance import Client
+from pathlib import Path
+import os
+import time
+from datetime import datetime, timedelta
 
+# Configurable SMA periods
+STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
 CRYPTO_SMA = [30, 45, 60]
 
 
@@ -23,7 +27,6 @@ def parse_time_string(time_string):
     if match_with_number:
         number = int(match_with_number.group(1))
         unit = match_with_number.group(2)
-
     elif match_without_number:
         number = 1
         unit = match_without_number.group(1)
@@ -47,131 +50,153 @@ class StockDownloader:
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
 
-    def check_symbol_legibility(self, symbol):
-        """
-        Check if symbol is legit, need to be common stock and the latest data should be recent
-        """
-        print(f"Checking {symbol}...")
-        ref_client = polygon.ReferenceClient(self.api_keys["polygon"])
-        response = ref_client.get_tickers(symbol)
-        try:
-            if response["count"] != 1:
-                print("Error", response)
-                return None
-            data = response["results"][0]
-            if "type" in data and not data["type"] in ["CS", "ADRC", "PFD"]:
-                return None
-        except Exception as e:
-            return None
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=0.5,
+            status_forcelist=[413, 429, 499, 500, 502, 503, 504],
+            allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "POST"],
+            raise_on_status=False,
+            respect_retry_after_header=True
+        )
 
-        success, response = self.request_ticker_by_traceback_days(symbol, 10, timeframe="1d")
-        if not success:
-            return None
-        latest_datetime = response['Datetime'].max()
-        current_datetime = datetime.now(pytz.utc)
-        one_week_ago = current_datetime - timedelta(days=5)
-        if latest_datetime < one_week_ago:
-            return None
-        return symbol
+        self.client = RESTClient(
+            api_key=self.api_keys["polygon"],
+            num_pools=5,
+            connect_timeout=10.0,
+            read_timeout=10.0,
+            retries=retry_strategy
+        )
+
+    def _validate_data_quality(self, df: pd.DataFrame) -> bool:
+        """
+        Validate data quality
+        - Check if latest data is within a week
+        - Check for stale prices (same closing price for 10+ consecutive periods)
+        """
+        if df.empty:
+            return False
+
+        # Check data freshness
+        latest_ts = df['Datetime'].astype(int).max() / 1e9
+        week_ago = time.time() - (7 * 24 * 3600)
+        if latest_ts < week_ago:
+            return False
+
+        # Check for stale prices
+        consecutive_same_price = df['Close'].rolling(window=10).apply(
+            lambda x: len(set(x)) == 1
+        )
+        if consecutive_same_price.any():
+            return False
+
+        return True
+
+    def get_data(self, ticker: str, start_ts: int, timeframe: str = "1d") -> tuple[bool, pd.DataFrame]:
+        """
+        Get stock data with SMA calculation and data quality validation
+        Args:
+            ticker: Stock symbol
+            start_ts: Start timestamp
+            timeframe: Time interval ("1d" or "1h")
+        Returns:
+            (success, DataFrame)
+        """
+        # Calculate extended start for SMA calculation
+        max_sma = max(STOCK_SMA)
+        extension = max_sma * 24 * 3600 if timeframe == "1d" else max_sma * 7 * 3600
+        extended_start = start_ts - extension
+
+        # Get current time
+        end_ts = int(time.time())
+
+        # Parse timeframe
+        multiplier, timespan = parse_time_string(timeframe)
+
+        # Request data from Polygon
+        aggs = self.client.list_aggs(
+            ticker,
+            multiplier,
+            timespan,
+            from_=extended_start * 1000,
+            to=end_ts * 1000,
+            limit=50000
+        )
+
+        if not aggs:
+            return False, pd.DataFrame()
+
+        # Convert to DataFrame
+        df = pd.DataFrame([{
+            'Datetime': pd.Timestamp.fromtimestamp(agg.timestamp // 1000, tz=pytz.UTC),
+            'Open': float(agg.open),
+            'Close': float(agg.close),
+            'High': float(agg.high),
+            'Low': float(agg.low),
+            'Volume': float(agg.volume)
+        } for agg in aggs])
+
+        if df.empty:
+            return False, df
+
+        # Convert timezone and sort
+        df['Datetime'] = df['Datetime'].dt.tz_convert('America/New_York')
+        df = df.sort_values('Datetime')
+
+        # Filter market hours (9:00 AM - 4:00 PM NY time)
+        if timespan == "hour":
+            df = df[
+                df['Datetime'].dt.time.between(
+                    pd.to_datetime('09:00').time(),
+                    pd.to_datetime('16:00').time(),
+                    inclusive='left'
+                )
+            ]
+        elif timespan == "minute":
+            df = df[
+                df['Datetime'].dt.time.between(
+                    pd.to_datetime('09:30').time(),
+                    pd.to_datetime('16:00').time(),
+                    inclusive='left'
+                )
+            ]
+
+        # Validate data quality
+        if not self._validate_data_quality(df):
+            return False, pd.DataFrame()
+
+        # Calculate SMAs
+        for period in STOCK_SMA:
+            df[f'SMA_{period}'] = df['Close'].rolling(window=period).mean()
+
+        # Drop rows with NaN values
+        df = df.dropna()
+
+        # Filter to requested time range and reset index
+        df = df[df['Datetime'].astype(int) / 1e9 >= start_ts]
+        df = df.reset_index(drop=True)
+
+        return True, df
 
     def get_all_tickers(self):
-        """
-        - Download all stock symbols from StockSymbol and Polygon.io API to csv file and update the file every month
-        - Avoid using this method in thread
-        """
-        saved_symbols_path = self.save_dir / "company-list.csv"
-        symbols_expired = False
-        if saved_symbols_path.exists():
-            # Obtain the file modification timestamp of a file
-            m_time = os.path.getmtime(saved_symbols_path)
-            # Obtain now timestamp
-            now = datetime.now()
-            # Find the timedelta between now and the file modification timestamp
-            delta = now - datetime.fromtimestamp(m_time)
-            if delta > timedelta(days=30):
-                symbols_expired = True
+        """Get all stock symbols from both StockSymbol and Polygon"""
+        # Get symbols from StockSymbol
+        ss = StockSymbol(self.api_keys["stocksymbol"])
+        stock_symbol_list = [x for x in ss.get_symbol_list(market="US", symbols_only=True)
+                           if "." not in x]
 
-        if not saved_symbols_path.exists() or symbols_expired:
-            print("Fetching all symbols...")
-            ss = StockSymbol(self.api_keys["stocksymbol"])
-            # First we download all ticker in US market
-            stock_symbol_list = ss.get_symbol_list(market="US", symbols_only=True)
-            # The first 2 rows are for discarding any tickers that is not stock
-            stock_symbol_list = [x for x in stock_symbol_list if "." not in x]
+        # Get symbols from Polygon
+        polygon_stocks = self.client.list_tickers(
+            market="stocks",
+            type="CS",
+            active=True,
+            limit=1000
+        )
+        polygon_common_stocks = [ticker.ticker for ticker in polygon_stocks]
 
-            ref_client = polygon.ReferenceClient(self.api_keys["polygon"])
-            response = ref_client.get_tickers(market='stocks', symbol_type="CS", limit=1000, all_pages=True)
-            polygon_common_stocks = [x["ticker"] for x in response]
-
-            stock_symbol_set = set(stock_symbol_list)
-            polygon_common_stocks_set = set(polygon_common_stocks)
-
-            merged_set = stock_symbol_set.union(polygon_common_stocks_set)
-            merged_list = list(merged_set)
-            merged_list.sort()
-
-            clean_stock_symbol_list = []
-            with ThreadPoolExecutor(max_workers=32) as executor:
-                futures = {executor.submit(self.check_symbol_legibility, symbol): symbol for symbol in merged_list}
-                for future in as_completed(futures):
-                    symbol = futures[future]
-                    try:
-                        result = future.result()
-                        if result:
-                            clean_stock_symbol_list.append(result)
-                    except Exception as e:
-                        print(f"Error processing {symbol}: {e}")
-            clean_stock_symbol_list.sort()
-            df = pd.DataFrame({'Symbol': clean_stock_symbol_list}, columns=['Symbol'])
-            # saving the dataframe as csv file
-            print(f"Generating {saved_symbols_path}...")
-            print(f"There are total {len(merged_list)}, and only {len(clean_stock_symbol_list)} tickers.")
-            df.to_csv(saved_symbols_path, sep=' ', index=False)
-            return clean_stock_symbol_list
-        else:
-            data = pd.read_csv(saved_symbols_path, header=0)
-            return list(data.iloc[:, 0])
-
-    @staticmethod
-    def parse_polygon_response(response):
-        success = False
-        if response:
-            success = True
-            df = pd.DataFrame(response)
-            df = df.drop(columns=['vw', 'n'])
-            df['t'] = pd.to_datetime(df['t'], unit='ms', utc=True)
-            new_york_tz = pytz.timezone('America/New_York')
-            df = df[["t", "o", "c", "h", "l", "v"]]
-            df = df.rename(columns={
-                't':  "Datetime",
-                'o': 'Open',
-                'c': 'Close',
-                'h': 'High',
-                'l': 'Low',
-                'v': 'Volume',
-            })
-            df['Datetime'] = df['Datetime'].dt.tz_convert(new_york_tz)
-            return success, df
-        else:
-            return success, response
-
-    def request_ticker_all_range(self, ticker, timeframe="1h", current_tz="America/Los_Angeles", request_days=450):
-        stock_client = polygon.StocksClient(self.api_keys["polygon"], connect_timeout=300, read_timeout=300)
-        start_date = datetime.now() - timedelta(days=request_days)
-        end_date = timezone(current_tz).localize(datetime.now())
-        multiplier, timespan = parse_time_string(timeframe)
-        response = stock_client.get_aggregate_bars(ticker, start_date, end_date, multiplier=multiplier,
-                                                   timespan=timespan, full_range=True, run_parallel=False,
-                                                   warnings=False, info=False)
-        return self.parse_polygon_response(response)
-
-    def request_ticker_by_date(self, ticker, start_datetime, end_datetime, timeframe="1h"):
-        stock_client = polygon.StocksClient(self.api_keys["polygon"], connect_timeout=300, read_timeout=300)
-        multiplier, timespan = parse_time_string(timeframe)
-        response = stock_client.get_aggregate_bars(ticker, start_datetime, end_datetime, multiplier=multiplier,
-                                                   timespan=timespan, full_range=True, run_parallel=False,
-                                                   warnings=False, info=False)
-        return self.parse_polygon_response(response)
+        # Merge and return unique symbols
+        all_symbols = sorted(set(stock_symbol_list).union(set(polygon_common_stocks)))
+        print(f"Found {len(all_symbols)} unique stock symbols")
+        return all_symbols
 
 
 class CryptoDownloader:
