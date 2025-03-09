@@ -1,9 +1,7 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from pytz import timezone
 import pandas as pd
-import pytz
 import json
 import re
+from pytz import timezone
 from stocksymbol import StockSymbol
 from polygon import RESTClient
 from urllib3.util.retry import Retry
@@ -11,11 +9,41 @@ from binance import Client
 from pathlib import Path
 import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
-# Configurable SMA periods
+# Configurable parameters
 STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
 CRYPTO_SMA = [30, 45, 60]
+ATR_PERIOD = 60  
+
+
+def calculate_atr(df, period=ATR_PERIOD):
+    """
+    Calculate Average True Range (ATR) for the given dataframe
+    
+    Args:
+        df: DataFrame containing 'high', 'low', 'close' columns
+        period: Period for ATR calculation (default: ATR_PERIOD)
+        
+    Returns:
+        Series containing ATR values
+    """
+    high = df['high']
+    low = df['low']
+    close = df['close']
+    
+    # Calculate True Range
+    tr1 = high - low
+    tr2 = abs(high - close.shift())
+    tr3 = abs(low - close.shift())
+    
+    # Get the maximum of the three price ranges
+    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    
+    # Calculate ATR as the simple moving average of True Range
+    atr = tr.rolling(window=period).mean()
+    
+    return atr
 
 
 def parse_time_string(time_string):
@@ -61,10 +89,10 @@ class StockDownloader:
 
         self.client = RESTClient(
             api_key=self.api_keys["polygon"],
-            num_pools=5,
-            connect_timeout=10.0,
-            read_timeout=10.0,
-            retries=retry_strategy
+            num_pools=100,
+            connect_timeout=1.0,
+            read_timeout=1.0,
+            retries=10
         )
 
     def _validate_data_quality(self, df: pd.DataFrame) -> bool:
@@ -77,13 +105,13 @@ class StockDownloader:
             return False
 
         # Check data freshness
-        latest_ts = df['Datetime'].astype(int).max() / 1e9
+        latest_ts = df['timestamp'].max()
         week_ago = time.time() - (7 * 24 * 3600)
         if latest_ts < week_ago:
             return False
 
         # Check for stale prices
-        consecutive_same_price = df['Close'].rolling(window=10).apply(
+        consecutive_same_price = df['close'].rolling(window=10).apply(
             lambda x: len(set(x)) == 1
         )
         if consecutive_same_price.any():
@@ -91,23 +119,28 @@ class StockDownloader:
 
         return True
 
-    def get_data(self, ticker: str, start_ts: int, timeframe: str = "1d") -> tuple[bool, pd.DataFrame]:
+    def get_data(self, ticker: str, start_ts: int, end_ts: int = None, timeframe: str = "1d", dropna=True, atr=True) -> tuple[bool, pd.DataFrame]:
         """
         Get stock data with SMA calculation and data quality validation
         Args:
             ticker: Stock symbol
             start_ts: Start timestamp
+            end_ts: End timestamp (default: current time)
             timeframe: Time interval ("1d" or "1h")
+            dropna: Whether to drop NA values
+            atr: Whether to calculate ATR (default: True)
         Returns:
             (success, DataFrame)
         """
         # Calculate extended start for SMA calculation
         max_sma = max(STOCK_SMA)
-        extension = max_sma * 24 * 3600 if timeframe == "1d" else max_sma * 7 * 3600
+        fc = 1.3 if timeframe == "1d" else 0.6
+        extension = int(max_sma * 24 * 3600 * fc) 
         extended_start = start_ts - extension
 
-        # Get current time
-        end_ts = int(time.time())
+        # Get current time if end_ts not provided
+        if end_ts is None:
+            end_ts = int(time.time())
 
         # Parse timeframe
         multiplier, timespan = parse_time_string(timeframe)
@@ -117,48 +150,52 @@ class StockDownloader:
             ticker,
             multiplier,
             timespan,
-            from_=extended_start * 1000,
-            to=end_ts * 1000,
-            limit=50000
+            int(extended_start * 1000),
+            int(end_ts * 1000),
+            limit=10000
         )
 
         if not aggs:
             return False, pd.DataFrame()
 
-        # Convert to DataFrame
+        # Convert to DataFrame with timestamp
         df = pd.DataFrame([{
-            'Datetime': pd.Timestamp.fromtimestamp(agg.timestamp // 1000, tz=pytz.UTC),
-            'Open': float(agg.open),
-            'Close': float(agg.close),
-            'High': float(agg.high),
-            'Low': float(agg.low),
-            'Volume': float(agg.volume)
+            'timestamp': agg.timestamp // 1000,
+            'open': float(agg.open),
+            'close': float(agg.close),
+            'high': float(agg.high),
+            'low': float(agg.low),
+            'volume': float(agg.volume)
         } for agg in aggs])
 
         if df.empty:
             return False, df
 
-        # Convert timezone and sort
-        df['Datetime'] = df['Datetime'].dt.tz_convert('America/New_York')
-        df = df.sort_values('Datetime')
+        # Sort by timestamp
+        df = df.sort_values('timestamp')
 
         # Filter market hours (9:00 AM - 4:00 PM NY time)
-        if timespan == "hour":
-            df = df[
-                df['Datetime'].dt.time.between(
+        if timespan == "hour" or timespan == "minute":
+            # Create temporary datetime column in NY timezone for filtering
+            ny_tz = timezone('America/New_York')
+            temp_dt = pd.to_datetime(df['timestamp'], unit='s', utc=True).dt.tz_convert(ny_tz)
+            
+            # Create filter based on NY market hours
+            if timespan == "hour":
+                market_hours_filter = temp_dt.dt.time.between(
                     pd.to_datetime('09:00').time(),
                     pd.to_datetime('16:00').time(),
                     inclusive='left'
                 )
-            ]
-        elif timespan == "minute":
-            df = df[
-                df['Datetime'].dt.time.between(
+            else:  # minute timeframe
+                market_hours_filter = temp_dt.dt.time.between(
                     pd.to_datetime('09:30').time(),
                     pd.to_datetime('16:00').time(),
                     inclusive='left'
                 )
-            ]
+            
+            # Apply filter and drop temporary column
+            df = df[market_hours_filter]
 
         # Validate data quality
         if not self._validate_data_quality(df):
@@ -166,13 +203,18 @@ class StockDownloader:
 
         # Calculate SMAs
         for period in STOCK_SMA:
-            df[f'SMA_{period}'] = df['Close'].rolling(window=period).mean()
+            df[f'sma_{period}'] = df['close'].rolling(window=period).mean()
+
+        # Calculate ATR if requested
+        if atr:
+            df['atr'] = calculate_atr(df, period=ATR_PERIOD)
 
         # Drop rows with NaN values
-        df = df.dropna()
+        if dropna:
+            df = df.dropna()
 
         # Filter to requested time range and reset index
-        df = df[df['Datetime'].astype(int) / 1e9 >= start_ts]
+        df = df[(df['timestamp'] >= start_ts) & (df['timestamp'] <= end_ts)]
         df = df.reset_index(drop=True)
 
         return True, df
@@ -187,7 +229,7 @@ class StockDownloader:
         # Get symbols from Polygon
         polygon_stocks = self.client.list_tickers(
             market="stocks",
-            type="CS",
+            # type="CS",
             active=True,
             limit=1000
         )
@@ -213,95 +255,181 @@ class CryptoDownloader:
             symbol_name = item["pair"]
             if symbol_name[-4:] == "USDT":
                 binance_symbols.add(symbol_name)
-        return list(binance_symbols)
+        return sorted(list(binance_symbols))
 
-    def request_binance(self, crypto, time_interval="15m", current_tz="America/Los_Angeles"):
+    def _validate_data_quality(self, df: pd.DataFrame) -> bool:
         """
-        1500 data points for all timeframe using binance futures instead of binance spots
+        Validate crypto data quality
+        - Check if latest data is within a week
+        - Check for stale prices (same closing price for 10+ consecutive periods)
         """
-        response = self.binance_client.futures_klines(symbol=crypto, interval=time_interval, limit=1500)
-        data = pd.DataFrame(response, columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price",
-                                               "Volume", "Close Time", "Quote Volume", "Number of Trades",
-                                               "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
-        data["Open Price"] = data["Open Price"].astype(float)
-        data["High Price"] = data["High Price"].astype(float)
-        data["Low Price"] = data["Low Price"].astype(float)
-        data["Close Price"] = data["Close Price"].astype(float)
-        data["Volume"] = data["Volume"].astype(float)
-        local_timezone = pytz.timezone(current_tz)
-        data["Datetime"] = pd.to_datetime(data['Datetime'], unit='ms', utc=True).dt.tz_convert(local_timezone).dt.strftime('%Y-%m-%d %H:%M:%S')
-        data.drop(["Close Time", "Quote Volume", "Number of Trades", "Taker buy base asset volume", "Taker buy quote asset volume",
-                   "Ignore"], axis=1, inplace=True)
-        return data
+        if df.empty:
+            return False
 
-    def get_crypto(self, crypto, start_date=None, time_interval="4h", timezone="America/Los_Angeles"):
-        success = False
+        # Check data freshness
+        latest_ts = df['timestamp'].max()
+        week_ago = time.time() - (7 * 24 * 3600)
+        if latest_ts < week_ago:
+            return False
+
+        # Check for stale prices
+        consecutive_same_price = df['close'].rolling(window=10).apply(
+            lambda x: len(set(x)) == 1
+        )
+        if consecutive_same_price.any():
+            return False
+
+        return True
+
+    def get_data(self, crypto, start_ts=None, end_ts=None, timeframe="4h", dropna=True, atr=True) -> tuple[bool, pd.DataFrame]:
+        """
+        Get cryptocurrency data with SMA calculation and data quality validation
+        Args:
+            crypto: Cryptocurrency symbol
+            start_ts: Start timestamp (default: None, fetches latest 1500 datapoints)
+            end_ts: End timestamp (default: current time)
+            timeframe: Time interval (e.g., "5m", "15m", "1h", "4h")
+            dropna: Whether to drop NA values (default: True)
+            atr: Whether to calculate ATR (default: True)
+        Returns:
+            (success, DataFrame)
+        """
         try:
-            if start_date is None:
+            # Default end_ts to current time if not provided
+            if end_ts is None:
+                end_ts = int(time.time())
+            
+            # Convert to milliseconds for Binance API
+            end_ts_ms = end_ts * 1000
+            
+            if start_ts is None:
                 # Fetch only the latest 1500 datapoints
                 response = self.binance_client.futures_klines(
                     symbol=crypto,
-                    interval=time_interval,
+                    interval=timeframe,
                     limit=1500
                 )
-                df = pd.DataFrame(response,
-                                  columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price", "Volume",
-                                           "Close Time", "Quote Volume", "Number of Trades",
-                                           "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
             else:
-                # Fetch historical data from the start_date
-                start_timestamp = int(datetime.strptime(start_date, "%Y-%m-%d").timestamp() * 1000)
-                end_timestamp = int(datetime.now().timestamp() * 1000)
-
+                # Calculate extended start for SMA calculation
+                max_sma = max(CRYPTO_SMA) 
+                
+                # Calculate number of time intervals in max_sma
+                num_intervals, unit = parse_time_string(timeframe)
+                if unit == "minute":
+                    interval_seconds = num_intervals * 60
+                elif unit == "hour":
+                    interval_seconds = num_intervals * 3600
+                else:  # day
+                    interval_seconds = num_intervals * 86400
+                
+                # Calculate extension in milliseconds (number of bars needed for max SMA)
+                extension_ms = max_sma * interval_seconds * 1000 * 1.2 # 20% buffer
+                
+                # Extended start timestamp with buffer for SMA calculation
+                extended_start_ts_ms = start_ts * 1000 - extension_ms
+                
+                # Fetch historical data from the extended start date
                 all_data = []
-                current_timestamp = start_timestamp
+                current_timestamp = extended_start_ts_ms
 
-                while current_timestamp < end_timestamp:
+                while current_timestamp < end_ts_ms:
                     response = self.binance_client.futures_klines(
                         symbol=crypto,
-                        interval=time_interval,
-                        startTime=current_timestamp,
+                        interval=timeframe,
+                        startTime=int(current_timestamp),
+                        endTime=int(end_ts_ms),
                         limit=1500
                     )
 
                     if not response:
                         break
 
-                    df = pd.DataFrame(response,
-                                      columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price",
-                                               "Volume", "Close Time", "Quote Volume", "Number of Trades",
-                                               "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
-                    all_data.append(df)
-
-                    current_timestamp = int(df.iloc[-1]['Close Time']) + 1
+                    all_data.extend(response)
+                    
+                    # Update current timestamp to the last received data point + 1
+                    if response:
+                        current_timestamp = int(response[-1][6]) + 1
+                    else:
+                        break
 
                 if not all_data:
-                    raise Exception("No data retrieved")
+                    print(f"{crypto} -> No data retrieved")
+                    return False, pd.DataFrame()
+                
+                response = all_data
 
-                df = pd.concat(all_data, ignore_index=True)
+            # Convert to DataFrame with timestamp as primary field
+            df = pd.DataFrame(response, 
+                            columns=["Datetime", "Open Price", "High Price", "Low Price", "Close Price",
+                                    "Volume", "Close Time", "Quote Volume", "Number of Trades",
+                                    "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"])
+            
+            # Check if DataFrame is empty
+            if df.empty:
+                print(f"{crypto} -> Empty DataFrame after initial conversion")
+                return False, pd.DataFrame()
+            
+            # Convert datetime to timestamp (in seconds)
+            df['timestamp'] = df['Datetime'].astype(int) // 1000
+            
+            # Rename columns to match stock df format (lowercase)
+            df['open'] = df['Open Price'].astype(float)
+            df['high'] = df['High Price'].astype(float)
+            df['low'] = df['Low Price'].astype(float)
+            df['close'] = df['Close Price'].astype(float)
+            df['volume'] = df['Volume'].astype(float)
+            
+            # Drop duplicate timestamps
+            df = df.drop_duplicates(subset=['timestamp'], keep='first')
+            
+            # Sort by timestamp
+            df = df.sort_values('timestamp')
 
-            df = df.drop_duplicates(subset=['Datetime'], keep='first')
-
-            for col in ["Open Price", "High Price", "Low Price", "Close Price", "Volume"]:
-                df[col] = df[col].astype(float)
-
-            local_timezone = pytz.timezone(timezone)
-            df["Datetime"] = pd.to_datetime(df['Datetime'], unit='ms', utc=True).dt.tz_convert(
-                local_timezone).dt.strftime('%Y-%m-%d %H:%M:%S')
-
-            df.drop(["Close Time", "Quote Volume", "Number of Trades", "Taker buy base asset volume",
-                     "Taker buy quote asset volume", "Ignore"], axis=1, inplace=True)
-
-            df.reset_index(drop=True, inplace=True)
-
+            # Validate data quality
+            if not self._validate_data_quality(df):
+                print(f"{crypto} -> Failed data quality validation")
+                return False, pd.DataFrame()
+            
+            # Calculate SMAs
             for duration in CRYPTO_SMA:
-                df[f"SMA_{duration}"] = round(df.loc[:, "Close Price"].rolling(window=duration).mean(), 20)
+                df[f"sma_{duration}"] = df['close'].rolling(window=duration).mean()
 
-            success = True
-            print(f"{crypto} -> Get data from binance successfully ({df['Datetime'].iloc[0]} to {df['Datetime'].iloc[-1]})")
+            # Calculate ATR if requested
+            if atr:
+                df['atr'] = calculate_atr(df, period=ATR_PERIOD)
 
-            return crypto, success, df
+            # Drop NaN values if requested
+            if dropna:
+                df = df.dropna()
+            
+            # Filter to requested time range (only after calculating SMAs)
+            if start_ts is not None:
+                df = df[(df['timestamp'] >= start_ts) & (df['timestamp'] <= end_ts)]
+            
+            # Final check if we have any data left
+            if df.empty:
+                print(f"{crypto} -> No data left after filtering")
+                return False, pd.DataFrame()
+            
+            # Reset index
+            df = df.reset_index(drop=True)
+            
+            # Keep only necessary columns
+            columns_to_keep = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
+            
+            # Add SMA columns
+            columns_to_keep += [f'sma_{period}' for period in CRYPTO_SMA]
+            
+            # Add ATR column if calculated
+            if atr:
+                columns_to_keep.append('atr')
+                
+            df = df[columns_to_keep]
+            
+            print(f"{crypto} -> Get data from binance successfully ({len(df)} rows from {datetime.fromtimestamp(df['timestamp'].iloc[0])} to {datetime.fromtimestamp(df['timestamp'].iloc[-1])})")
+            return True, df
 
         except Exception as e:
             print(f"{crypto} -> Error: {e}")
-            return crypto, success, str(e)
+            return False, pd.DataFrame()
+        

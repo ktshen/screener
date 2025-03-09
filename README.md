@@ -12,52 +12,63 @@ pip3 install -r requirements.txt
 
 API keys are needed for [Polygon](https://polygon.io) and [Stocksymbol](https://stock-symbol.herokuapp.com) (Not a requirement for Crypto usage)
 
-## Strategy Usage
+## Usage
 
-1. Crypto relative strength
+### 1. Crypto Screener
 
-Identify strong performing assets by comparing them with SMA-30, SMA-45 and SMA-60 (Default time frame = 15m, total days = 7)
-
-```bash
-python3 crypto_relative_strength.py  
-python3 crypto_relative_strength.py -t "1h" -d 60
-```
-* `-t` Time frame (3m, 5m, 15m, 30m, 1h, 2h, 4h)
-* `-d` Calculation duration in days (max: 1440 bars), e.g. 1440 / (24 bars per day in 1h) = 60
-* Change CURRENT_TIMEZONE in the file if timezone is essential to you.[[Refer](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]
-
-2. US stock trend template
-
-Utilize Mark Minervini's trend template to filter out strong performing stocks.
+Identify strong performing crypto currencies by comparing them with SMA-30, SMA-45 and SMA-60.
 
 ```bash
-python3 stock_trend_template.py
+python3 crypto_relative_strength.py -t "1h" -d 7
 ```
 
-Both scripts will generate a TXT file that can be imported into [TradingView](https://www.tradingview.com/)'s watchlist.
+Options
+* `-t` Time frame (5m, 15m, 30m, 1h, 2h, 4h, 8h, 1d) (default: 15m)
+* `-d` Calculation duration in days (default: 7 days)
 
-## Crypto Relative Strength Formula 
-$$ bars = 4 \times 24 \times days  \text{  (15m time frame)} $$
+The script will generate a TXT file in `output/<date>/` directory that can be imported into [TradingView](https://www.tradingview.com/)'s watchlist.
 
-$$ W = \frac{(bars-i)\times days}{bars} + 1 $$
+### 2. Stock Screener 
+
+Analyze US stocks using relative strength calculation and trend template conditions.
+
+```bash
+python3 stock_screener.py
+python3 stock_screener.py -a -g 
+```
+
+Options
+* `-a, --all` Include all strong targets in output instead of just top 980 (TradingView has import limit)
+* `-g` Ignore Minervini trend template conditions and calculate RS score only
+
+The script will generate a TXT file in `output/<date>/` directory that can be imported into [TradingView](https://www.tradingview.com/)'s watchlist.
+
+
+## Relative Strength Formula 
+The RS score is calculated using a weighted sum of relative strength indicators:
+
+
+$$ bars = \text{total bars (depend on time frame, e.g. } 4 \times 24 \times days \text{ for 15m})$$
+
+$$ W_i = e^{2 \times \ln(2) \times i / bars}  $$
 
 $$ \begin{align*}
-N_i & = \left [ (P_i - MA30_i) + (P_i - MA45_i) + (P_i - MA60_i) \right ]\times W\\  
-                       & +(MA30_i - MA60_i) +(MA30_i - MA45_i) + (MA45_i - MA60_i)\\  
-\end{align*} $$
+N_i & = \frac{(P_i - MA30_i) + (P_i - MA45_i) + (P_i - MA60_i) + (MA30_i - MA45_i) + (MA30_i - MA60_i) + (MA45_i - MA60_i)}{ATR_i}\\  
+\end{align*}  $$
 
-$$ Score = \sum_{i=1}^{bars} \frac{N_i} {MA60_i} \times (bars - i)  \\ \text{where i=1 means the closest bar} $$
+$$ Score = \frac{\sum_{i=1}^{bars} N_i \times W_i}{\sum_{i=1}^{bars} W_i}   $$
+
+Where:
+- Weight is calculated as an exponential function to make the weight at the midpoint (L/2) is exactly half of the weight at the endpoint (L)
+- ATR (Average True Range) is used for normalization
 
 
-## Download historical data only
-To import crypto or stock downloader for your own usage, simply include the following line in your Python code:
+## Output Files
 
-```python3
-from src.downloader import StockDownloader
-from src.downloader import CryptoDownloader
-```
-
-When devising your own strategy, feel free to refer to the existing strategies for guidance and inspiration. The stock data is downloaded from Polygon.io and the cryptocurrency data is obtained from Binance.
+Both scripts save results in the `output/<YYYY-MM-DD>/` directory with the following files:
+- For stocks: `<timestamp>_stock_strong_targets_<top_980|all>.txt`
+- For crypto: `<timestamp>_crypto_relative_strength_<timeframe>.txt`
+- Failed symbols: `<timestamp>_failed_<tickers|cryptos>.txt`
 
 ## License
 
