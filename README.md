@@ -12,6 +12,8 @@ pip3 install -r requirements.txt
 
 API keys are needed for [Polygon](https://polygon.io) and [Stocksymbol](https://stock-symbol.herokuapp.com) (Not a requirement for Crypto usage)
 
+Rename `api_keys.json.example` to `api_keys.json`
+
 ## Usage
 
 ### 1. Crypto Screener
@@ -19,12 +21,13 @@ API keys are needed for [Polygon](https://polygon.io) and [Stocksymbol](https://
 Identify strong performing crypto currencies by comparing them with SMA-30, SMA-45 and SMA-60.
 
 ```bash
-python3 crypto_relative_strength.py -t "1h" -d 7
+python3 crypto_screener.py
+python3 crypto_screener.py -t "15m" -d 3
 ```
 
 Options
 * `-t` Time frame (5m, 15m, 30m, 1h, 2h, 4h, 8h, 1d) (default: 15m)
-* `-d` Calculation duration in days (default: 7 days)
+* `-d` Calculation duration in days (default: 3 days)
 
 The script will generate a TXT file in `output/<date>/` directory that can be imported into [TradingView](https://www.tradingview.com/)'s watchlist.
 
