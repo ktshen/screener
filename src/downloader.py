@@ -71,12 +71,9 @@ def parse_time_string(time_string):
 
 
 class StockDownloader:
-    def __init__(self, save_dir: str = ".", api_file: str = "api_keys.json"):
+    def __init__(self, api_file: str = "api_keys.json"):
         with open(api_file) as f:
             self.api_keys = json.load(f)
-        self.save_dir = Path(save_dir)
-        if not os.path.exists(self.save_dir):
-            os.makedirs(self.save_dir)
 
         retry_strategy = Retry(
             total=3,

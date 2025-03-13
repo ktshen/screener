@@ -64,7 +64,8 @@ def calculate_rs_score(crypto_data, required_bars):
                      (moving_average_45 - moving_average_60))
         
         # Use ATR as denominator with small epsilon to avoid division by zero
-        denominator = current_atr + 0.001
+        denominator = current_atr + 0.0000000000000000001
+        # denominator = (moving_average_30 + moving_average_45 + moving_average_60) / 3
         
         # Calculate relative strength for this point
         relative_strength = numerator / denominator
@@ -146,7 +147,7 @@ def process_crypto(symbol, timeframe, days):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--timeframe', type=str, help='Time frame (5m, 15m, 30m, 1h, 2h, 4h, 8h, 1d)', default="15m")
-    parser.add_argument('-d', '--days', type=int, help='Calculation duration in days (default 7 days)', default=7)
+    parser.add_argument('-d', '--days', type=int, help='Calculation duration in days (default 3 days)', default=3)
     args = parser.parse_args()
     timeframe = args.timeframe
     days = args.days
