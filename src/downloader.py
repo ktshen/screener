@@ -116,7 +116,7 @@ class StockDownloader:
 
         return True
 
-    def get_data(self, ticker: str, start_ts: int, end_ts: int = None, timeframe: str = "1d", dropna=True, atr=True) -> tuple[bool, pd.DataFrame]:
+    def get_data(self, ticker: str, start_ts: int, end_ts: int = None, timeframe: str = "1d", dropna=True, atr=True, validate=True) -> tuple[bool, pd.DataFrame]:
         """
         Get stock data with SMA calculation and data quality validation
         Args:
@@ -195,7 +195,7 @@ class StockDownloader:
             df = df[market_hours_filter]
 
         # Validate data quality
-        if not self._validate_data_quality(df):
+        if validate and not self._validate_data_quality(df):
             return False, pd.DataFrame()
 
         # Calculate SMAs
@@ -278,7 +278,7 @@ class CryptoDownloader:
 
         return True
 
-    def get_data(self, crypto, start_ts=None, end_ts=None, timeframe="4h", dropna=True, atr=True) -> tuple[bool, pd.DataFrame]:
+    def get_data(self, crypto, start_ts=None, end_ts=None, timeframe="4h", dropna=True, atr=True, validate=True) -> tuple[bool, pd.DataFrame]:
         """
         Get cryptocurrency data with SMA calculation and data quality validation
         Args:
@@ -383,7 +383,7 @@ class CryptoDownloader:
             df = df.sort_values('timestamp')
 
             # Validate data quality
-            if not self._validate_data_quality(df):
+            if validate and not self._validate_data_quality(df):
                 print(f"{crypto} -> Failed data quality validation")
                 return False, pd.DataFrame()
             
