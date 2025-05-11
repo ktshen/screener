@@ -5,3 +5,4 @@ stocksymbol
 python-binance
 polygon-api-client
 dtaidistance
+matplotlib
