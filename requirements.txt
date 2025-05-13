@@ -6,3 +6,4 @@ python-binance
 polygon-api-client
 dtaidistance
 matplotlib
+shapedtw
