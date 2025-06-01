@@ -1,15 +1,17 @@
-import pandas as pd
 import json
 import re
+import os
+import time
+import pandas as pd
+import numpy as np
+from datetime import datetime
 from pytz import timezone
 from stocksymbol import StockSymbol
 from polygon import RESTClient
 from urllib3.util.retry import Retry
 from binance import Client
 from pathlib import Path
-import os
-import time
-from datetime import datetime
+
 
 # Configurable parameters
 STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
@@ -132,12 +134,12 @@ class StockDownloader:
         # Calculate extended start for SMA calculation
         max_sma = max(STOCK_SMA)
         fc = 1.3 if timeframe == "1d" else 0.6
-        extension = int(max_sma * 24 * 3600 * fc) 
-        extended_start = start_ts - extension
+        extension = np.int64(max_sma * 24 * 3600 * fc)
+        extended_start = np.int64(start_ts - extension)
 
         # Get current time if end_ts not provided
         if end_ts is None:
-            end_ts = int(time.time())
+            end_ts = np.int64(time.time())
 
         # Parse timeframe
         multiplier, timespan = parse_time_string(timeframe)
@@ -147,8 +149,8 @@ class StockDownloader:
             ticker,
             multiplier,
             timespan,
-            int(extended_start * 1000),
-            int(end_ts * 1000),
+            np.int64(extended_start * 1000),
+            np.int64(end_ts * 1000),
             limit=10000
         )
 
@@ -157,12 +159,12 @@ class StockDownloader:
 
         # Convert to DataFrame with timestamp
         df = pd.DataFrame([{
-            'timestamp': agg.timestamp // 1000,
-            'open': float(agg.open),
-            'close': float(agg.close),
-            'high': float(agg.high),
-            'low': float(agg.low),
-            'volume': float(agg.volume)
+            'timestamp': np.int64(agg.timestamp // 1000),
+            'open': np.float64(agg.open),
+            'close': np.float64(agg.close),
+            'high': np.float64(agg.high),
+            'low': np.float64(agg.low),
+            'volume': np.float64(agg.volume)
         } for agg in aggs])
 
         if df.empty:
@@ -200,11 +202,11 @@ class StockDownloader:
 
         # Calculate SMAs
         for period in STOCK_SMA:
-            df[f'sma_{period}'] = df['close'].rolling(window=period).mean()
+            df[f'sma_{period}'] = df['close'].rolling(window=period).mean().astype(np.float64)
 
         # Calculate ATR if requested
         if atr:
-            df['atr'] = calculate_atr(df, period=ATR_PERIOD)
+            df['atr'] = calculate_atr(df, period=ATR_PERIOD).astype(np.float64)
 
         # Drop rows with NaN values
         if dropna:
@@ -294,10 +296,10 @@ class CryptoDownloader:
         try:
             # Default end_ts to current time if not provided
             if end_ts is None:
-                end_ts = int(time.time())
+                end_ts = np.int64(time.time())
             
             # Convert to milliseconds for Binance API
-            end_ts_ms = end_ts * 1000
+            end_ts_ms = np.int64(end_ts * 1000)
             
             if start_ts is None:
                 # Fetch only the latest 1500 datapoints
@@ -313,17 +315,17 @@ class CryptoDownloader:
                 # Calculate number of time intervals in max_sma
                 num_intervals, unit = parse_time_string(timeframe)
                 if unit == "minute":
-                    interval_seconds = num_intervals * 60
+                    interval_seconds = np.int64(num_intervals * 60)
                 elif unit == "hour":
-                    interval_seconds = num_intervals * 3600
+                    interval_seconds = np.int64(num_intervals * 3600)
                 else:  # day
-                    interval_seconds = num_intervals * 86400
+                    interval_seconds = np.int64(num_intervals * 86400)
                 
                 # Calculate extension in milliseconds (number of bars needed for max SMA)
-                extension_ms = max_sma * interval_seconds * 1000 * 1.2 # 20% buffer
+                extension_ms = np.int64(max_sma * interval_seconds * 1000 * 1.2)  # 20% buffer
                 
                 # Extended start timestamp with buffer for SMA calculation
-                extended_start_ts_ms = start_ts * 1000 - extension_ms
+                extended_start_ts_ms = np.int64(start_ts * 1000 - extension_ms)
                 
                 # Fetch historical data from the extended start date
                 all_data = []
@@ -333,8 +335,8 @@ class CryptoDownloader:
                     response = self.binance_client.futures_klines(
                         symbol=crypto,
                         interval=timeframe,
-                        startTime=int(current_timestamp),
-                        endTime=int(end_ts_ms),
+                        startTime=np.int64(current_timestamp),
+                        endTime=np.int64(end_ts_ms),
                         limit=1500
                     )
 
@@ -345,7 +347,7 @@ class CryptoDownloader:
                     
                     # Update current timestamp to the last received data point + 1
                     if response:
-                        current_timestamp = int(response[-1][6]) + 1
+                        current_timestamp = np.int64(response[-1][6]) + 1
                     else:
                         break
 
@@ -366,15 +368,15 @@ class CryptoDownloader:
                 print(f"{crypto} -> Empty DataFrame after initial conversion")
                 return False, pd.DataFrame()
             
-            # Convert datetime to timestamp (in seconds)
-            df['timestamp'] = df['Datetime'].astype(int) // 1000
+            # Convert datetime to timestamp (in seconds) using int64
+            df['timestamp'] = df['Datetime'].values.astype(np.int64) // 1000
             
-            # Rename columns to match stock df format (lowercase)
-            df['open'] = df['Open Price'].astype(float)
-            df['high'] = df['High Price'].astype(float)
-            df['low'] = df['Low Price'].astype(float)
-            df['close'] = df['Close Price'].astype(float)
-            df['volume'] = df['Volume'].astype(float)
+            # Rename columns to match stock df format (lowercase) using float64
+            df['open'] = df['Open Price'].astype(np.float64)
+            df['high'] = df['High Price'].astype(np.float64)
+            df['low'] = df['Low Price'].astype(np.float64)
+            df['close'] = df['Close Price'].astype(np.float64)
+            df['volume'] = df['Volume'].astype(np.float64)
             
             # Drop duplicate timestamps
             df = df.drop_duplicates(subset=['timestamp'], keep='first')
@@ -389,11 +391,11 @@ class CryptoDownloader:
             
             # Calculate SMAs
             for duration in CRYPTO_SMA:
-                df[f"sma_{duration}"] = df['close'].rolling(window=duration).mean()
+                df[f"sma_{duration}"] = df['close'].rolling(window=duration).mean().astype(np.float64)
 
             # Calculate ATR if requested
             if atr:
-                df['atr'] = calculate_atr(df, period=ATR_PERIOD)
+                df['atr'] = calculate_atr(df, period=ATR_PERIOD).astype(np.float64)
 
             # Drop NaN values if requested
             if dropna:
