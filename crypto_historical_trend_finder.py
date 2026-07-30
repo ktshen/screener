@@ -62,6 +62,7 @@ from src.common import (
 REFERENCE_TRENDS = {
    "AVAX": [
        [datetime(2023, 11, 9, 12, 0), datetime(2023, 11, 14, 18, 0), "1h", "standard"],
+       [datetime(2023, 11, 9, 12, 0), datetime(2023, 11, 15, 0, 0), "1h", "standard_1"],
    ],
    "MKR": [
        [datetime(2023, 6, 24, 9, 0), datetime(2023, 7, 18, 5, 0), "4h", "standard"],
@@ -72,16 +73,20 @@ REFERENCE_TRENDS = {
        [datetime(2024, 11, 4, 0, 0), datetime(2024, 11, 29, 0, 0), "4h", "uptrend_2"],
    ],
    "GMT": [
-       [datetime(2022, 3, 26, 9, 0), datetime(2022, 4, 14, 21, 0), "4h", "uptrend"]
+       [datetime(2022, 3, 26, 9, 0), datetime(2022, 4, 14, 21, 0), "4h", "consolidate_to_oneline"],
+       [datetime(2022, 3, 26, 9, 0), datetime(2022, 4, 18, 13, 0), "4h", "consolidate_to_oneline_1"],
    ],
    "SOL": [
-       [datetime(2023, 9, 21, 1, 0), datetime(2023, 10, 15, 21, 0), "4h", "standard"]
+       [datetime(2023, 9, 21, 1, 0), datetime(2023, 10, 15, 21, 0), "4h", "standard"],
+       [datetime(2023, 9, 21, 1, 0), datetime(2023, 10, 18, 9, 0), "4h", "standard_1"]
    ],
    "LQTY": [
-       [datetime(2025, 5, 7, 5, 0), datetime(2025, 5, 9, 21, 0), "30m", "standard"]
+       [datetime(2025, 5, 7, 5, 0), datetime(2025, 5, 9, 21, 0), "30m", "consolidate_to_oneline"],
+       [datetime(2025, 5, 7, 5, 0), datetime(2025, 5, 10, 10, 0), "30m", "consolidate_to_oneline_1"]
    ],
    "MOODENG": [
-       [datetime(2025, 5, 8, 0, 0), datetime(2025, 5, 11, 1, 0), "1h", "standard"]
+       [datetime(2025, 5, 8, 0, 0), datetime(2025, 5, 11, 1, 0), "1h", "standard"],
+       [datetime(2025, 5, 8, 0, 0), datetime(2025, 5, 11, 5, 0), "1h", "standard_1"]
    ],
 }
 
@@ -106,7 +111,7 @@ API_SLEEP_SECONDS = 15
 # Overlap filtering strategy
 # True: Global filtering - no overlaps across all symbols
 # False: Per-symbol filtering - allow overlaps between different symbols
-GLOBAL_OVERLAP_FILTERING = True
+GLOBAL_OVERLAP_FILTERING = False
 
 # DTW parameters
 DTW_WINDOW_RATIO = 0.12

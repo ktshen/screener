@@ -7,6 +7,7 @@ import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from src.downloader import CryptoDownloader
 
+SLEEP_BETWEEN_REQUESTS = 0.5  # seconds
 
 def calc_total_bars(time_interval, days):
     bars_dict = {
@@ -72,8 +73,9 @@ def calculate_rs_score(crypto_data, required_bars):
         
         # Gives higher importance to newer data
         # weight = i 
-        k = 2 * np.log(2) / required_bars   
-        weight = np.exp(k * i)              # Exponential weight where w(L/2) * 2 = w(L)
+        # k = 2 * np.log(2) / required_bars   
+        # weight = np.exp(k * i)              # Exponential weight where w(L/2) * 2 = w(L)
+        weight = 1
         
         
         # Add to weighted sum
@@ -92,6 +94,7 @@ def calculate_rs_score(crypto_data, required_bars):
 def process_crypto(symbol, timeframe, days):
     """Process a single cryptocurrency and calculate its RS score"""
     try:
+        time.sleep(SLEEP_BETWEEN_REQUESTS)
         cd = CryptoDownloader()
         
         # Calculate required bars
@@ -147,7 +150,7 @@ def process_crypto(symbol, timeframe, days):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--timeframe', type=str, help='Time frame (5m, 15m, 30m, 1h, 2h, 4h, 8h, 1d)', default="15m")
-    parser.add_argument('-d', '--days', type=int, help='Calculation duration in days (default 3 days)', default=3)
+    parser.add_argument('-d', '--days', type=int, help='Calculation duration in days (default 3 days)', default=1)
     args = parser.parse_args()
     timeframe = args.timeframe
     days = args.days
@@ -160,7 +163,7 @@ if __name__ == '__main__':
     print(f"Total cryptos to process: {len(all_cryptos)}")
     
     # Process all cryptos using ProcessPoolExecutor
-    num_cores = min(4, mp.cpu_count())  # Use maximum 4 cores, binance rest api has rate limit
+    num_cores = min(1, mp.cpu_count())  # Use maximum 4 cores, binance rest api has rate limit
     print(f"Using {num_cores} processes")
     with ProcessPoolExecutor(max_workers=num_cores) as executor:
         futures = {executor.submit(process_crypto, crypto, timeframe, days): crypto for crypto in all_cryptos}
@@ -211,7 +214,7 @@ if __name__ == '__main__':
         txt_content += ",".join([f"BINANCE:{crypto}.P" for crypto in targets])
     
     # Create output/<date> directory structure
-    base_folder = "output"
+    base_folder = "crypto_rs_output"
     date_folder = os.path.join(base_folder, date_str)
     os.makedirs(date_folder, exist_ok=True)
     

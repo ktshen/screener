@@ -10,13 +10,26 @@ from stocksymbol import StockSymbol
 from polygon import RESTClient
 from urllib3.util.retry import Retry
 from binance import Client
-from pathlib import Path
 
 
 # Configurable parameters
 STOCK_SMA = [20, 30, 45, 50, 60, 150, 200]
 CRYPTO_SMA = [30, 45, 60]
 ATR_PERIOD = 60  
+POLYGON_STOCK_CODES = [
+    "CS",     # Common Stock
+    "PFD",    # Preferred Stock
+    # "RIGHT",  # Rights
+    "ADRC",   # American Depository Receipt Common
+    "ADRP",   # American Depository Receipt Preferred
+    # "ADRW",   # American Depository Receipt Warrants
+    "ADRR",   # American Depository Receipt Rights
+    # "UNIT",   # Unit
+    # "LT",     # Liquidating Trust
+    "OS",     # Ordinary Shares
+    "GDR",    # Global Depository Receipts
+    "NYRS",   # New York Registry Shares
+]
 
 
 def calculate_atr(df, period=ATR_PERIOD):
@@ -77,21 +90,13 @@ class StockDownloader:
         with open(api_file) as f:
             self.api_keys = json.load(f)
 
-        retry_strategy = Retry(
-            total=3,
-            backoff_factor=0.5,
-            status_forcelist=[413, 429, 499, 500, 502, 503, 504],
-            allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "POST"],
-            raise_on_status=False,
-            respect_retry_after_header=True
-        )
-
         self.client = RESTClient(
             api_key=self.api_keys["polygon"],
-            num_pools=100,
-            connect_timeout=1.0,
-            read_timeout=1.0,
-            retries=10
+            num_pools=3,
+            # num_pools=100,
+            # connect_timeout=10.0,
+            # read_timeout=10.0,
+            # # retries=10
         )
 
     def _validate_data_quality(self, df: pd.DataFrame) -> bool:
@@ -99,6 +104,7 @@ class StockDownloader:
         Validate data quality
         - Check if latest data is within a week
         - Check for stale prices (same closing price for 10+ consecutive periods)
+        - Check for time gaps larger than a week between consecutive rows
         """
         if df.empty:
             return False
@@ -115,10 +121,20 @@ class StockDownloader:
         )
         if consecutive_same_price.any():
             return False
+        
+        # Check for time gaps larger than a week between consecutive rows
+        if len(df) > 1:
+            # Calculate time differences between consecutive rows
+            time_diffs = df['timestamp'].diff().dropna()
+            week_in_seconds = 7 * 24 * 3600
+            
+            # Check if any time gap exceeds a week
+            if (time_diffs > week_in_seconds).any():
+                return False
 
         return True
 
-    def get_data(self, ticker: str, start_ts: int, end_ts: int = None, timeframe: str = "1d", dropna=True, atr=True, validate=True) -> tuple[bool, pd.DataFrame]:
+    def get_data(self, ticker: str, start_ts: int, end_ts: int = None, timeframe: str = "1d", dropna=True, atr=False, vwap=False, validate=True) -> tuple[bool, pd.DataFrame]:
         """
         Get stock data with SMA calculation and data quality validation
         Args:
@@ -127,7 +143,9 @@ class StockDownloader:
             end_ts: End timestamp (default: current time)
             timeframe: Time interval ("1d" or "1h")
             dropna: Whether to drop NA values
-            atr: Whether to calculate ATR (default: True)
+            atr: Whether to calculate ATR (default: False)
+            vwap: Whether to include VWAP (default: False)
+            validate: Whether to validate data quality (default: True)
         Returns:
             (success, DataFrame)
         """
@@ -164,7 +182,8 @@ class StockDownloader:
             'close': np.float64(agg.close),
             'high': np.float64(agg.high),
             'low': np.float64(agg.low),
-            'volume': np.float64(agg.volume)
+            'volume': np.float64(agg.volume),
+            'vwap': np.float64(agg.vw) if hasattr(agg, 'vw') and agg.vw is not None else np.nan
         } for agg in aggs])
 
         if df.empty:
@@ -207,6 +226,10 @@ class StockDownloader:
         # Calculate ATR if requested
         if atr:
             df['atr'] = calculate_atr(df, period=ATR_PERIOD).astype(np.float64)
+        
+        # Handle VWAP column - remove if not requested
+        if not vwap and 'vwap' in df.columns:
+            df = df.drop(columns=['vwap'])
 
         # Drop rows with NaN values
         if dropna:
@@ -225,17 +248,19 @@ class StockDownloader:
         stock_symbol_list = [x for x in ss.get_symbol_list(market="US", symbols_only=True)
                            if "." not in x]
 
-        # Get symbols from Polygon
-        polygon_stocks = self.client.list_tickers(
-            market="stocks",
-            # type="CS",
-            active=True,
-            limit=1000
-        )
-        polygon_common_stocks = [ticker.ticker for ticker in polygon_stocks]
+        all_polygon_stocks = []
+        for code in POLYGON_STOCK_CODES:
+            # Get symbols from Polygon
+            polygon_stocks = self.client.list_tickers(
+                market="stocks",
+                type=code,
+                active=True,
+                limit=1000
+            )
+            all_polygon_stocks.extend([ticker.ticker for ticker in polygon_stocks])
 
         # Merge and return unique symbols
-        all_symbols = sorted(set(stock_symbol_list).union(set(polygon_common_stocks)))
+        all_symbols = sorted(set(stock_symbol_list).union(set(all_polygon_stocks)))
         print(f"Found {len(all_symbols)} unique stock symbols")
         return all_symbols
 
@@ -280,7 +305,7 @@ class CryptoDownloader:
 
         return True
 
-    def get_data(self, crypto, start_ts=None, end_ts=None, timeframe="4h", dropna=True, atr=True, validate=True) -> tuple[bool, pd.DataFrame]:
+    def get_data(self, crypto, start_ts=None, end_ts=None, timeframe="4h", dropna=True, atr=True, vwap=False, validate=True) -> tuple[bool, pd.DataFrame]:
         """
         Get cryptocurrency data with SMA calculation and data quality validation
         Args:
@@ -290,6 +315,8 @@ class CryptoDownloader:
             timeframe: Time interval (e.g., "5m", "15m", "1h", "4h")
             dropna: Whether to drop NA values (default: True)
             atr: Whether to calculate ATR (default: True)
+            vwap: Whether to include VWAP (default: False, note: Binance doesn't provide VWAP)
+            validate: Whether to validate data quality (default: True)
         Returns:
             (success, DataFrame)
         """
@@ -431,4 +458,3 @@ class CryptoDownloader:
         except Exception as e:
             print(f"{crypto} -> Error: {e}")
             return False, pd.DataFrame()
-        

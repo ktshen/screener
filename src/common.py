@@ -75,7 +75,13 @@ def calculate_timeframe_seconds(timeframe: str) -> int:
 def convert_datetime_to_timestamp(dt_obj: datetime, tz_name: str) -> int:
     """Convert datetime object to timestamp with timezone consideration"""
     tz = timezone(tz_name)
-    dt_with_tz = tz.localize(dt_obj)
+    # Check if datetime is already timezone-aware
+    if dt_obj.tzinfo is None:
+        # If naive datetime, treat as local time in the specified timezone
+        dt_with_tz = tz.localize(dt_obj)
+    else:
+        # If already timezone-aware, convert to the specified timezone
+        dt_with_tz = dt_obj.astimezone(tz)
     return int(dt_with_tz.timestamp())
 
 
@@ -432,7 +438,7 @@ class DTWCalculator:
 # ================ Visualization Functions ================
 
 def plot_candlesticks_with_volume(ax: plt.Axes, df: pd.DataFrame, width_factor: float = 0.6, volume_ratio: float = 0.15):
-    """Plot candlestick chart with volume bars in same subplot"""
+    """Plot candlestick chart with volume bars using sequential positioning to avoid time gaps"""
     if len(df) <= 1:
         print("Not enough data points to plot candlesticks")
         return
@@ -443,9 +449,9 @@ def plot_candlesticks_with_volume(ax: plt.Axes, df: pd.DataFrame, width_factor: 
         print("Missing required OHLC columns")
         return
     
-    # Calculate appropriate width for candlesticks in days
-    time_diff = (df.index[1] - df.index[0]).total_seconds() / 86400  # Convert to days
-    width = time_diff * width_factor
+    # Use sequential integer positions instead of timestamps to avoid gaps
+    positions = np.arange(len(df))
+    width = width_factor
     
     # Define colors (green up, red down)
     up_color = 'green'
@@ -459,7 +465,7 @@ def plot_candlesticks_with_volume(ax: plt.Axes, df: pd.DataFrame, width_factor: 
     # Calculate volume range and normalization if volume exists
     has_volume = 'Volume' in df.columns
     if has_volume:
-        volume_min = 0  # 因為Volume已經標準化到[0,1]，所以最小值是0
+        volume_min = 0  # Volume is already normalized to [0,1]
         volume_max = df['Volume'].max()
         if volume_max > volume_min:
             volume_height = price_range * volume_ratio
@@ -468,8 +474,9 @@ def plot_candlesticks_with_volume(ax: plt.Axes, df: pd.DataFrame, width_factor: 
         else:
             has_volume = False
     
-    # Plot candlesticks
-    for timestamp, row in df.iterrows():
+    # Plot candlesticks using sequential positions
+    for i, (timestamp, row) in enumerate(df.iterrows()):
+        pos = positions[i]
         open_price = row['Open']
         high_price = row['High']
         low_price = row['Low']
@@ -480,11 +487,8 @@ def plot_candlesticks_with_volume(ax: plt.Axes, df: pd.DataFrame, width_factor: 
         color = up_color if is_upward_candle else down_color
         
         # Draw the high-low line (wick)
-        ax.plot([timestamp, timestamp], [low_price, high_price], 
+        ax.plot([pos, pos], [low_price, high_price], 
                 color=color, linewidth=1, alpha=0.8)
-        
-        # Calculate rectangle coordinates in timestamp space
-        half_width_timedelta = pd.Timedelta(days=width/2)
         
         # Draw the open-close rectangle (body)
         if is_upward_candle:
@@ -495,18 +499,26 @@ def plot_candlesticks_with_volume(ax: plt.Axes, df: pd.DataFrame, width_factor: 
             rect_height = open_price - close_price
         
         # Create rectangle for the body
-        rect = Rectangle((timestamp - half_width_timedelta, rect_bottom),
-                            pd.Timedelta(days=width), rect_height,
-                            facecolor=color, edgecolor=color, alpha=0.8)
+        rect = Rectangle((pos - width/2, rect_bottom), width, rect_height,
+                        facecolor=color, edgecolor=color, alpha=0.8)
         ax.add_patch(rect)
         
         # Plot volume bars if available
         if has_volume:
-            volume_value = scaled_volume.loc[timestamp]
-            volume_rect = Rectangle((timestamp - half_width_timedelta, volume_base),
-                                    pd.Timedelta(days=width), volume_value,
-                                    facecolor=color, edgecolor=color, alpha=0.5)
+            volume_value = scaled_volume.iloc[i]
+            volume_rect = Rectangle((pos - width/2, volume_base), width, volume_value,
+                                  facecolor=color, edgecolor=color, alpha=0.5)
             ax.add_patch(volume_rect)
+    
+    # Set x-axis limits and custom labels
+    ax.set_xlim(-0.5, len(df) - 0.5)
+    
+    # Create custom date labels (show every nth date to avoid crowding)
+    num_labels = min(8, len(df))  # Show max 8 labels
+    if num_labels > 1:
+        label_indices = np.linspace(0, len(df)-1, num_labels, dtype=int)
+        ax.set_xticks(label_indices)
+        ax.set_xticklabels([df.index[i].strftime('%Y-%m-%d') for i in label_indices], rotation=45)
     
     # Set y-axis limits to accommodate both price and volume
     if has_volume:
@@ -604,7 +616,7 @@ class ReferenceDataManager:
         """Load or fetch reference trend data with unified caching"""
         print(f"Loading reference trend for {symbol} ({timeframe}) from {start_datetime} to {end_datetime}...")
         
-        # Convert datetime to timestamp
+        # Convert datetime to timestamp - ensure timezone awareness
         start_ts = convert_datetime_to_timestamp(start_datetime, timezone_name)
         end_ts = convert_datetime_to_timestamp(end_datetime, timezone_name)
         
@@ -652,14 +664,16 @@ class ReferenceDataManager:
             print(f"Failed to get extended data for {symbol} at {timeframe}")
             return None
         
-        # Split data into past, reference, and future
-        reference_start_time = pd.Timestamp.fromtimestamp(start_ts, tz='UTC')
-        reference_end_time = pd.Timestamp.fromtimestamp(end_ts, tz='UTC')
+        # Split data into past, reference, and future - ensure timezone consistency
+        tz = timezone(timezone_name)
+        reference_start_time = pd.Timestamp.fromtimestamp(start_ts, tz=tz)
+        reference_end_time = pd.Timestamp.fromtimestamp(end_ts, tz=tz)
 
+        # Ensure extended_df index is timezone-aware and in the correct timezone
         if extended_df.index.tz is None:
-            extended_df.index = pd.to_datetime(extended_df.index, utc=True)
-        elif extended_df.index.tz != pd.Timestamp.now(tz='UTC').tz:
-            extended_df.index = extended_df.index.tz_convert('UTC')
+            extended_df.index = pd.to_datetime(extended_df.index, utc=True).tz_convert(tz)
+        elif extended_df.index.tz != tz:
+            extended_df.index = extended_df.index.tz_convert(tz)
         
         past_df = extended_df[extended_df.index < reference_start_time]
         reference_df = extended_df[(extended_df.index >= reference_start_time) & 
@@ -679,7 +693,7 @@ class ReferenceDataManager:
         # Create reference visualization with past + reference + future
         viz_file = os.path.join(reference_dir, f"ref_{symbol}_{timeframe}_{label}_{start_ts}_{end_ts}.png")
         ReferenceDataManager.create_reference_visualization(
-            reference_df, past_df, future_df, symbol, timeframe, label, viz_file
+            reference_df, past_df, future_df, symbol, timeframe, label, viz_file, timezone_name
         )
         
         print(f"Saved reference data for {symbol} with {len(reference_df)} data points")
@@ -700,9 +714,10 @@ class ReferenceDataManager:
             
             # Plot 1: Reference trend only with volume
             plot_candlesticks_with_volume(ax1, reference_normalized_df, volume_ratio=0.12)
-            ax1.plot(reference_normalized_df.index, reference_normalized_df['SMA_30'], 'blue', linewidth=2, alpha=0.8, label='SMA30')
-            ax1.plot(reference_normalized_df.index, reference_normalized_df['SMA_45'], 'orange', linewidth=2, alpha=0.8, label='SMA45')
-            ax1.plot(reference_normalized_df.index, reference_normalized_df['SMA_60'], 'purple', linewidth=2, alpha=0.8, label='SMA60')
+            positions = np.arange(len(reference_normalized_df))
+            ax1.plot(positions, reference_normalized_df['SMA_30'], 'blue', linewidth=2, alpha=0.8, label='SMA30')
+            ax1.plot(positions, reference_normalized_df['SMA_45'], 'orange', linewidth=2, alpha=0.8, label='SMA45')
+            ax1.plot(positions, reference_normalized_df['SMA_60'], 'purple', linewidth=2, alpha=0.8, label='SMA60')
             ax1.set_title(f'Reference Trend: {symbol} ({timeframe}, {label})', fontsize=14)
             ax1.set_ylabel('Normalized Price [-1, 1]', fontsize=12)
             ax1.set_ylim(-1.2, 1.2)
@@ -763,15 +778,21 @@ class ReferenceDataManager:
                     combined_normalized_df['Volume'] = normalized_volume.flatten()
                 
                 plot_candlesticks_with_volume(ax2, combined_normalized_df, volume_ratio=0.12)
-                ax2.plot(combined_normalized_df.index, combined_normalized_df['SMA_30'], 'blue', linewidth=2, alpha=0.8, label='SMA30')
-                ax2.plot(combined_normalized_df.index, combined_normalized_df['SMA_45'], 'orange', linewidth=2, alpha=0.8, label='SMA45')
-                ax2.plot(combined_normalized_df.index, combined_normalized_df['SMA_60'], 'purple', linewidth=2, alpha=0.8, label='SMA60')
+                
+                # Plot SMAs using sequential positions
+                combined_positions = np.arange(len(combined_normalized_df))
+                ax2.plot(combined_positions, combined_normalized_df['SMA_30'], 'blue', linewidth=2, alpha=0.8, label='SMA30')
+                ax2.plot(combined_positions, combined_normalized_df['SMA_45'], 'orange', linewidth=2, alpha=0.8, label='SMA45')
+                ax2.plot(combined_positions, combined_normalized_df['SMA_60'], 'purple', linewidth=2, alpha=0.8, label='SMA60')
                 
                 # Add vertical lines to mark reference boundaries
-                reference_start = reference_df.index[0]
-                reference_end = reference_df.index[-1]
-                ax2.axvline(x=reference_start, color='blue', linestyle='--', linewidth=2, alpha=0.8, label='Reference Start')
-                ax2.axvline(x=reference_end, color='red', linestyle='--', linewidth=2, alpha=0.8, label='Reference End')
+                # Calculate positions in the combined data
+                past_length = len(past_data) if past_df is not None and not past_df.empty else 0
+                ref_start_pos = past_length
+                ref_end_pos = past_length + len(reference_df) - 1
+                
+                ax2.axvline(x=ref_start_pos, color='blue', linestyle='--', linewidth=2, alpha=0.8, label='Reference Start')
+                ax2.axvline(x=ref_end_pos, color='red', linestyle='--', linewidth=2, alpha=0.8, label='Reference End')
                 
                 ax2.set_title(f'Extended View: {symbol} - Past + Reference + Future', fontsize=14)
                 ax2.set_ylabel('Normalized Price (ref range: [-1, 1])', fontsize=12)
@@ -787,12 +808,6 @@ class ReferenceDataManager:
                 ax2.text(0.5, 0.5, 'No extended data available', 
                         ha='center', va='center', transform=ax2.transAxes, fontsize=14)
                 ax2.set_title('Extended View: No Data', fontsize=14)
-            
-            # Format date ticks
-            for ax in [ax1, ax2]:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                plt.setp(ax.xaxis.get_majorticklabels(), rotation=45, ha='right')
-                ax.tick_params(axis='both', which='major', labelsize=10)
             
             # Add info textbox
             past_length = len(past_data) if past_df is not None and not past_df.empty else 0
